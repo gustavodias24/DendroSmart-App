@@ -17,23 +17,28 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.ExecutionException;
 
 import benicio.soluces.dimensional.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    ImageView rowRed, rowYelow;
     private ActivityMainBinding binding;
     private static final int PERMISSIONS_GERAL = 1;
     int cameraFacing = CameraSelector.LENS_FACING_BACK;
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     });
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +63,17 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         previewView = binding.cameraPreview;
+
+        rowRed = binding.rowredview;
+        rowYelow = binding.rowyelowview;
+
+        binding.maisyelow.setOnClickListener(this);
+        binding.menosyelow.setOnClickListener(this);
+        binding.maisred.setOnClickListener(this);
+        binding.menosred.setOnClickListener(this);
+
+        Picasso.get().load(R.raw.rowred).into(binding.rowredview);
+        Picasso.get().load(R.raw.rowyelow).into(binding.rowyelowview);
 
         if (
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -142,5 +159,41 @@ public class MainActivity extends AppCompatActivity {
 
         return "Altura: " + String.format("%.2f", heightCm) + " cm\n"
                 + "Largura: " + String.format("%.2f", widthCm) + " cm";
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        if ( id == binding.maisred.getId() ){
+            rowRed.getLayoutParams().width = rowRed.getWidth() + 100;
+            rowRed.requestLayout();
+
+            Log.d("rowstest", "onClick: " + (binding.rowredview.getWidth() + 100) );
+
+        }else if (id == binding.menosred.getId()){
+            if ( rowRed.getWidth() > 100){
+                rowRed.getLayoutParams().width = rowRed.getWidth() - 100;
+                rowRed.requestLayout();
+            }
+
+
+            Log.d("rowstest", "onClick: " + (rowRed.getWidth() - 100) );
+
+        }else if (id == binding.maisyelow.getId()){
+            rowYelow.getLayoutParams().width = rowYelow.getWidth() + 100;
+            rowYelow.requestLayout();
+
+            Log.d("rowstest", "onClick: " + (rowYelow.getWidth() + 100) );
+
+        }else if (id == binding.menosyelow.getId()){
+            if ( rowYelow.getWidth() > 100){
+                rowYelow.getLayoutParams().width = rowYelow.getWidth() - 100;
+                rowYelow.requestLayout();
+            }
+
+            Log.d("rowstest", "onClick: " + (rowYelow.getWidth() - 100) );
+
+        }
     }
 }
