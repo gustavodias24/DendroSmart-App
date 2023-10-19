@@ -15,13 +15,17 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -39,9 +43,11 @@ import benicio.soluces.dimensional.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private SurfaceHolder mHolder;
+    private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
+    private float maxZoomLevel = 1f; // Variável para armazenar o zoom máximo
+
+    private float currentZoomLevel = 1f;
     private Camera mCamera;
-    float mDist = 0;
     ImageView rowRed, rowYelow;
     private ActivityMainBinding binding;
     private static final int PERMISSIONS_GERAL = 1;
@@ -76,9 +82,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.menosyelow.setOnClickListener(this);
         binding.maisred.setOnClickListener(this);
         binding.menosred.setOnClickListener(this);
+        binding.maisZoom.setOnClickListener(this);
+        binding.menosZoom.setOnClickListener(this);
 
-        Picasso.get().load(R.drawable.dotted_red).into(binding.rowredview);
-        Picasso.get().load(R.drawable.dotted_yelow).into(binding.rowyelowview);
+        configurarEventoDePressionar();
+        pegarZoomMaximo();
 
         if (
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -202,4 +210,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    public void configurarEventoDePressionar(){
+
+        binding.maisZoom.setOnTouchListener((view, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_DOWN){
+                // Quando o botão é pressionado
+                if ( currentZoomLevel < maxZoomLevel ){
+                    currentZoomLevel += 1f;
+                    mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
+                    Log.d("cameraZoom", "configurarEventoDePressionar: " + currentZoomLevel);
+                }
+            }
+            return true;
+        });
+
+        binding.menosZoom.setOnTouchListener((view, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_DOWN){
+                // Quando o botão é pressionado
+                if ( currentZoomLevel > 1){
+                    currentZoomLevel -= 1f;
+                    mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
+                    Log.d("cameraZoom", "configurarEventoDePressionar: " + currentZoomLevel);
+                }
+            }
+            return true;
+        });
+    }
+
+    public void pegarZoomMaximo(){
+        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+
+                // Selecionar a câmera traseira como padrão
+                CameraSelector cameraSelector = new CameraSelector.Builder()
+                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                        .build();
+
+                // Configurar o Preview da câmera
+                Preview preview = new Preview.Builder().build();
+
+                // Configurar o ImageCapture da câmera
+                ImageCapture imageCapture = new ImageCapture.Builder().build();
+
+                // Vincular a câmera ao ciclo de vida
+                cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, imageCapture);
+
+                // Obter o zoom máximo da câmera usando Camera2 API
+                CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
+                String cameraId = cameraManager.getCameraIdList()[0];
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+                float maxZoom = characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM);
+
+                if (maxZoom > 1) {
+                    maxZoomLevel = maxZoom;
+                }
+
+            } catch (Exception e) {
+                // Lidar com exceções relacionadas à câmera
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
 }
