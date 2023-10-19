@@ -22,6 +22,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
@@ -38,6 +39,9 @@ import benicio.soluces.dimensional.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private SurfaceHolder mHolder;
+    private Camera mCamera;
+    float mDist = 0;
     ImageView rowRed, rowYelow;
     private ActivityMainBinding binding;
     private static final int PERMISSIONS_GERAL = 1;
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     });
+
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.maisred.setOnClickListener(this);
         binding.menosred.setOnClickListener(this);
 
-        Picasso.get().load(R.raw.rowred).into(binding.rowredview);
-        Picasso.get().load(R.raw.rowyelow).into(binding.rowyelowview);
+        Picasso.get().load(R.drawable.dotted_red).into(binding.rowredview);
+        Picasso.get().load(R.drawable.dotted_yelow).into(binding.rowyelowview);
 
         if (
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cameraProvider.unbindAll();
 
                 if ( !this.isDestroyed() ){
-                    Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
+                    mCamera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
                 }
 
                 preview.setSurfaceProvider(previewView.getSurfaceProvider());
@@ -196,4 +201,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+
 }
