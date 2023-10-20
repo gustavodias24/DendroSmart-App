@@ -179,33 +179,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = view.getId();
 
         if ( id == binding.maisred.getId() ){
-            rowRed.getLayoutParams().width = rowRed.getWidth() + 100;
+            rowRed.getLayoutParams().width = rowRed.getWidth() + 40;
             rowRed.requestLayout();
 
-            Log.d("rowstest", "onClick: " + (binding.rowredview.getWidth() + 100) );
+            Log.d("rowstest", "onClick: " + (binding.rowredview.getWidth() + 40) );
 
         }else if (id == binding.menosred.getId()){
-            if ( rowRed.getWidth() > 100){
-                rowRed.getLayoutParams().width = rowRed.getWidth() - 100;
+            if ( rowRed.getWidth() > 40){
+                rowRed.getLayoutParams().width = rowRed.getWidth() - 40;
                 rowRed.requestLayout();
             }
 
 
-            Log.d("rowstest", "onClick: " + (rowRed.getWidth() - 100) );
+            Log.d("rowstest", "onClick: " + (rowRed.getWidth() - 40) );
 
         }else if (id == binding.maisyelow.getId()){
-            rowYelow.getLayoutParams().width = rowYelow.getWidth() + 100;
+            rowYelow.getLayoutParams().width = rowYelow.getWidth() + 40;
             rowYelow.requestLayout();
 
-            Log.d("rowstest", "onClick: " + (rowYelow.getWidth() + 100) );
+            Log.d("rowstest", "onClick: " + (rowYelow.getWidth() + 40) );
 
         }else if (id == binding.menosyelow.getId()){
-            if ( rowYelow.getWidth() > 100){
-                rowYelow.getLayoutParams().width = rowYelow.getWidth() - 100;
+            if ( rowYelow.getWidth() > 40){
+                rowYelow.getLayoutParams().width = rowYelow.getWidth() - 40;
                 rowYelow.requestLayout();
             }
 
-            Log.d("rowstest", "onClick: " + (rowYelow.getWidth() - 100) );
+            Log.d("rowstest", "onClick: " + (rowYelow.getWidth() - 40) );
 
         }
     }

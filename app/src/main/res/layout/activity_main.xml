@@ -112,26 +112,41 @@
         android:src="@raw/circulo"
         android:visibility="visible" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal">
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
 
         <ImageButton
-            android:background="@drawable/dotted_yelow"
             android:id="@+id/rowyelowview"
-            android:layout_width="300px"
+            android:layout_width="200px"
             android:layout_height="80px"
-            />
+            android:layout_centerVertical="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toEndOf="@+id/helper"
+            android:background="@drawable/dotted_yelow"
+            android:scaleY="70" />
+
+        <ImageButton
+            android:id="@+id/helper"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="10px"
+            android:layout_height="10px"
+            android:background="@drawable/helper_circle"
+            android:scaleY="10" />
 
         <ImageButton
             android:id="@+id/rowredview"
-            android:layout_width="300px"
+            android:layout_width="200px"
             android:layout_height="80px"
-            android:background="@drawable/dotted_red" />
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="0dp"
+            android:layout_toStartOf="@+id/helper"
+            android:background="@drawable/dotted_red"
+            android:scaleY="70" />
+    </RelativeLayout>
 
-    </LinearLayout>
 
 </RelativeLayout>
