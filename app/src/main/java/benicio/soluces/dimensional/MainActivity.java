@@ -179,33 +179,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = view.getId();
 
         if ( id == binding.maisred.getId() ){
-            rowRed.getLayoutParams().width = rowRed.getWidth() + 40;
-            rowRed.requestLayout();
+            if ( rowRed.getLayoutParams().width < 360){
+                rowRed.getLayoutParams().width = rowRed.getWidth() + 40;
+                rowRed.requestLayout();
 
-            Log.d("rowstest", "onClick: " + (binding.rowredview.getWidth() + 40) );
+                Log.d("rowstest", "onClick: " + (binding.rowredview.getWidth() + 40) );
+            }
 
         }else if (id == binding.menosred.getId()){
             if ( rowRed.getWidth() > 40){
                 rowRed.getLayoutParams().width = rowRed.getWidth() - 40;
                 rowRed.requestLayout();
+
+                Log.d("rowstest", "onClick: " + (rowRed.getWidth() - 40) );
             }
 
-
-            Log.d("rowstest", "onClick: " + (rowRed.getWidth() - 40) );
-
         }else if (id == binding.maisyelow.getId()){
-            rowYelow.getLayoutParams().width = rowYelow.getWidth() + 40;
-            rowYelow.requestLayout();
+            if ( rowYelow.getLayoutParams().width < 360){
+                rowYelow.getLayoutParams().width = rowYelow.getWidth() + 40;
+                rowYelow.requestLayout();
 
-            Log.d("rowstest", "onClick: " + (rowYelow.getWidth() + 40) );
+                Log.d("rowstest", "onClick: " + (rowYelow.getWidth() + 40) );
+            }
 
         }else if (id == binding.menosyelow.getId()){
             if ( rowYelow.getWidth() > 40){
                 rowYelow.getLayoutParams().width = rowYelow.getWidth() - 40;
                 rowYelow.requestLayout();
-            }
 
-            Log.d("rowstest", "onClick: " + (rowYelow.getWidth() - 40) );
+                Log.d("rowstest", "onClick: " + (rowYelow.getWidth() - 40) );
+            }
 
         }
     }
@@ -217,9 +220,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 // Quando o botão é pressionado
                 if ( currentZoomLevel < maxZoomLevel ){
-                    currentZoomLevel += 1f;
+                    currentZoomLevel += 0.5f;
                     mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
-                    Log.d("cameraZoom", "configurarEventoDePressionar: " + currentZoomLevel);
+
+                    String zoomString = currentZoomLevel  + "X";
+                    binding.textViewZoom.setText(zoomString);
+                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
                 }
             }
             return true;
@@ -229,9 +235,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 // Quando o botão é pressionado
                 if ( currentZoomLevel > 1){
-                    currentZoomLevel -= 1f;
+                    currentZoomLevel -= 0.5f;
                     mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
-                    Log.d("cameraZoom", "configurarEventoDePressionar: " + currentZoomLevel);
+
+                    String zoomString = currentZoomLevel  + "X";
+                    binding.textViewZoom.setText(zoomString);
+                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
                 }
             }
             return true;

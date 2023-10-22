@@ -15,6 +15,19 @@
 
     </androidx.camera.view.PreviewView>
 
+    <TextView
+        android:id="@+id/textViewZoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background_blue"
+        android:padding="16dp"
+        android:text="1X"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <ImageButton
         android:id="@+id/maisred"
         android:layout_width="60sp"
@@ -47,7 +60,7 @@
         android:layout_height="60sp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="40sp"
+        android:layout_marginStart="70sp"
         android:layout_marginTop="20sp"
         android:backgroundTint="@color/yelow"
         android:background="@drawable/background_redondo"
@@ -62,7 +75,7 @@
         android:layout_height="60sp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="40sp"
+        android:layout_marginEnd="70sp"
         android:layout_marginTop="20sp"
         android:backgroundTint="@color/red"
         android:background="@drawable/background_redondo"
@@ -118,33 +131,34 @@
         android:layout_centerInParent="true">
 
         <ImageButton
-            android:id="@+id/rowyelowview"
+            android:id="@+id/rowredview"
             android:layout_width="200px"
             android:layout_height="80px"
             android:layout_centerVertical="true"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
             android:layout_toEndOf="@+id/helper"
-            android:background="@drawable/dotted_yelow"
+            android:background="@drawable/dotted_red"
             android:scaleY="70" />
 
         <ImageButton
             android:id="@+id/helper"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
             android:layout_width="10px"
             android:layout_height="10px"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/helper_circle"
             android:scaleY="10" />
 
         <ImageButton
-            android:id="@+id/rowredview"
+            android:id="@+id/rowyelowview"
             android:layout_width="200px"
+
             android:layout_height="80px"
             android:layout_centerVertical="true"
             android:layout_marginEnd="0dp"
             android:layout_toStartOf="@+id/helper"
-            android:background="@drawable/dotted_red"
+            android:background="@drawable/dotted_yelow"
             android:scaleY="70" />
     </RelativeLayout>
 
