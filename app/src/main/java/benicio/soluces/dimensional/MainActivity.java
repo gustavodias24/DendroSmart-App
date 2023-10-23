@@ -43,6 +43,9 @@ import benicio.soluces.dimensional.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private int ACRESCENTADOR = 0;
+    private int RAIO_IMAGE = 0;
+    private int TAMANHO_INICIAL = 0;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private float maxZoomLevel = 1f; // Variável para armazenar o zoom máximo
 
@@ -96,6 +99,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.CAMERA }, PERMISSIONS_GERAL);
         }
 
+        calcularTamanhoDaTela();
+        binding.raioImage.getLayoutParams().width = RAIO_IMAGE;
+        binding.raioImage.getLayoutParams().height = RAIO_IMAGE;
+        binding.rowredview.getLayoutParams().width = TAMANHO_INICIAL;
+        binding.rowyelowview.getLayoutParams().width = TAMANHO_INICIAL;
     }
     public void startCamera(int cameraFacing) {
         int aspectRatio = aspectRatio(previewView.getWidth(), previewView.getHeight());
@@ -132,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return AspectRatio.RATIO_16_9;
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -155,59 +164,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public String calcularTamanhoDaTela(){
-        // Obtendo as dimensões da tela em pixels
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int heightPixels = displayMetrics.heightPixels;
-        int widthPixels = displayMetrics.widthPixels;
-
-        // Calculando as dimensões em centímetros
-        double heightInches = heightPixels / displayMetrics.ydpi;
-        double widthInches = widthPixels / displayMetrics.xdpi;
-
-        // Convertendo polegadas para centímetros (1 polegada = 2.54 cm)
-        double heightCm = heightInches * 2.54;
-        double widthCm = widthInches * 2.54;
-
-        return "Altura: " + String.format("%.2f", heightCm) + " cm\n"
-                + "Largura: " + String.format("%.2f", widthCm) + " cm";
-    }
-
     @Override
     public void onClick(View view) {
         int id = view.getId();
 
         if ( id == binding.maisred.getId() ){
             if ( rowRed.getLayoutParams().width < 360){
-                rowRed.getLayoutParams().width = rowRed.getWidth() + 40;
+                rowRed.getLayoutParams().width = rowRed.getWidth() + ACRESCENTADOR;
                 rowRed.requestLayout();
 
-                Log.d("rowstest", "onClick: " + (binding.rowredview.getWidth() + 40) );
+                Log.d("rowstest", "onClick: " + (binding.rowredview.getWidth() + ACRESCENTADOR) );
             }
 
         }else if (id == binding.menosred.getId()){
             if ( rowRed.getWidth() > 40){
-                rowRed.getLayoutParams().width = rowRed.getWidth() - 40;
+                rowRed.getLayoutParams().width = rowRed.getWidth() - ACRESCENTADOR;
                 rowRed.requestLayout();
 
-                Log.d("rowstest", "onClick: " + (rowRed.getWidth() - 40) );
+                Log.d("rowstest", "onClick: " + (rowRed.getWidth() - ACRESCENTADOR) );
             }
 
         }else if (id == binding.maisyelow.getId()){
             if ( rowYelow.getLayoutParams().width < 360){
-                rowYelow.getLayoutParams().width = rowYelow.getWidth() + 40;
+                rowYelow.getLayoutParams().width = rowYelow.getWidth() + ACRESCENTADOR;
                 rowYelow.requestLayout();
 
-                Log.d("rowstest", "onClick: " + (rowYelow.getWidth() + 40) );
+                Log.d("rowstest", "onClick: " + (rowYelow.getWidth() + ACRESCENTADOR) );
             }
 
         }else if (id == binding.menosyelow.getId()){
             if ( rowYelow.getWidth() > 40){
-                rowYelow.getLayoutParams().width = rowYelow.getWidth() - 40;
+                rowYelow.getLayoutParams().width = rowYelow.getWidth() - ACRESCENTADOR;
                 rowYelow.requestLayout();
 
-                Log.d("rowstest", "onClick: " + (rowYelow.getWidth() - 40) );
+                Log.d("rowstest", "onClick: " + (rowYelow.getWidth() - ACRESCENTADOR) );
             }
 
         }
@@ -223,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     currentZoomLevel += 0.5f;
                     mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
 
-                    String zoomString = currentZoomLevel  + "X";
+                    String zoomString = currentZoomLevel  + "x";
                     binding.textViewZoom.setText(zoomString);
                     Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
                 }
@@ -238,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     currentZoomLevel -= 0.5f;
                     mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
 
-                    String zoomString = currentZoomLevel  + "X";
+                    String zoomString = currentZoomLevel  + "x";
                     binding.textViewZoom.setText(zoomString);
                     Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
                 }
@@ -282,5 +272,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Lidar com exceções relacionadas à câmera
             }
         }, ContextCompat.getMainExecutor(this));
+    }
+
+    @SuppressLint("DefaultLocale")
+    public void calcularTamanhoDaTela(){
+        // Obtendo as dimensões da tela em pixels
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int heightPixels = displayMetrics.heightPixels;
+        int widthPixels = displayMetrics.widthPixels;
+
+        // Calculando as dimensões em centímetros
+        double heightInches = heightPixels / displayMetrics.ydpi;
+        double widthInches = widthPixels / displayMetrics.xdpi;
+
+        // Convertendo polegadas para centímetros (1 polegada = 2.54 cm)
+        double heightCm = heightInches * 2.54;
+        double widthCm = widthInches * 2.54;
+
+        TAMANHO_INICIAL = (int) Math.ceil((200 * widthCm) / 13.78);
+        RAIO_IMAGE = (int) Math.ceil((60 * widthCm) / 13.78);
+        ACRESCENTADOR = (int) Math.ceil(((40 * widthCm) / 13.78));
+
+
+        Log.d("calcularTamanhoDaTela", "acrescenteador: " + ACRESCENTADOR);
+        Log.d("calcularTamanhoDaTela", "raio: " + RAIO_IMAGE);
+        Log.d("calcularTamanhoDaTela", "tamanho inicial: " + TAMANHO_INICIAL);
+        binding.dadosDaTela.setText(
+                String.format(
+                        "Altura: %.2f cm"
+                        +"\n"+
+                        "Largura: %.2f cm"
+                        +"\n"+
+                        "Altura: %.2f polegadas"+
+                        "\n"+
+                        "Largura: %.2f polegadas"
+                        , heightCm, widthCm, heightInches, widthInches)
+        );
+
     }
 }

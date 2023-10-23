@@ -16,6 +16,32 @@
     </androidx.camera.view.PreviewView>
 
     <TextView
+        android:id="@+id/dadosDaTela"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:background="#FFFFFF"
+        android:padding="8dp"
+        android:textStyle="bold"
+        android:text="TextView"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/configuracoes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/background_blue"
+        android:padding="16dp"
+        android:textStyle="bold"
+        android:text="Configurações."
+        android:textColor="#FFFFFF" />
+
+    <TextView
         android:id="@+id/textViewZoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +49,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/background_blue"
         android:padding="16dp"
-        android:text="1X"
+        android:text="1x"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -43,6 +69,7 @@
 
     <ImageButton
         android:id="@+id/menosred"
+
         android:layout_width="60sp"
         android:layout_height="60sp"
         android:layout_below="@+id/maisred"
@@ -55,33 +82,35 @@
         android:visibility="visible" />
 
     <ImageButton
-        android:id="@+id/mais_zoom"
+        android:id="@+id/menos_zoom"
+        android:background="@drawable/background_redondo"
+        android:backgroundTint="@color/yelow"
+        android:src="@drawable/baseline_zoom_out_24"
+
         android:layout_width="60sp"
         android:layout_height="60sp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="70sp"
         android:layout_marginTop="20sp"
-        android:backgroundTint="@color/yelow"
-        android:background="@drawable/background_redondo"
         android:padding="6dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/baseline_zoom_in_24"
         android:visibility="visible" />
 
     <ImageButton
-        android:id="@+id/menos_zoom"
+        android:id="@+id/mais_zoom"
+        android:backgroundTint="@color/red"
+        android:background="@drawable/background_redondo"
+        android:src="@drawable/baseline_zoom_in_24"
+
         android:layout_width="60sp"
         android:layout_height="60sp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="70sp"
         android:layout_marginTop="20sp"
-        android:backgroundTint="@color/red"
-        android:background="@drawable/background_redondo"
         android:padding="6dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/baseline_zoom_out_24"
         android:visibility="visible" />
 
     <ImageButton
@@ -111,6 +140,7 @@
         android:visibility="visible" />
 
     <ImageButton
+        android:id="@+id/raio_image"
         android:layout_width="60sp"
         android:layout_height="60sp"
         android:layout_alignParentStart="true"
@@ -139,7 +169,7 @@
             android:layout_marginEnd="0dp"
             android:layout_toEndOf="@+id/helper"
             android:background="@drawable/dotted_red"
-            android:scaleY="70" />
+            android:scaleY="100" />
 
         <ImageButton
             android:id="@+id/helper"
@@ -159,7 +189,7 @@
             android:layout_marginEnd="0dp"
             android:layout_toStartOf="@+id/helper"
             android:background="@drawable/dotted_yelow"
-            android:scaleY="70" />
+            android:scaleY="100" />
     </RelativeLayout>
 
 
