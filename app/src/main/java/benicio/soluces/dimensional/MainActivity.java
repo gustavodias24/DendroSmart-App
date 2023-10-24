@@ -19,6 +19,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.menosred.setOnClickListener(this);
         binding.maisZoom.setOnClickListener(this);
         binding.menosZoom.setOnClickListener(this);
+        binding.configuracoes.setOnClickListener(this);
 
         configurarEventoDePressionar();
         pegarZoomMaximo();
@@ -199,7 +201,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Log.d("rowstest", "onClick: " + (rowYelow.getWidth() - ACRESCENTADOR) );
             }
-
+        }else if ( id == binding.configuracoes.getId() ){
+            startActivity(new Intent(getApplicationContext(), ConfiguracoesActivity.class));
         }
     }
 
