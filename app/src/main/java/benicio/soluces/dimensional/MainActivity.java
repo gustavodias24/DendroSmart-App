@@ -38,21 +38,31 @@ import android.widget.Toast;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import benicio.soluces.dimensional.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    int tamanhoEmDpBarrinha = 60;
+    float scale;
+    int indexy = 4;
+    int indexr = 4;
+    List<Integer> listay= new ArrayList<>();
+    List<Integer> listar= new ArrayList<>();
+    private String textoFixo = "";
     private int ACRESCENTADOR = 0;
-    private int RAIO_IMAGE = 0;
-    private int TAMANHO_INICIAL = 0;
+    private int LIMITER = 0;
+
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private float maxZoomLevel = 1f; // Variável para armazenar o zoom máximo
 
     private float currentZoomLevel = 1f;
     private Camera mCamera;
-    ImageView rowRed, rowYelow;
     private ActivityMainBinding binding;
     private static final int PERMISSIONS_GERAL = 1;
     int cameraFacing = CameraSelector.LENS_FACING_BACK;
@@ -74,13 +84,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(binding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        scale = getResources().getDisplayMetrics().density;
+
+        preencherListas();
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         previewView = binding.cameraPreview;
 
-        rowRed = binding.rowredview;
-        rowYelow = binding.rowyelowview;
 
         binding.maisyelow.setOnClickListener(this);
         binding.menosyelow.setOnClickListener(this);
@@ -102,10 +114,69 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         calcularTamanhoDaTela();
-        binding.raioImage.getLayoutParams().width = RAIO_IMAGE;
-        binding.raioImage.getLayoutParams().height = RAIO_IMAGE;
-        binding.rowredview.getLayoutParams().width = TAMANHO_INICIAL;
-        binding.rowyelowview.getLayoutParams().width = TAMANHO_INICIAL;
+
+    }
+
+    private void preencherListas(){
+        listay.add(binding.a1.getId());
+        listay.add(binding.a2.getId());
+        listay.add(binding.a3.getId());
+        listay.add(binding.a4.getId());
+        listay.add(binding.a5.getId());
+        listay.add(binding.a6.getId());
+        listay.add(binding.a7.getId());
+        listay.add(binding.a8.getId());
+        listay.add(binding.a9.getId());
+        listay.add(binding.a10.getId());
+        listay.add(binding.a11.getId());
+        listay.add(binding.a12.getId());
+        listay.add(binding.a13.getId());
+        listay.add(binding.a14.getId());
+        listay.add(binding.a15.getId());
+        listay.add(binding.a16.getId());
+        listay.add(binding.a17.getId());
+        listay.add(binding.a18.getId());
+        listay.add(binding.a19.getId());
+        listay.add(binding.a20.getId());
+        listay.add(binding.a21.getId());
+        listay.add(binding.a22.getId());
+        listay.add(binding.a23.getId());
+        listay.add(binding.a24.getId());
+        listay.add(binding.a25.getId());
+        listay.add(binding.a26.getId());
+        listay.add(binding.a27.getId());
+        listay.add(binding.a28.getId());
+
+        Collections.reverse(listay);
+
+// Adicionando valores de r1 até r30 manualmente à listar
+        listar.add(binding.v1.getId());
+        listar.add(binding.v2.getId());
+        listar.add(binding.v3.getId());
+        listar.add(binding.v4.getId());
+        listar.add(binding.v5.getId());
+        listar.add(binding.v6.getId());
+        listar.add(binding.v7.getId());
+        listar.add(binding.v8.getId());
+        listar.add(binding.v9.getId());
+        listar.add(binding.v10.getId());
+        listar.add(binding.v11.getId());
+        listar.add(binding.v12.getId());
+        listar.add(binding.v13.getId());
+        listar.add(binding.v14.getId());
+        listar.add(binding.v15.getId());
+        listar.add(binding.v16.getId());
+        listar.add(binding.v17.getId());
+        listar.add(binding.v18.getId());
+        listar.add(binding.v19.getId());
+        listar.add(binding.v20.getId());
+        listar.add(binding.v21.getId());
+        listar.add(binding.v22.getId());
+        listar.add(binding.v23.getId());
+        listar.add(binding.v24.getId());
+        listar.add(binding.v25.getId());
+        listar.add(binding.v26.getId());
+        listar.add(binding.v27.getId());
     }
     public void startCamera(int cameraFacing) {
         int aspectRatio = aspectRatio(previewView.getWidth(), previewView.getHeight());
@@ -166,44 +237,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onClick(View view) {
         int id = view.getId();
 
         if ( id == binding.maisred.getId() ){
-            if ( rowRed.getLayoutParams().width < 360){
-                rowRed.getLayoutParams().width = rowRed.getWidth() + ACRESCENTADOR;
-                rowRed.requestLayout();
-
-                Log.d("rowstest", "onClick: " + (binding.rowredview.getWidth() + ACRESCENTADOR) );
+            if ( indexr < (listar.size() - 1 ) ){
+                indexr++;
+                findViewById(listar.get(indexr)).setVisibility(View.VISIBLE);
             }
-
         }else if (id == binding.menosred.getId()){
-            if ( rowRed.getWidth() > 40){
-                rowRed.getLayoutParams().width = rowRed.getWidth() - ACRESCENTADOR;
-                rowRed.requestLayout();
-
-                Log.d("rowstest", "onClick: " + (rowRed.getWidth() - ACRESCENTADOR) );
+            if ( indexr >= 1){
+                findViewById(listar.get(indexr)).setVisibility(View.INVISIBLE);
+                indexr--;
             }
+        }
 
-        }else if (id == binding.maisyelow.getId()){
-            if ( rowYelow.getLayoutParams().width < 360){
-                rowYelow.getLayoutParams().width = rowYelow.getWidth() + ACRESCENTADOR;
-                rowYelow.requestLayout();
-
-                Log.d("rowstest", "onClick: " + (rowYelow.getWidth() + ACRESCENTADOR) );
+        else if (id == binding.maisyelow.getId()){
+            if ( indexy < (listay.size() - 1 )){
+                indexy++;
+                findViewById(listay.get(indexy)).setVisibility(View.VISIBLE);
             }
-
         }else if (id == binding.menosyelow.getId()){
-            if ( rowYelow.getWidth() > 40){
-                rowYelow.getLayoutParams().width = rowYelow.getWidth() - ACRESCENTADOR;
-                rowYelow.requestLayout();
-
-                Log.d("rowstest", "onClick: " + (rowYelow.getWidth() - ACRESCENTADOR) );
+            if ( indexy >= 1){
+                findViewById(listay.get(indexy)).setVisibility(View.INVISIBLE);
+                indexy--;
             }
-        }else if ( id == binding.configuracoes.getId() ){
+        }
+
+        else if ( id == binding.configuracoes.getId() ){
             startActivity(new Intent(getApplicationContext(), ConfiguracoesActivity.class));
         }
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -213,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 // Quando o botão é pressionado
                 if ( currentZoomLevel < maxZoomLevel ){
+
                     currentZoomLevel += 0.5f;
                     mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
 
@@ -228,6 +295,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 // Quando o botão é pressionado
                 if ( currentZoomLevel > 1){
+
                     currentZoomLevel -= 0.5f;
                     mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
 
@@ -293,24 +361,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         double heightCm = heightInches * 2.54;
         double widthCm = widthInches * 2.54;
 
-        TAMANHO_INICIAL = (int) Math.ceil((200 * widthCm) / 13.78);
-        RAIO_IMAGE = (int) Math.ceil((60 * widthCm) / 13.78);
-        ACRESCENTADOR = (int) Math.ceil(((40 * widthCm) / 13.78));
+//        ACRESCENTADOR = (int) Math.ceil(((20 * widthPixels) / 1459));
+//        LIMITER = (int) Math.ceil(((360 * widthPixels) / 1459));
+        ACRESCENTADOR = 20;
+        LIMITER = 360;
 
 
         Log.d("calcularTamanhoDaTela", "acrescenteador: " + ACRESCENTADOR);
-        Log.d("calcularTamanhoDaTela", "raio: " + RAIO_IMAGE);
-        Log.d("calcularTamanhoDaTela", "tamanho inicial: " + TAMANHO_INICIAL);
+        textoFixo =   String.format(
+                "%.2fx%.2f cm"
+                        +"\n"+
+                        "%.2fx%.2f polegadas"
+                        +"\n"+
+                        "%dx%d pixels"
+                        +"\n"+
+                        "Acrescentadorr: %d"
+                        +"\n"+
+                        "Limitador: %d"
+                , widthCm, heightCm, widthInches,heightInches, widthPixels, heightPixels, ACRESCENTADOR, LIMITER );
         binding.dadosDaTela.setText(
-                String.format(
-                        "Altura: %.2f cm"
-                        +"\n"+
-                        "Largura: %.2f cm"
-                        +"\n"+
-                        "Altura: %.2f polegadas"+
-                        "\n"+
-                        "Largura: %.2f polegadas"
-                        , heightCm, widthCm, heightInches, widthInches)
+              textoFixo
         );
 
     }
