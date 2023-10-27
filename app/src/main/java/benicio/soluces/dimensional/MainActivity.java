@@ -243,27 +243,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = view.getId();
 
         if ( id == binding.maisred.getId() ){
-            if ( indexr < (listar.size() - 1 ) ){
-                indexr++;
-                findViewById(listar.get(indexr)).setVisibility(View.VISIBLE);
-            }
+            aumentarVermelho();
         }else if (id == binding.menosred.getId()){
-            if ( indexr >= 1){
-                findViewById(listar.get(indexr)).setVisibility(View.INVISIBLE);
-                indexr--;
-            }
+            diminuirVermelho();
         }
 
         else if (id == binding.maisyelow.getId()){
-            if ( indexy < (listay.size() - 1 )){
-                indexy++;
-                findViewById(listay.get(indexy)).setVisibility(View.VISIBLE);
-            }
+            aumentarAmerelo();
         }else if (id == binding.menosyelow.getId()){
-            if ( indexy >= 1){
-                findViewById(listay.get(indexy)).setVisibility(View.INVISIBLE);
-                indexy--;
-            }
+            diminuirAmerelo();
         }
 
         else if ( id == binding.configuracoes.getId() ){
@@ -272,6 +260,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void aumentarAmerelo(){
+        if ( indexy < (listay.size() - 1 )){
+            indexy++;
+            findViewById(listay.get(indexy)).setVisibility(View.VISIBLE);
+        }
+    }
+    private void diminuirAmerelo(){
+        if ( indexy >= 1){
+            findViewById(listay.get(indexy)).setVisibility(View.INVISIBLE);
+            indexy--;
+        }
+    }
+    private void aumentarVermelho(){
+        if ( indexr < (listar.size() - 1 ) ){
+            indexr++;
+            findViewById(listar.get(indexr)).setVisibility(View.VISIBLE);
+        }
+    }
+    private void diminuirVermelho(){
+        if ( indexr >= 1){
+            findViewById(listar.get(indexr)).setVisibility(View.INVISIBLE);
+            indexr--;
+        }
+    }
     @SuppressLint("ClickableViewAccessibility")
     public void configurarEventoDePressionar(){
 
@@ -279,6 +291,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 // Quando o botão é pressionado
                 if ( currentZoomLevel < maxZoomLevel ){
+
+                    int quantidadeParaAumentar = (int) Math.ceil( (indexr + indexy) * 0.5 ) / 2;
+
+                    for (int i = 0 ; i < quantidadeParaAumentar  ; i++){
+                        aumentarAmerelo();
+                        aumentarVermelho();
+                    }
 
                     currentZoomLevel += 0.5f;
                     mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
@@ -295,6 +314,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 // Quando o botão é pressionado
                 if ( currentZoomLevel > 1){
+
+                    int quantidadeParaAumentar = (int) Math.ceil( (indexr + indexy) * 0.5 ) / 2;
+
+                    for (int i = 0 ; i < quantidadeParaAumentar  ; i++){
+                        diminuirAmerelo();
+                        diminuirVermelho();
+                    }
+
 
                     currentZoomLevel -= 0.5f;
                     mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
