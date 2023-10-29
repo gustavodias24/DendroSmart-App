@@ -45,10 +45,11 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import benicio.soluces.dimensional.databinding.ActivityMainBinding;
+import benicio.soluces.dimensional.utils.Converter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-    int tamanhoEmDpBarrinha = 60;
+    
+    int dpBarrinhas = 90;
     float scale;
     int indexy = 4;
     int indexr = 4;
@@ -85,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         scale = getResources().getDisplayMetrics().density;
+
+        binding.textViewTamanho.setText(
+                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+        );
 
         preencherListas();
 
@@ -240,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("DefaultLocale")
     @Override
     public void onClick(View view) {
+
         int id = view.getId();
 
         if ( id == binding.maisred.getId() ){
@@ -247,27 +253,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if (id == binding.menosred.getId()){
             diminuirVermelho();
         }
-
         else if (id == binding.maisyelow.getId()){
             aumentarAmerelo();
         }else if (id == binding.menosyelow.getId()){
             diminuirAmerelo();
         }
-
         else if ( id == binding.configuracoes.getId() ){
             startActivity(new Intent(getApplicationContext(), ConfiguracoesActivity.class));
         }
-
+        binding.textViewTamanho.setText(
+                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+        );
     }
 
     private void aumentarAmerelo(){
         if ( indexy < (listay.size() - 1 )){
             indexy++;
+            dpBarrinhas += 9;
             findViewById(listay.get(indexy)).setVisibility(View.VISIBLE);
         }
     }
     private void diminuirAmerelo(){
         if ( indexy >= 1){
+            dpBarrinhas -= 9;
             findViewById(listay.get(indexy)).setVisibility(View.INVISIBLE);
             indexy--;
         }
@@ -275,11 +283,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void aumentarVermelho(){
         if ( indexr < (listar.size() - 1 ) ){
             indexr++;
+            dpBarrinhas += 9;
             findViewById(listar.get(indexr)).setVisibility(View.VISIBLE);
         }
     }
     private void diminuirVermelho(){
         if ( indexr >= 1){
+            dpBarrinhas -= 9;
             findViewById(listar.get(indexr)).setVisibility(View.INVISIBLE);
             indexr--;
         }
@@ -315,11 +325,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Quando o botão é pressionado
                 if ( currentZoomLevel > 1){
 
-                    int quantidadeParaAumentar = (int) Math.ceil( (indexr + indexy) * 0.5 ) / 2;
+                    int quantidadeParaAumentar = (int) Math.floor( (indexr + indexy) * 0.5 ) / 2;
 
-                    for (int i = 0 ; i < quantidadeParaAumentar  ; i++){
-                        diminuirAmerelo();
+                    for (int i = 0 ; i < (quantidadeParaAumentar - 1)  ; i++){
                         diminuirVermelho();
+                        diminuirAmerelo();
                     }
 
 
