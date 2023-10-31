@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if ( currentZoomLevel < maxZoomLevel ){
 
                         int quantidadeParaAjustar = (int) Math.ceil( (indexr + indexy) * 0.5 ) / 2;
-                        quantidadeParaAjustar = quantidadeParaAjustar == 0 ? 2 : quantidadeParaAjustar;
+                        quantidadeParaAjustar = quantidadeParaAjustar == 0 ? 1 : quantidadeParaAjustar;
 
                         for (int i = 0 ; i < quantidadeParaAjustar  ; i++){
                             aumentarAmerelo();
@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ( currentZoomLevel > 1){
 
                     int quantidadeParaAjustar = (int) Math.floor( (indexr + indexy) * 0.5 ) / 2;
-                    quantidadeParaAjustar = quantidadeParaAjustar == 0 ? 2 : quantidadeParaAjustar;
+                    quantidadeParaAjustar = quantidadeParaAjustar == 0 ? 1 : quantidadeParaAjustar;
 
 
                     for (int i = 0 ; i < quantidadeParaAjustar ; i++){
