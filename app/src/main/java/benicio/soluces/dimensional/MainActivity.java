@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     
     int dpBarrinhas = 90;
     float scale;
-    int indexy = 4;
-    int indexr = 4;
+    int indexy = 3;
+    int indexr = 3;
     List<Integer> listay= new ArrayList<>();
     List<Integer> listar= new ArrayList<>();
     private String textoFixo = "";
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private float maxZoomLevel = 1f; // Variável para armazenar o zoom máximo
 
-    private float currentZoomLevel = 1f;
+    private float currentZoomLevel = 4.0f;
     private Camera mCamera;
     private ActivityMainBinding binding;
     private static final int PERMISSIONS_GERAL = 1;
@@ -151,6 +151,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listay.add(binding.a26.getId());
         listay.add(binding.a27.getId());
         listay.add(binding.a28.getId());
+        listay.add(binding.a29.getId());
+        listay.add(binding.a30.getId());
+        listay.add(binding.a31.getId());
+        listay.add(binding.a32.getId());
+        listay.add(binding.a33.getId());
+        listay.add(binding.a34.getId());
+        listay.add(binding.a35.getId());
+        listay.add(binding.a36.getId());
+        listay.add(binding.a37.getId());
+        listay.add(binding.a38.getId());
+        listay.add(binding.a39.getId());
+        listay.add(binding.a40.getId());
 
         Collections.reverse(listay);
 
@@ -182,6 +194,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listar.add(binding.v25.getId());
         listar.add(binding.v26.getId());
         listar.add(binding.v27.getId());
+        listar.add(binding.v28.getId());
+        listar.add(binding.v29.getId());
+        listar.add(binding.v30.getId());
+        listar.add(binding.v31.getId());
+        listar.add(binding.v32.getId());
+        listar.add(binding.v33.getId());
+        listar.add(binding.v34.getId());
+        listar.add(binding.v35.getId());
+        listar.add(binding.v36.getId());
+        listar.add(binding.v37.getId());
+        listar.add(binding.v38.getId());
+        listar.add(binding.v39.getId());
+        listar.add(binding.v40.getId());
     }
     public void startCamera(int cameraFacing) {
         int aspectRatio = aspectRatio(previewView.getWidth(), previewView.getHeight());
@@ -203,13 +228,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if ( !this.isDestroyed() ){
                     mCamera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
+                    mCamera.getCameraControl().setZoomRatio(4.0f);
                 }
 
                 preview.setSurfaceProvider(previewView.getSurfaceProvider());
+
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         }, ContextCompat.getMainExecutor(this));
+
+
     }
     private int aspectRatio(int width, int height) {
         double previewRatio = (double) Math.max(width, height) / Math.min(width, height);
@@ -300,22 +329,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.maisZoom.setOnTouchListener((view, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 // Quando o botão é pressionado
-                if ( currentZoomLevel < maxZoomLevel ){
+                if ( findViewById(listar.get( listar.size() - 1 )).getVisibility() == View.INVISIBLE ){
+                    if ( currentZoomLevel < maxZoomLevel ){
 
-                    int quantidadeParaAumentar = (int) Math.ceil( (indexr + indexy) * 0.5 ) / 2;
+                        int quantidadeParaAumentar = (int) Math.ceil( (indexr + indexy) * 0.5 ) / 2;
 
-                    for (int i = 0 ; i < quantidadeParaAumentar  ; i++){
-                        aumentarAmerelo();
-                        aumentarVermelho();
+                        for (int i = 0 ; i < quantidadeParaAumentar  ; i++){
+                            aumentarAmerelo();
+                            aumentarVermelho();
+                        }
+
+                        currentZoomLevel += 0.5f;
+                        mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
+
+                        String zoomString = currentZoomLevel  + "x";
+                        binding.textViewZoom.setText(zoomString);
+//                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
                     }
-
-                    currentZoomLevel += 0.5f;
-                    mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
-
-                    String zoomString = currentZoomLevel  + "x";
-                    binding.textViewZoom.setText(zoomString);
-                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
                 }
+
             }
             return true;
         });
@@ -338,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     String zoomString = currentZoomLevel  + "x";
                     binding.textViewZoom.setText(zoomString);
-                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
                 }
             }
             return true;
