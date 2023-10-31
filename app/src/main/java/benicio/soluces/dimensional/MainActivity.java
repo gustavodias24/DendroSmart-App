@@ -332,9 +332,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ( findViewById(listar.get( listar.size() - 1 )).getVisibility() == View.INVISIBLE ){
                     if ( currentZoomLevel < maxZoomLevel ){
 
-                        int quantidadeParaAumentar = (int) Math.ceil( (indexr + indexy) * 0.5 ) / 2;
+                        int quantidadeParaAjustar = (int) Math.ceil( (indexr + indexy) * 0.5 ) / 2;
+                        quantidadeParaAjustar = quantidadeParaAjustar == 0 ? 2 : quantidadeParaAjustar;
 
-                        for (int i = 0 ; i < quantidadeParaAumentar  ; i++){
+                        for (int i = 0 ; i < quantidadeParaAjustar  ; i++){
                             aumentarAmerelo();
                             aumentarVermelho();
                         }
@@ -345,6 +346,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         String zoomString = currentZoomLevel  + "x";
                         binding.textViewZoom.setText(zoomString);
 //                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
+                        binding.textViewTamanho.setText(
+                                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+                        );
                     }
                 }
 
@@ -357,9 +361,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Quando o botão é pressionado
                 if ( currentZoomLevel > 1){
 
-                    int quantidadeParaAumentar = (int) Math.floor( (indexr + indexy) * 0.5 ) / 2;
+                    int quantidadeParaAjustar = (int) Math.floor( (indexr + indexy) * 0.5 ) / 2;
+                    quantidadeParaAjustar = quantidadeParaAjustar == 0 ? 2 : quantidadeParaAjustar;
 
-                    for (int i = 0 ; i < (quantidadeParaAumentar - 1)  ; i++){
+
+                    for (int i = 0 ; i < quantidadeParaAjustar ; i++){
                         diminuirVermelho();
                         diminuirAmerelo();
                     }
@@ -371,6 +377,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String zoomString = currentZoomLevel  + "x";
                     binding.textViewZoom.setText(zoomString);
 //                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
+                    binding.textViewTamanho.setText(
+                            Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+                    );
                 }
             }
             return true;
