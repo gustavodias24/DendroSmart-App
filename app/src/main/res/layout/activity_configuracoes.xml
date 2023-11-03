@@ -7,7 +7,7 @@
     android:layout_margin="8dp"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:context=".ConfiguracoesActivity">
+    tools:context=".activitys.ConfiguracoesActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/outlinedTextField"
