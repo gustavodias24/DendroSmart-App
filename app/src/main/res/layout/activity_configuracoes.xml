@@ -9,29 +9,21 @@
     android:padding="8dp"
     tools:context=".activitys.ConfiguracoesActivity">
 
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="@drawable/background_blue"
+        android:src="@raw/emptylogo" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/outlinedTextField"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:hint="Incremento do Zoom">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number|numberDecimal|numberSigned"
-            android:text="0.5" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:checked="true"
-        android:text="Exibir mensagem do Zoom." />
+        android:hint="Incremento do Zoom" />
 
     <View
         android:id="@+id/divider"
