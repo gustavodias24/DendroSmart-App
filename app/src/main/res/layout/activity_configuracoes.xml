@@ -32,11 +32,25 @@
         android:background="?android:attr/listDivider" />
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/exibirGps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:checked="true"
-        android:text="Exibir dados da tela." />
+        android:text="Exibir dados do GPS na tela." />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="?android:attr/listDivider" />
+
+    <Button
+        android:id="@+id/sair"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#F44336"
+        android:text="Deslogar"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
 
 </LinearLayout>

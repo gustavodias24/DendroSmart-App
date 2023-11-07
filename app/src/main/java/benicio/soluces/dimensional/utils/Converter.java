@@ -3,6 +3,7 @@ package benicio.soluces.dimensional.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 
 public class Converter {
 
@@ -23,5 +24,10 @@ public class Converter {
     public static float pixelsToCm(float pixels, Context context) {
         float centimetrosPorPolegada = 2.54f;
         return pixels / (context.getResources().getDisplayMetrics().xdpi / centimetrosPorPolegada);
+    }
+
+    public static int dpToPixels(Context context, float dp) {
+        // Converte dp para pixels usando TypedValue e applyDimension
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 }

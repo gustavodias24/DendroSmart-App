@@ -42,19 +42,36 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
-        if ( preferences.getString("logoImage", null) != null){
-            byte[] decodedBytes = Base64.decode(preferences.getString("logoImage", null), Base64.DEFAULT);
-            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-            mainBinding.logo.setImageBitmap(decodedBitmap);
-        }
+        configurarDadosSalvos();
 
         mainBinding.logo.setOnClickListener( view -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, 1);
         });
 
-    }
+        mainBinding.exibirGps.setOnClickListener( view -> {
+            if ( mainBinding.exibirGps.isChecked() ){
+                editor.putBoolean("gps", true);
+            }else{
+                editor.putBoolean("gps", false);
+            }
 
+            editor.apply();
+
+        });
+
+    }
+    private void configurarDadosSalvos(){
+        if ( preferences.getString("logoImage", null) != null){
+            byte[] decodedBytes = Base64.decode(preferences.getString("logoImage", null), Base64.DEFAULT);
+            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+            mainBinding.logo.setImageBitmap(decodedBitmap);
+        }
+
+        mainBinding.exibirGps.setChecked(
+                preferences.getBoolean("gps", false)
+        );
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

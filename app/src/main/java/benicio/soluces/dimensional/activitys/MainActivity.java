@@ -1,5 +1,30 @@
 package benicio.soluces.dimensional.activitys;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationRequest;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Base64;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -17,50 +42,45 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
-import android.os.Bundle;
-import android.util.Base64;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Toast;
-
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import benicio.soluces.dimensional.databinding.ActivityMainBinding;
 import benicio.soluces.dimensional.utils.Converter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
+    private static final int ALTURA_BARRINHA_NORMAL = 30;
+    private static final int ALTURA_BARRINHA_AUMENTADA = 40;
+    private Double latitude, longitude;
+    private FusedLocationProviderClient fusedLocationClient;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private int delay = 3000; // 3 segundos em milissegundos
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    
     int dpBarrinhas = 90;
     float scale;
     int indexy = 3;
     int indexr = 3;
-    List<Integer> listay= new ArrayList<>();
-    List<Integer> listar= new ArrayList<>();
+    List<Integer> listay = new ArrayList<>();
+    List<Integer> listar = new ArrayList<>();
     private String textoFixo = "";
     private int ACRESCENTADOR = 0;
     private int LIMITER = 0;
-
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private float maxZoomLevel = 1f; // Variável para armazenar o zoom máximo
 
@@ -70,10 +90,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int PERMISSIONS_GERAL = 1;
     int cameraFacing = CameraSelector.LENS_FACING_BACK;
     private PreviewView previewView;
-    private  final ActivityResultLauncher<String> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+    private final ActivityResultLauncher<String> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
         @Override
         public void onActivityResult(Boolean result) {
-            if ( result ){
+            if (result) {
                 startCamera(cameraFacing);
             }
         }
@@ -89,6 +109,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
 
         scale = getResources().getDisplayMetrics().density;
 
@@ -127,6 +151,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         calcularTamanhoDaTela();
 
+        Runnable runnableCode = new Runnable() {
+            @Override
+            public void run() {
+                pegarLocalizacao();
+                handler.postDelayed(this, delay);
+            }
+        };
+
+        runnableCode.run();
     }
 
     private void preencherListas(){
@@ -214,6 +247,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listar.add(binding.v38.getId());
         listar.add(binding.v39.getId());
         listar.add(binding.v40.getId());
+    }
+
+    public void pegarLocalizacao(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                configurarTextInfos();
+                Log.d("latlong", "onSuccess: " +  latitude + " " + longitude);
+            }
+        });
     }
     public void startCamera(int cameraFacing) {
         int aspectRatio = aspectRatio(previewView.getWidth(), previewView.getHeight());
@@ -306,12 +360,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if ( indexy < (listay.size() - 1 )){
             indexy++;
             dpBarrinhas += 9;
+
+            int anterior = indexy + 1 > (listay.size() - 1) ? (listay.size() - 1) : indexy + 1;
+            findViewById(listay.get(anterior)).getLayoutParams().height = Converter.dpToPixels(this, ALTURA_BARRINHA_AUMENTADA);
+            findViewById(listay.get(anterior)).requestLayout();
+
+            findViewById(listay.get(indexy - 1)).getLayoutParams().height = Converter.dpToPixels(this, ALTURA_BARRINHA_NORMAL);
+            findViewById(listay.get(indexy - 1)).requestLayout();
+
             findViewById(listay.get(indexy)).setVisibility(View.VISIBLE);
         }
     }
     private void diminuirAmerelo(){
         if ( indexy >= 1){
             dpBarrinhas -= 9;
+
+            int anterior = Math.min(indexy + 1, 0);
+            findViewById(listay.get(anterior)).getLayoutParams().height = Converter.dpToPixels(this, ALTURA_BARRINHA_NORMAL);
+            findViewById(listay.get(anterior)).requestLayout();
+
+            findViewById(listay.get(indexy - 1)).getLayoutParams().height = Converter.dpToPixels(this, ALTURA_BARRINHA_AUMENTADA);
+            findViewById(listay.get(indexy - 1)).requestLayout();
+
             findViewById(listay.get(indexy)).setVisibility(View.INVISIBLE);
             indexy--;
         }
@@ -321,12 +391,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             indexr++;
             dpBarrinhas += 9;
             findViewById(listar.get(indexr)).setVisibility(View.VISIBLE);
+
+            int anterior = Math.max(indexr - 1, 0);
+            findViewById(listar.get(anterior)).getLayoutParams().height = Converter.dpToPixels(this, ALTURA_BARRINHA_NORMAL);
+            findViewById(listar.get(anterior)).requestLayout();
+
+            findViewById(listar.get(indexr)).getLayoutParams().height = Converter.dpToPixels(this, ALTURA_BARRINHA_AUMENTADA);
+            findViewById(listar.get(indexr)).requestLayout();
+
         }
     }
     private void diminuirVermelho(){
         if ( indexr >= 1){
             dpBarrinhas -= 9;
             findViewById(listar.get(indexr)).setVisibility(View.INVISIBLE);
+
+            int anterior = Math.max(indexr - 1, 0);
+            findViewById(listar.get(anterior)).getLayoutParams().height = Converter.dpToPixels(this, ALTURA_BARRINHA_AUMENTADA);
+            findViewById(listar.get(anterior)).requestLayout();
+
+            findViewById(listar.get(indexr)).getLayoutParams().height = Converter.dpToPixels(this, ALTURA_BARRINHA_NORMAL);
+            findViewById(listar.get(indexr)).requestLayout();
+
             indexr--;
         }
     }
@@ -477,6 +563,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             binding.logoEmpresa.setImageBitmap(decodedBitmap);
             binding.logoEmpresa.setVisibility(View.VISIBLE);
         }
+
+        if ( preferences.getBoolean("gps", false) ){
+            binding.dadosGpsText.setVisibility(View.VISIBLE);
+        }else{
+            binding.dadosGpsText.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -484,4 +576,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         pegarConfiguracoesAtuais();
     }
+
+    @SuppressLint("SetTextI18n")
+    private void configurarTextInfos(){
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+
+        // Formatar a data e a hora
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+
+        String formattedDate = dateFormat.format(currentDate);
+        String formattedTime = timeFormat.format(currentDate);
+
+        String operador;
+
+        String nomeOperador = getSharedPreferences("configPreferences", MODE_PRIVATE).getString("operador", "");
+        operador = Objects.requireNonNull(nomeOperador.isEmpty() ? "Nome não informado." : nomeOperador);
+
+
+        @SuppressLint("DefaultLocale") String cordenadas = String.format("Lat: %f Long: %f", latitude, longitude);
+
+        binding.dadosGpsText.setText(
+                String.format("%s ás %s", formattedDate, formattedTime) + "\n" +
+                        cordenadas + "\n" +
+                        "Operador: " + operador
+        );
+
+
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        try {
+
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+            if (!addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                String fullAddress = address.getAddressLine(0).replace(",", "\n");
+                binding.dadosGpsText.setText(
+                        String.format("%s ás %s", formattedDate, formattedTime) + "\n" +
+                                cordenadas + "\n" +
+                                fullAddress + "\n" +
+                                "Operador: " + operador
+                );
+                Log.d("Address", fullAddress);
+            } else {
+                Log.d("Address", "No address found");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

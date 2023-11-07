@@ -36,6 +36,8 @@ android {
 
 dependencies {
 
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
     implementation("com.github.ahmmedrejowan.CuteToast:CuteToast:1.2")
     implementation("com.github.ahmmedrejowan.CuteToast:CuteToast-Custom:1.2")
 
