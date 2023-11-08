@@ -14,7 +14,9 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationRequest;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
@@ -35,11 +37,13 @@ import androidx.camera.core.AspectRatio;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -48,7 +52,11 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,8 +66,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
+import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivityMainBinding;
 import benicio.soluces.dimensional.utils.Converter;
 
@@ -78,13 +89,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int indexr = 3;
     List<Integer> listay = new ArrayList<>();
     List<Integer> listar = new ArrayList<>();
-    private String textoFixo = "";
+    private int qtdBarrinhas = 8;
     private int ACRESCENTADOR = 0;
     private int LIMITER = 0;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private float maxZoomLevel = 1f; // Variável para armazenar o zoom máximo
 
-    private float currentZoomLevel = 4.0f;
+    private float currentZoomLevel = 2.0f;
+    private String textoFixo = "";
     private Camera mCamera;
     private ActivityMainBinding binding;
     private static final int PERMISSIONS_GERAL = 1;
@@ -292,6 +304,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mCamera.getCameraControl().setZoomRatio(4.0f);
                 }
 
+                binding.print.setOnClickListener( view -> {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        activityResultLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    } else {
+                        takePrint(imageCapture);
+                    }
+                });
+
                 preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
             } catch (ExecutionException | InterruptedException e) {
@@ -300,6 +320,168 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }, ContextCompat.getMainExecutor(this));
 
 
+    }
+
+    public void takePrint(ImageCapture imageCapture){
+        binding.maisZoom.setVisibility(View.INVISIBLE);
+        binding.menosZoom.setVisibility(View.INVISIBLE);
+        binding.configuracoes.setVisibility(View.INVISIBLE);
+        binding.maisred.setVisibility(View.INVISIBLE);
+        binding.menosred.setVisibility(View.INVISIBLE);
+        binding.maisyelow.setVisibility(View.INVISIBLE);
+        binding.menosyelow.setVisibility(View.INVISIBLE);
+        binding.print.setVisibility(View.INVISIBLE);
+
+        binding.imagePreview.setVisibility(View.VISIBLE);
+
+
+
+        File documentosDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+
+        File fotoMapaDir = new File(documentosDir, "FOTO MAPA");
+        if (!fotoMapaDir.exists()) {
+            fotoMapaDir.mkdirs();
+        }
+
+        File partesDir = new File(fotoMapaDir, "PARTES");
+
+        if ( !partesDir.exists()){
+            partesDir.mkdirs();
+        }
+
+
+        final File file = new File(partesDir, System.currentTimeMillis() + ".png");
+        ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
+        imageCapture.takePicture(outputFileOptions, Executors.newCachedThreadPool(), new ImageCapture.OnImageSavedCallback() {
+            @Override
+            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                runOnUiThread(() -> {
+                    Picasso.get().load(file).into(binding.imagePreview, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            try {
+                                // create bitmap screen capture
+                                View v1 = getWindow().getDecorView().getRootView().findViewById(R.id.maconha);
+                                v1.setDrawingCacheEnabled(true);
+                                Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+                                v1.setDrawingCacheEnabled(false);
+
+                                File documentosDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+
+                                File fotoMapaDir = new File(documentosDir, "DIMENSIONAL PHOTOS");
+
+                                if (!fotoMapaDir.exists()) {
+                                    fotoMapaDir.mkdirs();
+                                }
+
+                                File partesDir = new File(fotoMapaDir, "PARTES");
+
+                                if ( !partesDir.exists()){
+                                    partesDir.mkdirs();
+                                }
+
+                                File imageFile = new File(partesDir, UUID.randomUUID().toString() + ".png");
+
+                                FileOutputStream outputStream = new FileOutputStream(imageFile);
+                                int quality = 70;
+
+                                bitmap.compress(Bitmap.CompressFormat.PNG, quality, outputStream);
+
+                                outputStream.flush();
+                                outputStream.close();
+
+                                Toast.makeText(MainActivity.this, "Imagem Salva", Toast.LENGTH_SHORT).show();
+
+                                binding.maisZoom.setVisibility(View.VISIBLE);
+                                binding.menosZoom.setVisibility(View.VISIBLE);
+                                binding.configuracoes.setVisibility(View.VISIBLE);
+                                binding.maisred.setVisibility(View.VISIBLE);
+                                binding.menosred.setVisibility(View.VISIBLE);
+                                binding.maisyelow.setVisibility(View.VISIBLE);
+                                binding.menosyelow.setVisibility(View.VISIBLE);
+                                binding.print.setVisibility(View.VISIBLE);
+
+                                startCamera(cameraFacing);
+                                baterPrintDenovo();
+                            } catch (Throwable e) {
+
+                            }
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Log.d("cauda do erro", "onError: " + e.getCause().getMessage());
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            binding.imagePreview.setVisibility(View.GONE);
+                        }
+                    });
+                });
+            }
+            @Override
+            public void onError(@NonNull ImageCaptureException exception) {
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erro: "+ exception.getMessage(), Toast.LENGTH_SHORT).show());
+                startCamera(cameraFacing);
+            }
+        });
+    }
+
+    public  void baterPrintDenovo (){
+        try {
+            binding.configuracoes.setVisibility(View.INVISIBLE);
+            binding.maisred.setVisibility(View.INVISIBLE);
+            binding.menosred.setVisibility(View.INVISIBLE);
+            binding.maisyelow.setVisibility(View.INVISIBLE);
+            binding.menosyelow.setVisibility(View.INVISIBLE);
+            binding.print.setVisibility(View.INVISIBLE);
+            binding.maisZoom.setVisibility(View.INVISIBLE);
+            binding.menosZoom.setVisibility(View.INVISIBLE);
+
+            // create bitmap screen capture
+            View v1 = getWindow().getDecorView().getRootView().findViewById(R.id.maconha);
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File documentosDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+
+            File fotoMapaDir = new File(documentosDir, "DIMENSIONAL PHOTOS");
+            if (!fotoMapaDir.exists()) {
+                fotoMapaDir.mkdirs();
+            }
+
+            File imageFile = new File(fotoMapaDir, UUID.randomUUID().toString() + ".png");
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 70;
+
+            bitmap.compress(Bitmap.CompressFormat.PNG, quality, outputStream);
+
+            outputStream.flush();
+            outputStream.close();
+
+            binding.configuracoes.setVisibility(View.VISIBLE);
+            binding.maisred.setVisibility(View.VISIBLE);
+            binding.menosred.setVisibility(View.VISIBLE);
+            binding.maisyelow.setVisibility(View.VISIBLE);
+            binding.menosyelow.setVisibility(View.VISIBLE);
+            binding.print.setVisibility(View.VISIBLE);
+            binding.maisZoom.setVisibility(View.VISIBLE);
+            binding.menosZoom.setVisibility(View.VISIBLE);
+            startCamera(cameraFacing);
+
+            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(MainActivity.this),
+                    "benicio.soluces.dimensional.provider", imageFile);
+
+            Intent viewImageIntent = new Intent(Intent.ACTION_VIEW);
+            viewImageIntent.setDataAndType(uri, "image/*");
+            viewImageIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(viewImageIntent);
+
+            binding.imagePreview.setVisibility(View.GONE);
+
+        } catch (Throwable e) {
+            Log.d("baterPrintDenovo:",  e.getMessage());
+        }
     }
     private int aspectRatio(int width, int height) {
         double previewRatio = (double) Math.max(width, height) / Math.min(width, height);
@@ -358,6 +540,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void aumentarAmerelo(){
         if ( indexy < (listay.size() - 1 )){
+            qtdBarrinhas++;
+            atualizarContagemBarrinhas();
             indexy++;
             dpBarrinhas += 9;
 
@@ -373,6 +557,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void diminuirAmerelo(){
         if ( indexy >= 1){
+            qtdBarrinhas--;
+            atualizarContagemBarrinhas();
             dpBarrinhas -= 9;
 
             int anterior = Math.min(indexy + 1, 0);
@@ -388,6 +574,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void aumentarVermelho(){
         if ( indexr < (listar.size() - 1 ) ){
+            qtdBarrinhas++;
+            atualizarContagemBarrinhas();
             indexr++;
             dpBarrinhas += 9;
             findViewById(listar.get(indexr)).setVisibility(View.VISIBLE);
@@ -403,6 +591,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void diminuirVermelho(){
         if ( indexr >= 1){
+            qtdBarrinhas--;
+            atualizarContagemBarrinhas();
             dpBarrinhas -= 9;
             findViewById(listar.get(indexr)).setVisibility(View.INVISIBLE);
 
@@ -425,15 +615,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ( findViewById(listar.get( listar.size() - 1 )).getVisibility() == View.INVISIBLE ){
                     if ( currentZoomLevel < maxZoomLevel ){
 
-                        int quantidadeParaAjustar = (int) Math.ceil( (indexr + indexy) * 0.5 ) / 2;
-                        quantidadeParaAjustar = quantidadeParaAjustar == 0 ? 1 : quantidadeParaAjustar;
-
-                        for (int i = 0 ; i < quantidadeParaAjustar  ; i++){
-                            aumentarAmerelo();
-                            aumentarVermelho();
+                        int quantidadeParaAjustar = (indexr+1) + (indexy+1);
+                        for (int i = 0 ; i < quantidadeParaAjustar ; i++){
+                            if (i % 2 == 0){
+                                aumentarAmerelo();
+                            }else{
+                                aumentarVermelho();
+                            }
                         }
-
-                        currentZoomLevel += 0.5f;
+                        currentZoomLevel = currentZoomLevel*2;
                         mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
 
                         String zoomString = currentZoomLevel  + "x";
@@ -452,19 +642,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.menosZoom.setOnTouchListener((view, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 // Quando o botão é pressionado
-                if ( currentZoomLevel > 1){
+                if ( currentZoomLevel > 2){
 
-                    int quantidadeParaAjustar = (int) Math.floor( (indexr + indexy) * 0.5 ) / 2;
-                    quantidadeParaAjustar = quantidadeParaAjustar == 0 ? 1 : quantidadeParaAjustar;
-
-
+                    int quantidadeParaAjustar = ((indexr+1) + (indexy+1)) / 2 ;
+                    Log.d("diminuicao", "configurarEventoDePressionar: " + quantidadeParaAjustar);
                     for (int i = 0 ; i < quantidadeParaAjustar ; i++){
-                        diminuirVermelho();
-                        diminuirAmerelo();
+                        if (i % 2 == 0){
+                            diminuirAmerelo();
+                        }else{
+                            diminuirVermelho();
+                        }
                     }
 
-
-                    currentZoomLevel -= 0.5f;
+                    currentZoomLevel = currentZoomLevel/2;
                     mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
 
                     String zoomString = currentZoomLevel  + "x";
@@ -473,6 +663,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     binding.textViewTamanho.setText(
                             Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
                     );
+                }else{
+                    Log.d("zoomDiminuir", "não pode zoom: " + currentZoomLevel);
                 }
             }
             return true;
@@ -611,14 +803,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (!addresses.isEmpty()) {
                 Address address = addresses.get(0);
-                String fullAddress = address.getAddressLine(0).replace(",", "\n");
+                String[] fullAddress = address.getAddressLine(0).split(",");
                 binding.dadosGpsText.setText(
                         String.format("%s ás %s", formattedDate, formattedTime) + "\n" +
                                 cordenadas + "\n" +
-                                fullAddress + "\n" +
+                                fullAddress[0] + ", " + fullAddress[1] + "\n" +
+                                fullAddress[2] + fullAddress[3] + "\n" +
                                 "Operador: " + operador
                 );
-                Log.d("Address", fullAddress);
             } else {
                 Log.d("Address", "No address found");
             }
@@ -627,4 +819,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    private void atualizarContagemBarrinhas(){
+        binding.qtdBarrinha.setText(qtdBarrinhas + "");
+    }
 }
