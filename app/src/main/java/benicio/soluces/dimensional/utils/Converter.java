@@ -6,12 +6,13 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 public class Converter {
+    private static final float DIVIDAO_RAFAEL = 1.5312f;
 
     @SuppressLint("DefaultLocale")
     public static String converterDpParaCm(Context context, int valorDp) {
         float dp = valorDp; // Valor em dp
         float pixels = dpToPixels(dp, context); // Converte dp para pixels
-        float centimetros = pixelsToCm(pixels, context); // Converte pixels para centímetros
+        float centimetros = (pixelsToCm(pixels, context)) / DIVIDAO_RAFAEL; // Converte pixels para centímetros
 
         return String.format("%.2f cm", centimetros); // Exibe o resultado no TextView
     }

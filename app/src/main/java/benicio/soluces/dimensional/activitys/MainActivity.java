@@ -2,6 +2,8 @@ package benicio.soluces.dimensional.activitys;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -72,9 +74,12 @@ import java.util.concurrent.Executors;
 
 import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivityMainBinding;
+import benicio.soluces.dimensional.databinding.InputDistanciaHorizoltalLayoutBinding;
 import benicio.soluces.dimensional.utils.Converter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private Dialog dialogInputDH;
+    private Float dh = 0.0f;
     private static final int ALTURA_BARRINHA_NORMAL = 30;
     private static final int ALTURA_BARRINHA_AUMENTADA = 40;
     private Double latitude, longitude;
@@ -118,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        configurarDialogDH();
+        dialogInputDH.show();
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -174,6 +182,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         runnableCode.run();
     }
 
+    private void configurarDialogDH() {
+        AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
+        InputDistanciaHorizoltalLayoutBinding dhlbinding = InputDistanciaHorizoltalLayoutBinding.inflate(getLayoutInflater());
+
+        dhlbinding.okBtn.setOnClickListener( view -> {
+            String dhString = dhlbinding.dhField.getEditText().getText().toString();
+
+            if ( !dhString.isEmpty() ){
+                dh = Float.parseFloat(dhString);
+            }
+            dialogInputDH.dismiss();
+        });
+
+        b.setView(dhlbinding.getRoot());
+        dialogInputDH = b.create();
+    }
+
     private void preencherListas(){
         listay.add(binding.a1.getId());
         listay.add(binding.a2.getId());
@@ -215,6 +240,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listay.add(binding.a38.getId());
         listay.add(binding.a39.getId());
         listay.add(binding.a40.getId());
+        listay.add(binding.a41.getId());
+        listay.add(binding.a42.getId());
+        listay.add(binding.a43.getId());
+        listay.add(binding.a44.getId());
+        listay.add(binding.a45.getId());
+        listay.add(binding.a46.getId());
+        listay.add(binding.a47.getId());
+        listay.add(binding.a48.getId());
+        listay.add(binding.a49.getId());
+        listay.add(binding.a50.getId());
+        listay.add(binding.a51.getId());
+        listay.add(binding.a52.getId());
+        listay.add(binding.a53.getId());
+        listay.add(binding.a54.getId());
+        listay.add(binding.a55.getId());
+        listay.add(binding.a56.getId());
+        listay.add(binding.a57.getId());
+        listay.add(binding.a58.getId());
+        listay.add(binding.a59.getId());
+        listay.add(binding.a60.getId());
+        listay.add(binding.a61.getId());
+        listay.add(binding.a62.getId());
+        listay.add(binding.a63.getId());
+        listay.add(binding.a64.getId());
+        listay.add(binding.a65.getId());
+        listay.add(binding.a66.getId());
+        listay.add(binding.a67.getId());
+        listay.add(binding.a68.getId());
+        listay.add(binding.a69.getId());
+        listay.add(binding.a70.getId());
+        listay.add(binding.a71.getId());
+        listay.add(binding.a72.getId());
+        listay.add(binding.a73.getId());
+        listay.add(binding.a74.getId());
+        listay.add(binding.a75.getId());
+        listay.add(binding.a76.getId());
+        listay.add(binding.a77.getId());
+        listay.add(binding.a78.getId());
+        listay.add(binding.a79.getId());
+        listay.add(binding.a80.getId());
 
         Collections.reverse(listay);
 
@@ -259,6 +324,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listar.add(binding.v38.getId());
         listar.add(binding.v39.getId());
         listar.add(binding.v40.getId());
+        listar.add(binding.v41.getId());
+        listar.add(binding.v42.getId());
+        listar.add(binding.v43.getId());
+        listar.add(binding.v44.getId());
+        listar.add(binding.v45.getId());
+        listar.add(binding.v46.getId());
+        listar.add(binding.v47.getId());
+        listar.add(binding.v48.getId());
+        listar.add(binding.v49.getId());
+        listar.add(binding.v50.getId());
+        listar.add(binding.v51.getId());
+        listar.add(binding.v52.getId());
+        listar.add(binding.v53.getId());
+        listar.add(binding.v54.getId());
+        listar.add(binding.v55.getId());
+        listar.add(binding.v56.getId());
+        listar.add(binding.v57.getId());
+        listar.add(binding.v58.getId());
+        listar.add(binding.v59.getId());
+        listar.add(binding.v60.getId());
+        listar.add(binding.v61.getId());
+        listar.add(binding.v62.getId());
+        listar.add(binding.v63.getId());
+        listar.add(binding.v64.getId());
+        listar.add(binding.v65.getId());
+        listar.add(binding.v66.getId());
+        listar.add(binding.v67.getId());
+        listar.add(binding.v68.getId());
+        listar.add(binding.v69.getId());
+        listar.add(binding.v70.getId());
+        listar.add(binding.v71.getId());
+        listar.add(binding.v72.getId());
+        listar.add(binding.v73.getId());
+        listar.add(binding.v74.getId());
+        listar.add(binding.v75.getId());
+        listar.add(binding.v76.getId());
+        listar.add(binding.v77.getId());
+        listar.add(binding.v78.getId());
+        listar.add(binding.v79.getId());
+        listar.add(binding.v80.getId());
     }
 
     public void pegarLocalizacao(){
@@ -301,7 +406,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if ( !this.isDestroyed() ){
                     mCamera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
-                    mCamera.getCameraControl().setZoomRatio(4.0f);
+                    mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
                 }
 
                 binding.print.setOnClickListener( view -> {
@@ -521,13 +626,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = view.getId();
 
         if ( id == binding.maisred.getId() ){
+            dialogInputDH.show();
             aumentarVermelho();
         }else if (id == binding.menosred.getId()){
+            dialogInputDH.show();
             diminuirVermelho();
         }
         else if (id == binding.maisyelow.getId()){
+            dialogInputDH.show();
             aumentarAmerelo();
         }else if (id == binding.menosyelow.getId()){
+            dialogInputDH.show();
             diminuirAmerelo();
         }
         else if ( id == binding.configuracoes.getId() ){
@@ -628,7 +737,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         String zoomString = currentZoomLevel  + "x";
                         binding.textViewZoom.setText(zoomString);
-//                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
                         binding.textViewTamanho.setText(
                                 Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
                         );
