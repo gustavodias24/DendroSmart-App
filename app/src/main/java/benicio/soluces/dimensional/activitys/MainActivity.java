@@ -78,6 +78,11 @@ import benicio.soluces.dimensional.databinding.InputDistanciaHorizoltalLayoutBin
 import benicio.soluces.dimensional.utils.Converter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private boolean longPressing = false;
+    Boolean firstTime;
+    String qualPressionado = "";
+    Runnable longPressRunnable;
     private Dialog dialogInputDH;
     private Float dh = 0.0f;
     private static final int ALTURA_BARRINHA_NORMAL = 30;
@@ -124,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(binding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        configurarIncrementoDecrementoAutomatico();
+
         configurarDialogDH();
         dialogInputDH.show();
 
@@ -155,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.maisZoom.setOnClickListener(this);
         binding.menosZoom.setOnClickListener(this);
         binding.configuracoes.setOnClickListener(this);
+        binding.setarDh.setOnClickListener(this);
 
         configurarEventoDePressionar();
         pegarZoomMaximo();
@@ -626,27 +634,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = view.getId();
 
         if ( id == binding.maisred.getId() ){
-            dialogInputDH.show();
             aumentarVermelho();
         }else if (id == binding.menosred.getId()){
-            dialogInputDH.show();
             diminuirVermelho();
         }
         else if (id == binding.maisyelow.getId()){
-            dialogInputDH.show();
             aumentarAmerelo();
         }else if (id == binding.menosyelow.getId()){
-            dialogInputDH.show();
             diminuirAmerelo();
         }
         else if ( id == binding.configuracoes.getId() ){
             startActivity(new Intent(getApplicationContext(), ConfiguracoesActivity.class));
+        }else if ( id == binding.setarDh.getId() ){
+            dialogInputDH.show();
         }
         binding.textViewTamanho.setText(
                 Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
         );
     }
-
     private void aumentarAmerelo(){
         if ( indexy < (listay.size() - 1 )){
             qtdBarrinhas++;
@@ -777,6 +782,114 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             return true;
         });
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void configurarIncrementoDecrementoAutomatico(){
+        binding.maisyelow.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    qualPressionado = "+Y";
+                    longPressing = true;
+                    startRepeatingTask();
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    longPressing = false;
+                    stopRepeatingTask();
+                    break;
+            }
+            return false;
+        });
+
+        binding.menosyelow.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    qualPressionado = "-Y";
+                    longPressing = true;
+                    startRepeatingTask();
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    stopRepeatingTask();
+                    longPressing = false;
+                    break;
+            }
+            return false;
+        });
+
+        binding.maisred.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    qualPressionado = "+R";
+                    startRepeatingTask();
+                    longPressing = true;
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    stopRepeatingTask();
+                    longPressing = false;
+                    break;
+            }
+            return false;
+        });
+
+        binding.menosred.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    qualPressionado = "-R";
+                    startRepeatingTask();
+                    longPressing = true;
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    stopRepeatingTask();
+                    longPressing = false;
+                    break;
+            }
+            return false;
+        });
+    }
+
+    void startRepeatingTask() {
+
+        firstTime = true;
+        longPressRunnable = new Runnable() {
+            @Override
+            public void run() {
+
+                if ( !firstTime ){
+                    if (longPressing) {
+                        switch (qualPressionado){
+                            case "+Y":
+                                aumentarAmerelo();
+                                break;
+                            case "-Y":
+                                diminuirAmerelo();
+                                break;
+                            case "+R":
+                                aumentarVermelho();
+                                break;
+                            case "-R":
+                                diminuirVermelho();
+                                break;
+                        }
+                        binding.textViewTamanho.setText(
+                                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+                        );
+                    }
+                }else{
+                    firstTime = false;
+                }
+
+                handler.postDelayed(this, 200);
+            }
+        };
+
+        longPressRunnable.run();
+    }
+    void stopRepeatingTask() {
+        handler.removeCallbacks(longPressRunnable);
     }
 
     public void pegarZoomMaximo(){
@@ -931,4 +1044,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void atualizarContagemBarrinhas(){
         binding.qtdBarrinha.setText(qtdBarrinhas + "");
     }
+
 }

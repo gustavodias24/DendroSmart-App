@@ -14,7 +14,7 @@ public class Converter {
         float pixels = dpToPixels(dp, context); // Converte dp para pixels
         float centimetros = (pixelsToCm(pixels, context)) / DIVIDAO_RAFAEL; // Converte pixels para centímetros
 
-        return String.format("%.2f cm", centimetros); // Exibe o resultado no TextView
+        return String.format("%.4f cm", centimetros); // Exibe o resultado no TextView
     }
 
     public static float dpToPixels(float dp, Context context) {

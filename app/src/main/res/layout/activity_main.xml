@@ -239,6 +239,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewTamanho" />
 
+    <TextView
+        android:id="@+id/setar_dh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/background_blue"
+        android:padding="16dp"
+        android:text="Setar D.H."
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/configuracoes" />
+
     <ImageButton
         android:id="@+id/print"
         android:layout_width="60sp"
