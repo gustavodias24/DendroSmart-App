@@ -10,6 +10,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.location.Address;
@@ -32,6 +36,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -77,10 +82,18 @@ import benicio.soluces.dimensional.databinding.ActivityMainBinding;
 import benicio.soluces.dimensional.databinding.InputDistanciaHorizoltalLayoutBinding;
 import benicio.soluces.dimensional.utils.Converter;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
+
+    SensorManager sensorManager;
+    Sensor accelerometer;
 
     private boolean longPressing = false;
-    Boolean firstTime;
+    private boolean ocupadoRed = false;
+    private boolean ocupadoYellow = false;
+    private boolean firstTime;
+    private int tempoEspera = 2000;
+
+
     String qualPressionado = "";
     Runnable longPressRunnable;
     private Dialog dialogInputDH;
@@ -129,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(binding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
         configurarIncrementoDecrementoAutomatico();
 
         configurarDialogDH();
@@ -170,7 +186,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED
         ) {
             startCamera(cameraFacing);
         } else {
@@ -789,12 +806,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.maisyelow.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    ocupadoYellow = true;
                     qualPressionado = "+Y";
                     longPressing = true;
                     startRepeatingTask();
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
+                    ocupadoYellow = false;
                     longPressing = false;
                     stopRepeatingTask();
                     break;
@@ -807,12 +826,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case MotionEvent.ACTION_DOWN:
                     qualPressionado = "-Y";
                     longPressing = true;
+                    ocupadoYellow = true;
                     startRepeatingTask();
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     stopRepeatingTask();
                     longPressing = false;
+                    ocupadoYellow = false;
                     break;
             }
             return false;
@@ -822,13 +843,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     qualPressionado = "+R";
-                    startRepeatingTask();
                     longPressing = true;
+                    ocupadoRed = true;
+                    startRepeatingTask();
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     stopRepeatingTask();
                     longPressing = false;
+                    ocupadoRed = false;
                     break;
             }
             return false;
@@ -838,13 +861,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     qualPressionado = "-R";
-                    startRepeatingTask();
                     longPressing = true;
+                    ocupadoRed = true;
+                    startRepeatingTask();
+
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     stopRepeatingTask();
                     longPressing = false;
+                    ocupadoRed = false;
                     break;
             }
             return false;
@@ -854,35 +880,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void startRepeatingTask() {
 
         firstTime = true;
+        tempoEspera = 2000;
+
         longPressRunnable = new Runnable() {
             @Override
             public void run() {
 
-                if ( !firstTime ){
-                    if (longPressing) {
-                        switch (qualPressionado){
-                            case "+Y":
-                                aumentarAmerelo();
-                                break;
-                            case "-Y":
-                                diminuirAmerelo();
-                                break;
-                            case "+R":
-                                aumentarVermelho();
-                                break;
-                            case "-R":
-                                diminuirVermelho();
-                                break;
+                if ((!ocupadoRed && ocupadoYellow) || (ocupadoRed && !ocupadoYellow) ){
+                    if ( !firstTime ){
+                        if (longPressing) {
+                            switch (qualPressionado){
+                                case "+Y":
+                                    aumentarAmerelo();
+                                    break;
+                                case "-Y":
+                                    diminuirAmerelo();
+                                    break;
+                                case "+R":
+                                    aumentarVermelho();
+                                    break;
+                                case "-R":
+                                    diminuirVermelho();
+                                    break;
+                            }
+                            binding.textViewTamanho.setText(
+                                    Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+                            );
                         }
-                        binding.textViewTamanho.setText(
-                                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-                        );
+                    }else{
+                        firstTime = false;
+                        tempoEspera = 200;
                     }
-                }else{
-                    firstTime = false;
-                }
 
-                handler.postDelayed(this, 200);
+                    handler.postDelayed(this, tempoEspera);
+                }
             }
         };
 
@@ -988,6 +1019,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         pegarConfiguracoesAtuais();
+        if (accelerometer == null){
+            Toast.makeText(this, "Sensor acelerômetro não encontrado no dispositivo", Toast.LENGTH_SHORT).show();
+            finish();
+        }else {
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -1043,6 +1086,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     private void atualizarContagemBarrinhas(){
         binding.qtdBarrinha.setText(qtdBarrinhas + "");
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        float x = sensorEvent.values[0];
+        float y = sensorEvent.values[1];
+        float z = sensorEvent.values[2];
+
+        // Calcular o ângulo em radianos
+        double radianAngle = Math.atan2(y, x);
+
+        // Converter o ângulo de radianos para graus
+        double degreeAngle = Math.toDegrees(radianAngle);
+
+        // Garantir que o ângulo esteja no intervalo [0, 360)
+        /*
+        * Adicionando 360: -90 + 360 = 270
+        * Calculando o resto da divisão por 360: 270 % 360 = 270
+        * Portanto, -90 é transformado em 270, que está no intervalo [0, 360).
+        *
+        * */
+        degreeAngle = (degreeAngle + 360) % 360;
+
+        // Exibir o ângulo no TextView
+        binding.angulo.setText((int) degreeAngle + "°");
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 
 }
