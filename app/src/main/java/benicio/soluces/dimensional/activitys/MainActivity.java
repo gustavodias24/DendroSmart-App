@@ -84,6 +84,9 @@ import benicio.soluces.dimensional.utils.Converter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
+    private long lastUpdate;
+
+
     SensorManager sensorManager;
     Sensor accelerometer;
 
@@ -133,6 +136,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     });
+    private float lastAccelX;
+    private float lastAccelY;
+    private float lastAccelZ;
 
     @SuppressLint("ResourceType")
     @Override
@@ -1088,30 +1094,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.qtdBarrinha.setText(qtdBarrinhas + "");
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        float x = sensorEvent.values[0];
-        float y = sensorEvent.values[1];
-        float z = sensorEvent.values[2];
+        if (sensorEvent.sensor.getType() != 1) {
+            return;
+        }
+        float f = sensorEvent.values[0];
+        float f2 = sensorEvent.values[1];
+        float f3 = sensorEvent.values[2];
 
-        // Calcular o ângulo em radianos
-        double radianAngle = Math.atan2(y, x);
+        float degrees = (float) Math.toDegrees(Math.acos(f / ((float) Math.sqrt(((f * f) + (f2 * f2)) + (f3 * f3)))));
+        if (f3 > 0.0f) {
+            degrees *= -1.0f;
+        }
 
-        // Converter o ângulo de radianos para graus
-        double degreeAngle = Math.toDegrees(radianAngle);
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = this.lastUpdate;
 
-        // Garantir que o ângulo esteja no intervalo [0, 360)
-        /*
-        * Adicionando 360: -90 + 360 = 270
-        * Calculando o resto da divisão por 360: 270 % 360 = 270
-        * Portanto, -90 é transformado em 270, que está no intervalo [0, 360).
-        *
-        * */
-        degreeAngle = (degreeAngle + 360) % 360;
-
-        // Exibir o ângulo no TextView
-        binding.angulo.setText((int) degreeAngle + "°");
+        if (currentTimeMillis - j > 100) {
+            
+            long j2 = currentTimeMillis - j;
+            this.lastUpdate = currentTimeMillis;
+            
+            if ((Math.abs(((((f2 + f) + f3) - this.lastAccelX) - this.lastAccelY) - this.lastAccelZ) / ((float) j2)) * 10000.0f > 6.0f) {
+                    binding.angulo.setText(String.format("%.2f°", degrees));
+            }
+            this.lastAccelX = f2;
+            this.lastAccelY = f;
+            this.lastAccelZ = f3;
+        }
     }
 
     @Override
