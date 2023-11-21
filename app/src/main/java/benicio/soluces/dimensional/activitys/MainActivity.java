@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean ocupadoRed = false;
     private boolean ocupadoYellow = false;
     private boolean firstTime;
-    private int tempoEspera = 2000;
+    private int tempoEspera = 500;
 
 
     String qualPressionado = "";
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Dialog dialogInputDH;
     private Float dh = 0.0f;
     private static final int ALTURA_BARRINHA_NORMAL = 30;
-    private static final int ALTURA_BARRINHA_AUMENTADA = 40;
+    private static final int ALTURA_BARRINHA_AUMENTADA = 70;
     private Double latitude, longitude;
     private FusedLocationProviderClient fusedLocationClient;
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int indexr = 3;
     List<Integer> listay = new ArrayList<>();
     List<Integer> listar = new ArrayList<>();
-    private int qtdBarrinhas = 8;
+    private int qtdBarrinhas = 15;
     private int ACRESCENTADOR = 0;
     private int LIMITER = 0;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         configurarIncrementoDecrementoAutomatico();
 
         configurarDialogDH();
-        dialogInputDH.show();
+//        dialogInputDH.show();
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -165,9 +165,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         scale = getResources().getDisplayMetrics().density;
 
-        binding.textViewTamanho.setText(
-                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-        );
+//        binding.textViewTamanho.setText(
+//                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+//        );
 
         preencherListas();
 
@@ -671,9 +671,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if ( id == binding.setarDh.getId() ){
             dialogInputDH.show();
         }
-        binding.textViewTamanho.setText(
-                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-        );
+//        binding.textViewTamanho.setText(
+//                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+//        );
     }
     private void aumentarAmerelo(){
         if ( indexy < (listay.size() - 1 )){
@@ -765,9 +765,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         String zoomString = currentZoomLevel  + "x";
                         binding.textViewZoom.setText(zoomString);
-                        binding.textViewTamanho.setText(
-                                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-                        );
+//                        binding.textViewTamanho.setText(
+//                                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+//                        );
                     }
                 }
 
@@ -796,9 +796,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String zoomString = currentZoomLevel  + "x";
                     binding.textViewZoom.setText(zoomString);
 //                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
-                    binding.textViewTamanho.setText(
-                            Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-                    );
+//                    binding.textViewTamanho.setText(
+//                            Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+//                    );
                 }else{
                     Log.d("zoomDiminuir", "não pode zoom: " + currentZoomLevel);
                 }
@@ -886,7 +886,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void startRepeatingTask() {
 
         firstTime = true;
-        tempoEspera = 2000;
+        tempoEspera = 500;
 
         longPressRunnable = new Runnable() {
             @Override
@@ -895,6 +895,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ((!ocupadoRed && ocupadoYellow) || (ocupadoRed && !ocupadoYellow) ){
                     if ( !firstTime ){
                         if (longPressing) {
+
                             switch (qualPressionado){
                                 case "+Y":
                                     aumentarAmerelo();
@@ -909,16 +910,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     diminuirVermelho();
                                     break;
                             }
-                            binding.textViewTamanho.setText(
-                                    Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-                            );
+                            handler.postDelayed(this, tempoEspera);
+
+//                            binding.textViewTamanho.setText(
+//                                    Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
+//                            );
                         }
                     }else{
+                        handler.postDelayed(this, tempoEspera);
                         firstTime = false;
-                        tempoEspera = 200;
+                        tempoEspera = 24;
                     }
-
-                    handler.postDelayed(this, tempoEspera);
                 }
             }
         };
@@ -1091,7 +1093,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     private void atualizarContagemBarrinhas(){
-        binding.qtdBarrinha.setText(qtdBarrinhas + "");
+        binding.qtdBarrinha.setText(qtdBarrinhas + (qtdBarrinhas - 1) + "");
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})

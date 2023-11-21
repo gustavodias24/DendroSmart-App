@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/maconha"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/maconha"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activitys.MainActivity">
@@ -38,9 +37,9 @@
         android:id="@+id/logoEmpresa"
         android:layout_width="50sp"
         android:layout_height="50sp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
-        android:visibility="invisible"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -79,8 +78,8 @@
     <ImageView
         android:layout_width="50sp"
         android:layout_height="50sp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:src="@raw/logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -203,26 +202,10 @@
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/setar_dh"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.84"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewTamanho"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/background_blue"
-        android:padding="16dp"
-        android:text="30 cm"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/camera_preview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/logoEmpresa"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/configuracoes" />
 
     <TextView
         android:id="@+id/medida_real_text"
@@ -240,13 +223,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewZoom" />
 
 
-
     <TextView
         android:id="@+id/configuracoes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/background_blue"
         android:padding="16dp"
@@ -254,41 +236,46 @@
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewTamanho" />
+        app:layout_constraintEnd_toStartOf="@+id/angulo"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/setar_dh" />
 
     <TextView
         android:id="@+id/setar_dh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="8dp"
         android:background="@drawable/background_blue"
         android:padding="16dp"
         android:text="Setar D.H."
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/configuracoes" />
+        app:layout_constraintEnd_toStartOf="@+id/configuracoes"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/print" />
 
     <ImageButton
         android:id="@+id/print"
         android:layout_width="60sp"
         android:layout_height="60sp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/background_redondo"
         android:backgroundTint="#2196F3"
         android:src="@drawable/baseline_add_a_photo_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textViewTamanho" />
+        app:layout_constraintEnd_toStartOf="@+id/setar_dh"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/dadosGpsText"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/dadosGpsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="32dp"
         android:text="Carregando..."
         android:textAlignment="textEnd"
         android:textColor="#FFEB3B"
@@ -296,14 +283,17 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/print"
-        app:layout_constraintTop_toBottomOf="@+id/barrinhas"
-        app:layout_constraintVertical_bias="0.79" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menosyelow"
+        app:layout_constraintVertical_bias="0.76" />
 
     <TextView
         android:id="@+id/qtd_barrinha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="8"
+        android:text="15"
         android:textAlignment="textEnd"
         android:textColor="#00B0FF"
         android:textSize="24sp"
@@ -1086,7 +1076,7 @@
         <ImageView
             android:id="@+id/a77"
             android:layout_width="1.5dp"
-            android:layout_height="40dp"
+            android:layout_height="70dp"
             android:layout_marginLeft="1.5dp"
             android:layout_weight="0"
             android:scaleType="fitXY"
@@ -1156,7 +1146,7 @@
         <ImageView
             android:id="@+id/v4"
             android:layout_width="1.5dp"
-            android:layout_height="40dp"
+            android:layout_height="70dp"
             android:layout_marginLeft="1.5dp"
             android:layout_weight="0"
             android:scaleType="fitXY"
