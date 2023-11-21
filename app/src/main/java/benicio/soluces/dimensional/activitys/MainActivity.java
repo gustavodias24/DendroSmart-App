@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int indexr = 3;
     List<Integer> listay = new ArrayList<>();
     List<Integer> listar = new ArrayList<>();
-    private int qtdBarrinhas = 15;
+    private int qtdBarrinhas = 8;
     private int ACRESCENTADOR = 0;
     private int LIMITER = 0;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
@@ -677,7 +677,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void aumentarAmerelo(){
         if ( indexy < (listay.size() - 1 )){
-            qtdBarrinhas++;
+            qtdBarrinhas ++ ;
             atualizarContagemBarrinhas();
             indexy++;
             dpBarrinhas += 9;
@@ -694,7 +694,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void diminuirAmerelo(){
         if ( indexy >= 1){
-            qtdBarrinhas--;
+            qtdBarrinhas -- ;
             atualizarContagemBarrinhas();
             dpBarrinhas -= 9;
 
@@ -711,7 +711,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void aumentarVermelho(){
         if ( indexr < (listar.size() - 1 ) ){
-            qtdBarrinhas++;
+            qtdBarrinhas ++ ;
             atualizarContagemBarrinhas();
             indexr++;
             dpBarrinhas += 9;
@@ -728,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void diminuirVermelho(){
         if ( indexr >= 1){
-            qtdBarrinhas--;
+            qtdBarrinhas --;
             atualizarContagemBarrinhas();
             dpBarrinhas -= 9;
             findViewById(listar.get(indexr)).setVisibility(View.INVISIBLE);
@@ -1130,7 +1130,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-
     }
 
 }
