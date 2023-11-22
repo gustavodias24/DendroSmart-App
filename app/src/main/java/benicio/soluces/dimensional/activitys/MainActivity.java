@@ -83,13 +83,11 @@ import benicio.soluces.dimensional.databinding.InputDistanciaHorizoltalLayoutBin
 import benicio.soluces.dimensional.utils.Converter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
-
+//    private static final float CONST_CHAVE = 0.054347826f;
+    private static final float CONST_CHAVE = 0.130266f;
     private long lastUpdate;
-
-
     SensorManager sensorManager;
     Sensor accelerometer;
-
     private boolean longPressing = false;
     private boolean ocupadoRed = false;
     private boolean ocupadoYellow = false;
@@ -154,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         configurarIncrementoDecrementoAutomatico();
 
         configurarDialogDH();
-//        dialogInputDH.show();
+        dialogInputDH.show();
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -1091,9 +1089,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     private void atualizarContagemBarrinhas(){
-        binding.qtdBarrinha.setText(qtdBarrinhas + (qtdBarrinhas - 1) + "");
+        int qtdPos = qtdBarrinhas + (qtdBarrinhas - 1);
+        binding.qtdBarrinha.setText( qtdPos + "");
+        binding.medidaRealText.setText(
+                String.format("%.4fm", ((dh * qtdPos * CONST_CHAVE) - 5 ) / 100)
+        );
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})

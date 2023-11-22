@@ -215,7 +215,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/background_blue"
         android:padding="16dp"
-        android:text="0 cm"
+        android:text="0m"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/mais_zoom"
