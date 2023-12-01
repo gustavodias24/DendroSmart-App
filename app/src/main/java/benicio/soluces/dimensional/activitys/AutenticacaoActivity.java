@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+
 import benicio.soluces.dimensional.databinding.ActivityAutenticacaoBinding;
 import benicio.soluces.dimensional.databinding.CarregandoLayoutBinding;
 import benicio.soluces.dimensional.databinding.CredenciamentoLayoutBinding;
@@ -418,7 +419,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
     public void irParaOutraTela(){
         finish();
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        startActivity(new Intent(getApplicationContext(), SelecionarMetodoActivity.class));
     }
 
 

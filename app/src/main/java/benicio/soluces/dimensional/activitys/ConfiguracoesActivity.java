@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +49,16 @@ public class ConfiguracoesActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, 1);
         });
-
+        
+        mainBinding.dapField.getEditText().setText(
+                preferences.getString("dap", "")
+        );
+        
+        mainBinding.toleranciaField.getEditText().setText(
+                preferences.getString("tolerancia", "")
+        );
+        
+        
         mainBinding.exibirGps.setOnClickListener( view -> {
             if ( mainBinding.exibirGps.isChecked() ){
                 editor.putBoolean("gps", true);
@@ -58,6 +68,12 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
             editor.apply();
 
+        });
+        
+        mainBinding.btnSalvar.setOnClickListener( view -> {
+            editor.putString("dap", mainBinding.dapField.getEditText().getText().toString()).apply();
+            editor.putString("tolerancia", mainBinding.toleranciaField.getEditText().getText().toString()).apply();
+            Toast.makeText(this, "Configurações salvas!", Toast.LENGTH_SHORT).show();
         });
 
     }
