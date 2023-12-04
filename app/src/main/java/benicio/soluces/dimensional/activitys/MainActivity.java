@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -84,8 +85,32 @@ import java.util.concurrent.Executors;
 
 import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.utils.Converter;
+import benicio.soluces.dimensional.utils.GenericUtils;
+import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
+
+    ImageView imageAnguloCorreto;
+    TextView infosGenericas, infoMedirTora;
+    LinearLayout layoutIntroVolume;
+
+    int toraAtual = 0;
+    Float alturaCorreta = 0.0f;
+    Float alturaAtualTora = 0.0f;
+    Float anguloAtualTora = 0.0f;
+    Float anguloBaseTora = 0.0f;
+    Float alturaBaseTora = 0.0f;
+    Float anguloMedioTora = 0.0f;
+    Float alturaMedioTora = 0.0f;
+    Float anguloTopoTora = 0.0f;
+    Float alturaTopoTora = 0.0f;
+
+    // variaveis da divisão
+    int qtdDivisao = 0;
+    float tamCadaParte = 0.f;
+    Dialog dialogDivisao;
+
+    // variaveis da divisão
 
     ImageButton restartButton;
     TextView instrucaoTela;
@@ -169,7 +194,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        
+
+        imageAnguloCorreto = findViewById(R.id.image_correcao_tora);
+        infosGenericas = findViewById(R.id.infos_dev_text);
+        layoutIntroVolume = findViewById(R.id.layout_mediar_volume);
+        infoMedirTora = findViewById(R.id.info_medir_volume_tora);
+
         configurarInstrucaoTela();
         restartButton = findViewById(R.id.restartButton);
         
@@ -199,15 +229,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(this, MainActivity.class));
         });
         medirAngulo.setOnClickListener( view -> {
+
+
             if ( etapa <= 2){
                 etapa++;
                 instrucaoTela.setText(MSG2);
+
             }
 
             if( etapa == 2){
                 if ( dh != 0){
                     calculateMeasureHeight();
                     musarParaMedidorDiametro();
+                    dialogDivisao.show();
                 }else{
                     dialogInputDH.show();
                 }
@@ -220,6 +254,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         configurarIncrementoDecrementoAutomatico();
 
         configurarDialogDH();
+        configurarDialogDivisao();
         dialogInputDH.show();
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
@@ -227,15 +262,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-
-
         scale = getResources().getDisplayMetrics().density;
 
-//        R.id.textViewTamanho.setText(
-//                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-//        );
-
-        preencherListas();
+        ListaBarrinhasUtils.preencherListas(listay, listar, this);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -309,6 +338,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Inicia a animação
         instrucaoTela.startAnimation(blinkAnimation);
+        infoMedirTora.startAnimation(blinkAnimation);
+        imageAnguloCorreto.startAnimation(blinkAnimation);
     }
 
     private void musarParaMedidorDiametro(){
@@ -360,11 +391,88 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        alturaReal.setText(String.format("%.4f cm", (Float.valueOf(alturaCalc) * 100 )));
+        // mudança aqui
+        alturaCalc = (Float.valueOf(alturaCalc) * 100 );
+        alturaReal.setText(String.format("A %.4f cm", alturaCalc));
+    }
+
+    @SuppressLint("DefaultLocale")
+    public void calcularAlturaTora() {
+        Float ValueTA =  (float) Math.tan(Math.toRadians(anguloBaseTora));
+        Float ValueTB =  (float) Math.tan(Math.toRadians(anguloAtualTora));
+
+        if ((ValueTA > 0.0f && ValueTB > 0.0f) || (ValueTA < 0.0f && ValueTB < 0.0f)) {
+            if (ValueTA < 0.0f) {
+                ValueTA = ValueTA * (-1.0f);
+            }
+            if (ValueTB < 0.0f) {
+                ValueTB = ValueTB * (-1.0f);
+            }
+            alturaAtualTora = (dh * (ValueTA - ValueTB));
+
+            if (alturaCalc < 0.0f) {
+                alturaAtualTora = (alturaAtualTora * (-1.0f));
+            }
+        } else {
+            if (ValueTA < 0.0f) {
+                ValueTA = ValueTA * (-1.0f);
+            }
+            if (ValueTB < 0.0f) {
+                ValueTB  = ValueTB * (-1.0f);
+            }
+
+            alturaAtualTora = dh * (ValueTA + ValueTB);
+
+            if (alturaAtualTora < 0.0f) {
+                alturaAtualTora = alturaAtualTora * (-1.0f);
+            }
+        }
+
+        // mudança aqui
+        alturaAtualTora = (Float.valueOf(alturaAtualTora) * 100 );
+        alturaReal.setText(String.format("A %.4f cm", alturaCalc));
+    }
+
+
+    @SuppressLint("DefaultLocale")
+    private void configurarDialogDivisao() {
+        AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
+        b.setMessage("Insira a divisão das toras");
+        View dvbinding = LayoutInflater.from(MainActivity.this).inflate(R.layout.input_distancia_horizoltal_layout, null);
+
+
+        Button okBtn = dvbinding.findViewById(R.id.ok_btn);
+        TextInputLayout divisaoField = dvbinding.findViewById(R.id.dh_field);
+
+        b.setCancelable(false);
+        divisaoField.setHint("Divisão das toras");
+
+        okBtn.setOnClickListener( view -> {
+            String divisaoString = divisaoField.getEditText().getText().toString();
+
+            if ( !divisaoString.isEmpty() ){
+                qtdDivisao = Integer.parseInt(divisaoString);
+                if ( qtdDivisao != 0){
+                    tamCadaParte = alturaCalc / qtdDivisao;
+                    infosGenericas.setText(
+                            String.format("%d divisões\nCada tora com %.2f cm",
+                                    qtdDivisao, tamCadaParte)
+                    );
+                    dialogDivisao.dismiss();
+                    layoutIntroVolume.setVisibility(View.VISIBLE);
+                }else{
+                    Toast.makeText(this, "Coloque algum valor válido.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        b.setView(dvbinding);
+        dialogDivisao = b.create();
     }
 
     private void configurarDialogDH() {
         AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
+        b.setMessage("Insira a distância horizontal");
         View dhlbinding = LayoutInflater.from(MainActivity.this).inflate(R.layout.input_distancia_horizoltal_layout, null);
 
         Button okBtn = dhlbinding.findViewById(R.id.ok_btn);
@@ -384,338 +492,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialogInputDH = b.create();
     }
 
-    private void preencherListas(){
 
-        listay.add(findViewById(R.id.a1).getId());
-        listay.add(findViewById(R.id.a2).getId());
-        listay.add(findViewById(R.id.a3).getId());
-        listay.add(findViewById(R.id.a4).getId());
-        listay.add(findViewById(R.id.a5).getId());
-        listay.add(findViewById(R.id.a6).getId());
-        listay.add(findViewById(R.id.a7).getId());
-        listay.add(findViewById(R.id.a8).getId());
-        listay.add(findViewById(R.id.a9).getId());
-        listay.add(findViewById(R.id.a10).getId());
-        listay.add(findViewById(R.id.a11).getId());
-        listay.add(findViewById(R.id.a12).getId());
-        listay.add(findViewById(R.id.a13).getId());
-        listay.add(findViewById(R.id.a14).getId());
-        listay.add(findViewById(R.id.a15).getId());
-        listay.add(findViewById(R.id.a16).getId());
-        listay.add(findViewById(R.id.a17).getId());
-        listay.add(findViewById(R.id.a18).getId());
-        listay.add(findViewById(R.id.a19).getId());
-        listay.add(findViewById(R.id.a20).getId());
-        listay.add(findViewById(R.id.a21).getId());
-        listay.add(findViewById(R.id.a22).getId());
-        listay.add(findViewById(R.id.a23).getId());
-        listay.add(findViewById(R.id.a24).getId());
-        listay.add(findViewById(R.id.a25).getId());
-        listay.add(findViewById(R.id.a26).getId());
-        listay.add(findViewById(R.id.a27).getId());
-        listay.add(findViewById(R.id.a28).getId());
-        listay.add(findViewById(R.id.a29).getId());
-        listay.add(findViewById(R.id.a30).getId());
-        listay.add(findViewById(R.id.a31).getId());
-        listay.add(findViewById(R.id.a32).getId());
-        listay.add(findViewById(R.id.a33).getId());
-        listay.add(findViewById(R.id.a34).getId());
-        listay.add(findViewById(R.id.a35).getId());
-        listay.add(findViewById(R.id.a36).getId());
-        listay.add(findViewById(R.id.a37).getId());
-        listay.add(findViewById(R.id.a38).getId());
-        listay.add(findViewById(R.id.a39).getId());
-        listay.add(findViewById(R.id.a40).getId());
-        listay.add(findViewById(R.id.a41).getId());
-        listay.add(findViewById(R.id.a42).getId());
-        listay.add(findViewById(R.id.a43).getId());
-        listay.add(findViewById(R.id.a44).getId());
-        listay.add(findViewById(R.id.a45).getId());
-        listay.add(findViewById(R.id.a46).getId());
-        listay.add(findViewById(R.id.a47).getId());
-        listay.add(findViewById(R.id.a48).getId());
-        listay.add(findViewById(R.id.a49).getId());
-        listay.add(findViewById(R.id.a50).getId());
-        listay.add(findViewById(R.id.a51).getId());
-        listay.add(findViewById(R.id.a52).getId());
-        listay.add(findViewById(R.id.a53).getId());
-        listay.add(findViewById(R.id.a54).getId());
-        listay.add(findViewById(R.id.a55).getId());
-        listay.add(findViewById(R.id.a56).getId());
-        listay.add(findViewById(R.id.a57).getId());
-        listay.add(findViewById(R.id.a58).getId());
-        listay.add(findViewById(R.id.a59).getId());
-        listay.add(findViewById(R.id.a60).getId());
-        listay.add(findViewById(R.id.a61).getId());
-        listay.add(findViewById(R.id.a62).getId());
-        listay.add(findViewById(R.id.a63).getId());
-        listay.add(findViewById(R.id.a64).getId());
-        listay.add(findViewById(R.id.a65).getId());
-        listay.add(findViewById(R.id.a66).getId());
-        listay.add(findViewById(R.id.a67).getId());
-        listay.add(findViewById(R.id.a68).getId());
-        listay.add(findViewById(R.id.a69).getId());
-        listay.add(findViewById(R.id.a70).getId());
-        listay.add(findViewById(R.id.a71).getId());
-        listay.add(findViewById(R.id.a72).getId());
-        listay.add(findViewById(R.id.a73).getId());
-        listay.add(findViewById(R.id.a74).getId());
-        listay.add(findViewById(R.id.a75).getId());
-        listay.add(findViewById(R.id.a76).getId());
-        listay.add(findViewById(R.id.a77).getId());
-        listay.add(findViewById(R.id.a78).getId());
-        listay.add(findViewById(R.id.a79).getId());
-        listay.add(findViewById(R.id.a80).getId());
-        listay.add(findViewById(R.id.a81).getId());
-        listay.add(findViewById(R.id.a82).getId());
-        listay.add(findViewById(R.id.a83).getId());
-        listay.add(findViewById(R.id.a84).getId());
-        listay.add(findViewById(R.id.a85).getId());
-        listay.add(findViewById(R.id.a86).getId());
-        listay.add(findViewById(R.id.a87).getId());
-        listay.add(findViewById(R.id.a88).getId());
-        listay.add(findViewById(R.id.a89).getId());
-        listay.add(findViewById(R.id.a90).getId());
-        listay.add(findViewById(R.id.a91).getId());
-        listay.add(findViewById(R.id.a92).getId());
-        listay.add(findViewById(R.id.a93).getId());
-        listay.add(findViewById(R.id.a94).getId());
-        listay.add(findViewById(R.id.a95).getId());
-        listay.add(findViewById(R.id.a96).getId());
-        listay.add(findViewById(R.id.a97).getId());
-        listay.add(findViewById(R.id.a98).getId());
-        listay.add(findViewById(R.id.a99).getId());
-        listay.add(findViewById(R.id.a100).getId());
-        listay.add(findViewById(R.id.a101).getId());
-        listay.add(findViewById(R.id.a102).getId());
-        listay.add(findViewById(R.id.a103).getId());
-        listay.add(findViewById(R.id.a104).getId());
-        listay.add(findViewById(R.id.a105).getId());
-        listay.add(findViewById(R.id.a106).getId());
-        listay.add(findViewById(R.id.a107).getId());
-        listay.add(findViewById(R.id.a108).getId());
-        listay.add(findViewById(R.id.a109).getId());
-        listay.add(findViewById(R.id.a110).getId());
-        listay.add(findViewById(R.id.a111).getId());
-        listay.add(findViewById(R.id.a112).getId());
-        listay.add(findViewById(R.id.a113).getId());
-        listay.add(findViewById(R.id.a114).getId());
-        listay.add(findViewById(R.id.a115).getId());
-        listay.add(findViewById(R.id.a116).getId());
-        listay.add(findViewById(R.id.a117).getId());
-        listay.add(findViewById(R.id.a118).getId());
-        listay.add(findViewById(R.id.a119).getId());
-        listay.add(findViewById(R.id.a120).getId());
-        listay.add(findViewById(R.id.a121).getId());
-        listay.add(findViewById(R.id.a122).getId());
-        listay.add(findViewById(R.id.a123).getId());
-        listay.add(findViewById(R.id.a124).getId());
-        listay.add(findViewById(R.id.a125).getId());
-        listay.add(findViewById(R.id.a126).getId());
-        listay.add(findViewById(R.id.a127).getId());
-        listay.add(findViewById(R.id.a128).getId());
-        listay.add(findViewById(R.id.a129).getId());
-        listay.add(findViewById(R.id.a130).getId());
-        listay.add(findViewById(R.id.a131).getId());
-        listay.add(findViewById(R.id.a132).getId());
-        listay.add(findViewById(R.id.a133).getId());
-        listay.add(findViewById(R.id.a134).getId());
-        listay.add(findViewById(R.id.a135).getId());
-        listay.add(findViewById(R.id.a136).getId());
-        listay.add(findViewById(R.id.a137).getId());
-        listay.add(findViewById(R.id.a138).getId());
-        listay.add(findViewById(R.id.a139).getId());
-        listay.add(findViewById(R.id.a140).getId());
-        listay.add(findViewById(R.id.a141).getId());
-        listay.add(findViewById(R.id.a142).getId());
-        listay.add(findViewById(R.id.a143).getId());
-        listay.add(findViewById(R.id.a144).getId());
-        listay.add(findViewById(R.id.a145).getId());
-        listay.add(findViewById(R.id.a146).getId());
-        listay.add(findViewById(R.id.a147).getId());
-        listay.add(findViewById(R.id.a148).getId());
-        listay.add(findViewById(R.id.a149).getId());
-        listay.add(findViewById(R.id.a150).getId());
-        listay.add(findViewById(R.id.a151).getId());
-        listay.add(findViewById(R.id.a152).getId());
-        listay.add(findViewById(R.id.a153).getId());
-        listay.add(findViewById(R.id.a154).getId());
-        listay.add(findViewById(R.id.a155).getId());
-        listay.add(findViewById(R.id.a156).getId());
-        listay.add(findViewById(R.id.a157).getId());
-        listay.add(findViewById(R.id.a158).getId());
-        listay.add(findViewById(R.id.a159).getId());
-        listay.add(findViewById(R.id.a160).getId());
-
-
-
-        Collections.reverse(listay);
-
-// Adicionando valores de r1 até r30 manualmente à listar
-        listar.add(findViewById(R.id.v1).getId());
-        listar.add(findViewById(R.id.v2).getId());
-        listar.add(findViewById(R.id.v3).getId());
-        listar.add(findViewById(R.id.v4).getId());
-        listar.add(findViewById(R.id.v5).getId());
-        listar.add(findViewById(R.id.v6).getId());
-        listar.add(findViewById(R.id.v7).getId());
-        listar.add(findViewById(R.id.v8).getId());
-        listar.add(findViewById(R.id.v9).getId());
-        listar.add(findViewById(R.id.v10).getId());
-        listar.add(findViewById(R.id.v11).getId());
-        listar.add(findViewById(R.id.v12).getId());
-        listar.add(findViewById(R.id.v13).getId());
-        listar.add(findViewById(R.id.v14).getId());
-        listar.add(findViewById(R.id.v15).getId());
-        listar.add(findViewById(R.id.v16).getId());
-        listar.add(findViewById(R.id.v17).getId());
-        listar.add(findViewById(R.id.v18).getId());
-        listar.add(findViewById(R.id.v19).getId());
-        listar.add(findViewById(R.id.v20).getId());
-        listar.add(findViewById(R.id.v21).getId());
-        listar.add(findViewById(R.id.v22).getId());
-        listar.add(findViewById(R.id.v23).getId());
-        listar.add(findViewById(R.id.v24).getId());
-        listar.add(findViewById(R.id.v25).getId());
-        listar.add(findViewById(R.id.v26).getId());
-        listar.add(findViewById(R.id.v27).getId());
-        listar.add(findViewById(R.id.v28).getId());
-        listar.add(findViewById(R.id.v29).getId());
-        listar.add(findViewById(R.id.v30).getId());
-        listar.add(findViewById(R.id.v31).getId());
-        listar.add(findViewById(R.id.v32).getId());
-        listar.add(findViewById(R.id.v33).getId());
-        listar.add(findViewById(R.id.v34).getId());
-        listar.add(findViewById(R.id.v35).getId());
-        listar.add(findViewById(R.id.v36).getId());
-        listar.add(findViewById(R.id.v37).getId());
-        listar.add(findViewById(R.id.v38).getId());
-        listar.add(findViewById(R.id.v39).getId());
-        listar.add(findViewById(R.id.v40).getId());
-        listar.add(findViewById(R.id.v41).getId());
-        listar.add(findViewById(R.id.v42).getId());
-        listar.add(findViewById(R.id.v43).getId());
-        listar.add(findViewById(R.id.v44).getId());
-        listar.add(findViewById(R.id.v45).getId());
-        listar.add(findViewById(R.id.v46).getId());
-        listar.add(findViewById(R.id.v47).getId());
-        listar.add(findViewById(R.id.v48).getId());
-        listar.add(findViewById(R.id.v49).getId());
-        listar.add(findViewById(R.id.v50).getId());
-        listar.add(findViewById(R.id.v51).getId());
-        listar.add(findViewById(R.id.v52).getId());
-        listar.add(findViewById(R.id.v53).getId());
-        listar.add(findViewById(R.id.v54).getId());
-        listar.add(findViewById(R.id.v55).getId());
-        listar.add(findViewById(R.id.v56).getId());
-        listar.add(findViewById(R.id.v57).getId());
-        listar.add(findViewById(R.id.v58).getId());
-        listar.add(findViewById(R.id.v59).getId());
-        listar.add(findViewById(R.id.v60).getId());
-        listar.add(findViewById(R.id.v61).getId());
-        listar.add(findViewById(R.id.v62).getId());
-        listar.add(findViewById(R.id.v63).getId());
-        listar.add(findViewById(R.id.v64).getId());
-        listar.add(findViewById(R.id.v65).getId());
-        listar.add(findViewById(R.id.v66).getId());
-        listar.add(findViewById(R.id.v67).getId());
-        listar.add(findViewById(R.id.v68).getId());
-        listar.add(findViewById(R.id.v69).getId());
-        listar.add(findViewById(R.id.v70).getId());
-        listar.add(findViewById(R.id.v71).getId());
-        listar.add(findViewById(R.id.v72).getId());
-        listar.add(findViewById(R.id.v73).getId());
-        listar.add(findViewById(R.id.v74).getId());
-        listar.add(findViewById(R.id.v75).getId());
-        listar.add(findViewById(R.id.v76).getId());
-        listar.add(findViewById(R.id.v77).getId());
-        listar.add(findViewById(R.id.v78).getId());
-        listar.add(findViewById(R.id.v79).getId());
-        listar.add(findViewById(R.id.v80).getId());
-        listar.add(findViewById(R.id.v81).getId());
-        listar.add(findViewById(R.id.v82).getId());
-        listar.add(findViewById(R.id.v83).getId());
-        listar.add(findViewById(R.id.v84).getId());
-        listar.add(findViewById(R.id.v85).getId());
-        listar.add(findViewById(R.id.v86).getId());
-        listar.add(findViewById(R.id.v87).getId());
-        listar.add(findViewById(R.id.v88).getId());
-        listar.add(findViewById(R.id.v89).getId());
-        listar.add(findViewById(R.id.v90).getId());
-        listar.add(findViewById(R.id.v91).getId());
-        listar.add(findViewById(R.id.v92).getId());
-        listar.add(findViewById(R.id.v93).getId());
-        listar.add(findViewById(R.id.v94).getId());
-        listar.add(findViewById(R.id.v95).getId());
-        listar.add(findViewById(R.id.v96).getId());
-        listar.add(findViewById(R.id.v97).getId());
-        listar.add(findViewById(R.id.v98).getId());
-        listar.add(findViewById(R.id.v99).getId());
-        listar.add(findViewById(R.id.v100).getId());
-        listar.add(findViewById(R.id.v101).getId());
-        listar.add(findViewById(R.id.v102).getId());
-        listar.add(findViewById(R.id.v103).getId());
-        listar.add(findViewById(R.id.v104).getId());
-        listar.add(findViewById(R.id.v105).getId());
-        listar.add(findViewById(R.id.v106).getId());
-        listar.add(findViewById(R.id.v107).getId());
-        listar.add(findViewById(R.id.v108).getId());
-        listar.add(findViewById(R.id.v109).getId());
-        listar.add(findViewById(R.id.v110).getId());
-        listar.add(findViewById(R.id.v111).getId());
-        listar.add(findViewById(R.id.v112).getId());
-        listar.add(findViewById(R.id.v113).getId());
-        listar.add(findViewById(R.id.v114).getId());
-        listar.add(findViewById(R.id.v115).getId());
-        listar.add(findViewById(R.id.v116).getId());
-        listar.add(findViewById(R.id.v117).getId());
-        listar.add(findViewById(R.id.v118).getId());
-        listar.add(findViewById(R.id.v119).getId());
-        listar.add(findViewById(R.id.v120).getId());
-        listar.add(findViewById(R.id.v121).getId());
-        listar.add(findViewById(R.id.v122).getId());
-        listar.add(findViewById(R.id.v123).getId());
-        listar.add(findViewById(R.id.v124).getId());
-        listar.add(findViewById(R.id.v125).getId());
-        listar.add(findViewById(R.id.v126).getId());
-        listar.add(findViewById(R.id.v127).getId());
-        listar.add(findViewById(R.id.v128).getId());
-        listar.add(findViewById(R.id.v129).getId());
-        listar.add(findViewById(R.id.v130).getId());
-        listar.add(findViewById(R.id.v131).getId());
-        listar.add(findViewById(R.id.v132).getId());
-        listar.add(findViewById(R.id.v133).getId());
-        listar.add(findViewById(R.id.v134).getId());
-        listar.add(findViewById(R.id.v135).getId());
-        listar.add(findViewById(R.id.v136).getId());
-        listar.add(findViewById(R.id.v137).getId());
-        listar.add(findViewById(R.id.v138).getId());
-        listar.add(findViewById(R.id.v139).getId());
-        listar.add(findViewById(R.id.v140).getId());
-        listar.add(findViewById(R.id.v141).getId());
-        listar.add(findViewById(R.id.v142).getId());
-        listar.add(findViewById(R.id.v143).getId());
-        listar.add(findViewById(R.id.v144).getId());
-        listar.add(findViewById(R.id.v145).getId());
-        listar.add(findViewById(R.id.v146).getId());
-        listar.add(findViewById(R.id.v147).getId());
-        listar.add(findViewById(R.id.v148).getId());
-        listar.add(findViewById(R.id.v149).getId());
-        listar.add(findViewById(R.id.v150).getId());
-        listar.add(findViewById(R.id.v151).getId());
-        listar.add(findViewById(R.id.v152).getId());
-        listar.add(findViewById(R.id.v153).getId());
-        listar.add(findViewById(R.id.v154).getId());
-        listar.add(findViewById(R.id.v155).getId());
-        listar.add(findViewById(R.id.v156).getId());
-        listar.add(findViewById(R.id.v157).getId());
-        listar.add(findViewById(R.id.v158).getId());
-        listar.add(findViewById(R.id.v159).getId());
-        listar.add(findViewById(R.id.v160).getId());
-
-        Log.d(TAG, "listar: " + listar.size());
-        Log.d(TAG, "listay: " + listay.size());
-    }
 
     public void pegarLocalizacao(){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -991,9 +768,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if ( id == findViewById(R.id.setar_dh).getId() ){
             dialogInputDH.show();
         }
-//        R.id.textViewTamanho.setText(
-//                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-//        );
     }
     private void aumentarAmerelo(){
         if ( indexy < (listay.size() - 1 )){
@@ -1090,9 +864,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         String zoomString = currentZoomLevel  + "x";
                         textZoom.setText(zoomString);
-//                        R.id.textViewTamanho.setText(
-//                                Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-//                        );
+
                     }
                 }
 
@@ -1122,10 +894,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     String zoomString = currentZoomLevel  + "x";
                     textZoom.setText(zoomString);
-//                    Toast.makeText(this, zoomString, Toast.LENGTH_SHORT).show();
-//                    R.id.textViewTamanho.setText(
-//                            Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-//                    );
                 }else{
                     Log.d("zoomDiminuir", "não pode zoom: " + currentZoomLevel);
                 }
@@ -1311,8 +1079,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         double heightCm = heightInches * 2.54;
         double widthCm = widthInches * 2.54;
 
-//        ACRESCENTADOR = (int) Math.ceil(((20 * widthPixels) / 1459));
-//        LIMITER = (int) Math.ceil(((360 * widthPixels) / 1459));
         ACRESCENTADOR = 20;
         LIMITER = 360;
 
@@ -1329,9 +1095,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         +"\n"+
                         "Limitador: %d"
                 , widthCm, heightCm, widthInches,heightInches, widthPixels, heightPixels, ACRESCENTADOR, LIMITER );
-//        R.id.dadosDaTela.setText(
-//              textoFixo
-//        );
 
     }
 
@@ -1427,7 +1190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         );
     }
 
-    @SuppressLint({"SetTextI18n", "DefaultLocale"})
+    @SuppressLint({"SetTextI18n", "DefaultLocale", "ResourceType"})
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() != 1) {
@@ -1460,13 +1223,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 switch (etapa){
                     case 0:
-                        anguloBText.setText(String.format("%.2f°", degrees));
+                        anguloBText.setText(String.format("B %.2f°", degrees));
+                        anguloBaseTora = degrees;
                         anguloB = degrees;
                         break;
                     case 1:
-                        anguloTText.setText(String.format("%.2f°", degrees));
+                        anguloTText.setText(String.format("T %.2f°", degrees));
                         anguloT = degrees;
                         break;
+                }
+
+                calcularAlturaTora();
+                anguloAtualTora = degrees;
+                infoMedirTora.setText(
+                        String.format(
+                                "Aponte para base da 1° tora" +
+                                        "\n\nÂngulo correto %.2f" +
+                                        "\nÂngulo atual %.2f" +
+                                        "\nAltura correta %.2f" +
+                                        "\nAltura atual %.2f",
+                                anguloBaseTora, anguloAtualTora, alturaCorreta, alturaAtualTora)
+                );
+
+                if (anguloBaseTora == degrees) {
+                    if (!GenericUtils.isSameDrawable(imageAnguloCorreto, R.raw.okgreen)) {
+                        imageAnguloCorreto.setImageResource(R.raw.okgreen);
+                    }
+                } else {
+                    if (!GenericUtils.isSameDrawable(imageAnguloCorreto, R.raw.xred)) {
+                        imageAnguloCorreto.setImageResource(R.raw.xred);
+                    }
                 }
             }
             this.lastAccelX = f2;
@@ -1478,5 +1264,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
     }
+
+
 
 }
