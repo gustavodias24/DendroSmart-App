@@ -87,23 +87,28 @@ import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.utils.Converter;
 import benicio.soluces.dimensional.utils.GenericUtils;
 import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
+import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
-    ImageView imageAnguloCorreto;
+    int qtdPos;
+    float diametroMarcado;
     TextView infosGenericas, infoMedirTora;
     LinearLayout layoutIntroVolume;
-
-    int toraAtual = 0;
-    Float alturaCorreta = 0.0f;
+    boolean acabouToras = false;
+    String parteDaTora = "a base";
+    int parteDaToraPos = 1;
+    int toraAtual = 1;
     Float alturaAtualTora = 0.0f;
+    String alturaAtualToraString = "0.0 cm";
     Float anguloAtualTora = 0.0f;
     Float anguloBaseTora = 0.0f;
-    Float alturaBaseTora = 0.0f;
-    Float anguloMedioTora = 0.0f;
-    Float alturaMedioTora = 0.0f;
-    Float anguloTopoTora = 0.0f;
-    Float alturaTopoTora = 0.0f;
+    Float diametroBaseTora = 0.0f;
+    Float diametroMedioTora = 0.0f;
+    Float diametroTopoTora = 0.0f;
+
+    Float ultimoDiametroBase = 0.0f;
+    boolean primeiroCalculoBase = false;
 
     // variaveis da divisão
     int qtdDivisao = 0;
@@ -120,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Componentes de medir altura
     float anguloB, anguloT, alturaCalc = 0.0f;
     int etapa = 0; // 0 medir b 1 medir t 2 medir largura
-    TextView anguloBText, anguloTText, setinha, medirAngulo, alturaReal;
+    TextView anguloBText, anguloTText, setinha, medirAngulo, alturaReal, medirDiametro;
     // Componentes de medir altura
 
     // Componentes de medir largura
@@ -188,14 +193,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private float lastAccelY;
     private float lastAccelZ;
 
-    @SuppressLint("ResourceType")
+    @SuppressLint({"ResourceType", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-        imageAnguloCorreto = findViewById(R.id.image_correcao_tora);
         infosGenericas = findViewById(R.id.infos_dev_text);
         layoutIntroVolume = findViewById(R.id.layout_mediar_volume);
         infoMedirTora = findViewById(R.id.info_medir_volume_tora);
@@ -215,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         anguloTText = findViewById(R.id.angulo_topo);
         setinha = findViewById(R.id.setinha);
         medirAngulo = findViewById(R.id.calAltura);
+        medirDiametro = findViewById(R.id.medirDiametroBtn);
         alturaReal = findViewById(R.id.altura_real_text);
 
         textZoom = findViewById(R.id.textViewZoom);
@@ -280,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.menos_zoom).setOnClickListener(this);
         findViewById(R.id.configuracoes).setOnClickListener(this);
         findViewById(R.id.setar_dh).setOnClickListener(this);
+        medirDiametro.setOnClickListener(this);
 
         configurarEventoDePressionar();
         pegarZoomMaximo();
@@ -295,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA }, PERMISSIONS_GERAL);
         }
 
-        calcularTamanhoDaTela();
+//        calcularTamanhoDaTela();
 
         Runnable runnableCode = new Runnable() {
             @Override
@@ -306,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
 
         runnableCode.run();
+
     }
 
     private void configurarInstrucaoTela() {
@@ -339,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Inicia a animação
         instrucaoTela.startAnimation(blinkAnimation);
         infoMedirTora.startAnimation(blinkAnimation);
-        imageAnguloCorreto.startAnimation(blinkAnimation);
+//        imageAnguloCorreto.startAnimation(blinkAnimation);
     }
 
     private void musarParaMedidorDiametro(){
@@ -351,6 +358,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnMaisYellow.setVisibility(View.VISIBLE);
         btnMenosYellow.setVisibility(View.VISIBLE);
         barrinhasLayout.setVisibility(View.VISIBLE);
+        layoutIntroVolume.setVisibility(View.VISIBLE);
+        medirDiametro.setVisibility(View.VISIBLE);
 
         anguloBText.setVisibility(View.GONE);
         anguloTText.setVisibility(View.GONE);
@@ -428,9 +437,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        // mudança aqui
         alturaAtualTora = (Float.valueOf(alturaAtualTora) * 100 );
-        alturaReal.setText(String.format("A %.4f cm", alturaCalc));
+
+        alturaAtualToraString = String.format(" %.2f cm", alturaAtualTora);
     }
 
 
@@ -455,7 +464,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ( qtdDivisao != 0){
                     tamCadaParte = alturaCalc / qtdDivisao;
                     infosGenericas.setText(
-                            String.format("%d divisões\nCada tora com %.2f cm",
+                            String.format("%d divisões\nCada tora com altura de %.2f cm",
                                     qtdDivisao, tamCadaParte)
                     );
                     dialogDivisao.dismiss();
@@ -483,6 +492,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if ( !dhString.isEmpty() ){
                 dh = Float.parseFloat(dhString);
+                atualizarContagemBarrinhas();
                 if ( etapa == 2){calculateMeasureHeight(); musarParaMedidorDiametro();}
             }
             dialogInputDH.dismiss();
@@ -747,7 +757,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @SuppressLint("DefaultLocale")
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     public void onClick(View view) {
 
@@ -767,6 +777,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(getApplicationContext(), ConfiguracoesActivity.class));
         }else if ( id == findViewById(R.id.setar_dh).getId() ){
             dialogInputDH.show();
+        }else if ( id == medirDiametro.getId()){
+
+           switch (parteDaToraPos){
+               case 1:
+                   if (!primeiroCalculoBase){
+                       diametroBaseTora = diametroMarcado;
+                       parteDaToraPos++;
+                       parteDaTora = "o centro";
+                       primeiroCalculoBase = true;
+                   }else{
+                       diametroMedioTora = diametroMarcado;
+                       parteDaToraPos += 2;
+                       parteDaTora = "o topo";
+                   }
+
+                   break;
+               case 2:
+                   diametroMedioTora = diametroMarcado;
+                   parteDaToraPos++;
+                   parteDaTora = "o topo";
+                   break;
+               case 3:
+                   diametroTopoTora = diametroMarcado;
+                   parteDaToraPos++;
+                   medirDiametro.setText("Próxima Tora");
+                   break;
+               default:
+                   parteDaToraPos = 1;
+                   if (!primeiroCalculoBase){
+                       parteDaTora = "a base";
+                   }else{
+                       parteDaTora = "o centro";
+                   }
+                   medirDiametro.setText("Medir Diâmetro");
+
+                   if ( toraAtual < qtdDivisao){
+                       float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
+                       infosGenericas.setText(
+                               infosGenericas.getText() + "\n" + String.format(
+                                       "Volume Tora %d: %s",
+                                       toraAtual,
+                                       volumeToraCalculado
+                                       )
+                       );
+                       ultimoDiametroBase = diametroTopoTora;
+                       diametroTopoTora = diametroMedioTora = diametroBaseTora = 0.0f;
+
+                       if(primeiroCalculoBase){diametroBaseTora = ultimoDiametroBase;}
+
+                       toraAtual += 1;
+                   }else{
+                       medirDiametro.setVisibility(View.GONE);
+                       acabouToras = true;
+
+                       float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
+                       infosGenericas.setText(
+                               infosGenericas.getText() + "\n" + String.format(
+                                       "Volume Tora %d: %s",
+                                       toraAtual,
+                                       volumeToraCalculado
+                               )
+                       );
+
+                   }
+                   break;
+           }
         }
     }
     private void aumentarAmerelo(){
@@ -1063,41 +1139,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }, ContextCompat.getMainExecutor(this));
     }
 
-    @SuppressLint("DefaultLocale")
-    public void calcularTamanhoDaTela(){
-        // Obtendo as dimensões da tela em pixels
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int heightPixels = displayMetrics.heightPixels;
-        int widthPixels = displayMetrics.widthPixels;
-
-        // Calculando as dimensões em centímetros
-        double heightInches = heightPixels / displayMetrics.ydpi;
-        double widthInches = widthPixels / displayMetrics.xdpi;
-
-        // Convertendo polegadas para centímetros (1 polegada = 2.54 cm)
-        double heightCm = heightInches * 2.54;
-        double widthCm = widthInches * 2.54;
-
-        ACRESCENTADOR = 20;
-        LIMITER = 360;
-
-
-        Log.d("calcularTamanhoDaTela", "acrescenteador: " + ACRESCENTADOR);
-        textoFixo =   String.format(
-                "%.2fx%.2f cm"
-                        +"\n"+
-                        "%.2fx%.2f polegadas"
-                        +"\n"+
-                        "%dx%d pixels"
-                        +"\n"+
-                        "Acrescentadorr: %d"
-                        +"\n"+
-                        "Limitador: %d"
-                , widthCm, heightCm, widthInches,heightInches, widthPixels, heightPixels, ACRESCENTADOR, LIMITER );
-
-    }
-
     private void pegarConfiguracoesAtuais(){
         if ( preferences.getString("logoImage", null) != null){
             byte[] decodedBytes = Base64.decode(preferences.getString("logoImage", null), Base64.DEFAULT);
@@ -1183,10 +1224,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     private void atualizarContagemBarrinhas(){
-        int qtdPos = qtdBarrinhas + (qtdBarrinhas - 1);
+        qtdPos = qtdBarrinhas + (qtdBarrinhas - 1);
         qtdBarrinhasText.setText( qtdPos + "");
+        diametroMarcado = (dh * (qtdPos / divisorPorZoom) * CONST_CHAVE);
         medidaRealText.setText(
-                String.format("L %.4fcm", (dh * (qtdPos / divisorPorZoom) * CONST_CHAVE))
+                String.format("L %.4f cm", diametroMarcado)
         );
     }
 
@@ -1233,27 +1275,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                 }
 
+                if ( toraAtual == qtdDivisao && acabouToras){
+                    layoutIntroVolume.setVisibility(View.INVISIBLE);
+                }
                 calcularAlturaTora();
                 anguloAtualTora = degrees;
                 infoMedirTora.setText(
                         String.format(
-                                "Aponte para base da 1° tora" +
-                                        "\n\nÂngulo correto %.2f" +
+                                "Aponte para %s da %d° tora" +
                                         "\nÂngulo atual %.2f" +
-                                        "\nAltura correta %.2f" +
-                                        "\nAltura atual %.2f",
-                                anguloBaseTora, anguloAtualTora, alturaCorreta, alturaAtualTora)
+                                        "\nAltura atual %s" +
+                                        "\nDiametro da base: %.2f cm" +
+                                        "\nDiametro do centro: %.2f cm" +
+                                        "\nDiametro do topo: %.2f cm",
+                                parteDaTora,
+                                toraAtual,
+                                anguloAtualTora,
+                                alturaAtualToraString.replace("-", ""),
+                                diametroBaseTora,
+                                diametroMedioTora,
+                                diametroTopoTora
+                        )
                 );
-
-                if (anguloBaseTora == degrees) {
-                    if (!GenericUtils.isSameDrawable(imageAnguloCorreto, R.raw.okgreen)) {
-                        imageAnguloCorreto.setImageResource(R.raw.okgreen);
-                    }
-                } else {
-                    if (!GenericUtils.isSameDrawable(imageAnguloCorreto, R.raw.xred)) {
-                        imageAnguloCorreto.setImageResource(R.raw.xred);
-                    }
-                }
             }
             this.lastAccelX = f2;
             this.lastAccelY = f;
