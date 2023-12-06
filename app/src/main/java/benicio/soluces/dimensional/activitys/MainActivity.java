@@ -90,7 +90,8 @@ import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
-
+    float alturaDesejada = 0.0f;
+    float volumeTotal = 0.0f;
     int qtdPos;
     float diametroMarcado;
     TextView infosGenericas, infoMedirTora;
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int parteDaToraPos = 1;
     int toraAtual = 1;
     Float alturaAtualTora = 0.0f;
-    String alturaAtualToraString = "0.0 cm";
+    String alturaAtualToraString = "0.0 m";
     Float anguloAtualTora = 0.0f;
     Float anguloBaseTora = 0.0f;
     Float diametroBaseTora = 0.0f;
@@ -235,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         medirAngulo.setOnClickListener( view -> {
 
+            medirAngulo.setText("Medir ângulo T");
 
             if ( etapa <= 2){
                 etapa++;
@@ -345,7 +347,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Inicia a animação
         instrucaoTela.startAnimation(blinkAnimation);
-        infoMedirTora.startAnimation(blinkAnimation);
 //        imageAnguloCorreto.startAnimation(blinkAnimation);
     }
 
@@ -401,8 +402,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // mudança aqui
-        alturaCalc = (Float.valueOf(alturaCalc) * 100 );
-        alturaReal.setText(String.format("A %.4f cm", alturaCalc));
+        alturaCalc = Float.valueOf(alturaCalc);
+        alturaReal.setText(String.format("A %.4f m", alturaCalc));
     }
 
     @SuppressLint("DefaultLocale")
@@ -437,9 +438,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        alturaAtualTora = (Float.valueOf(alturaAtualTora) * 100 );
+        alturaAtualTora = Float.valueOf(alturaAtualTora) * 100;
 
-        alturaAtualToraString = String.format(" %.2f cm", alturaAtualTora);
+        alturaAtualToraString = String.format(" %.2f m", alturaAtualTora);
     }
 
 
@@ -464,7 +465,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ( qtdDivisao != 0){
                     tamCadaParte = alturaCalc / qtdDivisao;
                     infosGenericas.setText(
-                            String.format("%d divisões\nCada tora com altura de %.2f cm",
+                            String.format("%d divisões\nCada tora com altura de %.2f m",
                                     qtdDivisao, tamCadaParte)
                     );
                     dialogDivisao.dismiss();
@@ -484,6 +485,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         b.setMessage("Insira a distância horizontal");
         View dhlbinding = LayoutInflater.from(MainActivity.this).inflate(R.layout.input_distancia_horizoltal_layout, null);
 
+        b.setCancelable(false);
         Button okBtn = dhlbinding.findViewById(R.id.ok_btn);
         TextInputLayout dhField = dhlbinding.findViewById(R.id.dh_field);
 
@@ -786,14 +788,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                        parteDaToraPos++;
                        parteDaTora = "o centro";
                        primeiroCalculoBase = true;
+                       alturaDesejada += (alturaCalc/4);
+
                    }else{
                        diametroMedioTora = diametroMarcado;
                        parteDaToraPos += 2;
                        parteDaTora = "o topo";
+                       alturaDesejada += (alturaCalc/4);
+
                    }
 
                    break;
                case 2:
+                   alturaDesejada += (alturaCalc/4);
                    diametroMedioTora = diametroMarcado;
                    parteDaToraPos++;
                    parteDaTora = "o topo";
@@ -802,6 +809,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                    diametroTopoTora = diametroMarcado;
                    parteDaToraPos++;
                    medirDiametro.setText("Próxima Tora");
+
                    break;
                default:
                    parteDaToraPos = 1;
@@ -809,13 +817,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                        parteDaTora = "a base";
                    }else{
                        parteDaTora = "o centro";
+                       alturaDesejada += (alturaCalc/4);
                    }
                    medirDiametro.setText("Medir Diâmetro");
 
                    if ( toraAtual < qtdDivisao){
+
                        float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
+                       volumeTotal += volumeToraCalculado;
                        infosGenericas.setText(
-                               infosGenericas.getText() + "\n" + String.format(
+                       infosGenericas.getText() + "\n" + String.format(
                                        "Volume Tora %d: %s",
                                        toraAtual,
                                        volumeToraCalculado
@@ -832,12 +843,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                        acabouToras = true;
 
                        float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
+                       volumeTotal += volumeToraCalculado;
                        infosGenericas.setText(
                                infosGenericas.getText() + "\n" + String.format(
                                        "Volume Tora %d: %s",
                                        toraAtual,
                                        volumeToraCalculado
-                               )
+                               ) + "\n" +
+                               "Volume total: " + volumeTotal
                        );
 
                    }
@@ -1083,9 +1096,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                             handler.postDelayed(this, tempoEspera);
 
-//                            R.id.textViewTamanho.setText(
-//                                    Converter.converterDpParaCm(getApplicationContext(), dpBarrinhas)
-//                            );
                         }
                     }else{
                         handler.postDelayed(this, tempoEspera);
@@ -1226,9 +1236,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void atualizarContagemBarrinhas(){
         qtdPos = qtdBarrinhas + (qtdBarrinhas - 1);
         qtdBarrinhasText.setText( qtdPos + "");
-        diametroMarcado = (dh * (qtdPos / divisorPorZoom) * CONST_CHAVE);
+        diametroMarcado = ((dh * (qtdPos / divisorPorZoom) * CONST_CHAVE)/100);
         medidaRealText.setText(
-                String.format("L %.4f cm", diametroMarcado)
+                String.format("L %.4f m", diametroMarcado)
         );
     }
 
@@ -1283,15 +1293,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 infoMedirTora.setText(
                         String.format(
                                 "Aponte para %s da %d° tora" +
-                                        "\nÂngulo atual %.2f" +
-                                        "\nAltura atual %s" +
-                                        "\nDiametro da base: %.2f cm" +
-                                        "\nDiametro do centro: %.2f cm" +
-                                        "\nDiametro do topo: %.2f cm",
+                                        "\nAltura para apontar: %.2f m" +
+                                        "\nAltura atual: %s " +
+                                        "\nÂngulo atual: %.2f" +
+                                        "\nDiametro da base: %.2f m" +
+                                        "\nDiametro do centro: %.2f m" +
+                                        "\nDiametro do topo: %.2f m",
                                 parteDaTora,
                                 toraAtual,
-                                anguloAtualTora,
+                                alturaDesejada,
                                 alturaAtualToraString.replace("-", ""),
+                                anguloAtualTora,
                                 diametroBaseTora,
                                 diametroMedioTora,
                                 diametroTopoTora
