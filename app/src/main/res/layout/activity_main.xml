@@ -231,6 +231,24 @@
         app:layout_constraintStart_toEndOf="@+id/angulo_topo"
         app:layout_constraintTop_toBottomOf="@+id/medida_real_text" />
 
+    <TextView
+        android:id="@+id/infos_dev_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background_blue"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Método de Newton"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="8sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/altura_real_text"
+        app:layout_constraintStart_toEndOf="@+id/menos_zoom"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/layout_mediar_volume"
         android:layout_width="wrap_content"

@@ -493,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String dhString = dhField.getEditText().getText().toString();
 
             if ( !dhString.isEmpty() ){
-                dh = Float.parseFloat(dhString);
+                dh = Float.parseFloat(dhString.replace(",", "."));
                 atualizarContagemBarrinhas();
                 if ( etapa == 2){calculateMeasureHeight(); musarParaMedidorDiametro();}
             }
@@ -827,9 +827,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                        volumeTotal += volumeToraCalculado;
                        infosGenericas.setText(
                        infosGenericas.getText() + "\n" + String.format(
-                                       "Volume Tora %d: %s",
+                                       "Volume Tora %d: %.4f m³",
                                        toraAtual,
-                                       volumeToraCalculado
+                                       Float.parseFloat(String.valueOf(volumeToraCalculado).split("E")[0])
                                        )
                        );
                        ultimoDiametroBase = diametroTopoTora;
@@ -846,11 +846,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                        volumeTotal += volumeToraCalculado;
                        infosGenericas.setText(
                                infosGenericas.getText() + "\n" + String.format(
-                                       "Volume Tora %d: %s",
+                                       "Volume Tora %d: %.4f m³",
                                        toraAtual,
-                                       volumeToraCalculado
+                                       Float.parseFloat(String.valueOf(volumeToraCalculado).split("E")[0])
                                ) + "\n" +
-                               "Volume total: " + volumeTotal
+                                       String.format("Volume total: %.4f m³",
+                                               Float.parseFloat(String.valueOf(volumeTotal).split("E")[0]))
                        );
 
                    }
