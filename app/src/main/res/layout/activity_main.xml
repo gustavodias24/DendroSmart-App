@@ -251,11 +251,13 @@
 
     <LinearLayout
         android:id="@+id/layout_mediar_volume"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/background_blue"
         android:foregroundGravity="center"
         android:gravity="center"
         android:orientation="horizontal"
@@ -273,7 +275,6 @@
             android:layout_gravity="center"
             android:foregroundGravity="center"
             android:gravity="center"
-            android:padding="16dp"
             android:text="Aponte para base da 1° tora"
             android:textAlignment="center"
             android:textColor="#FFE500"
@@ -336,9 +337,9 @@
         android:textColor="#FFE500"
         android:textSize="12sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toStartOf="@+id/maisred"
-        app:layout_constraintStart_toEndOf="@+id/maisyelow"
-        app:layout_constraintTop_toBottomOf="@+id/angulo_base" />
+        app:layout_constraintStart_toEndOf="@+id/maisyelow" />
 
     <TextView
         android:id="@+id/setinha"
@@ -355,14 +356,14 @@
         app:layout_constraintTop_toBottomOf="@+id/angulo_topo" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/logoEmpresa"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instrucao_text">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/dadosGpsText"

@@ -366,8 +366,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         anguloTText.setVisibility(View.GONE);
         setinha.setVisibility(View.GONE);
         medirAngulo.setVisibility(View.GONE);
-        instrucaoTela.clearAnimation();
-        instrucaoTela.setVisibility(View.INVISIBLE);
+//        instrucaoTela.clearAnimation();
+//        instrucaoTela.setVisibility(View.INVISIBLE);
     }
     @SuppressLint("DefaultLocale")
     public void calculateMeasureHeight() {
@@ -840,6 +840,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                        toraAtual += 1;
                    }else{
                        medirDiametro.setVisibility(View.GONE);
+                       instrucaoTela.setVisibility(View.INVISIBLE);
                        acabouToras = true;
 
                        float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
@@ -1291,18 +1292,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 calcularAlturaTora();
                 anguloAtualTora = degrees;
+
+                if ( qtdDivisao != 0){
+                    instrucaoTela.setText(
+                            String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada)
+                    );
+                }
+
+
                 infoMedirTora.setText(
                         String.format(
-                                "Aponte para %s da %d° tora" +
-                                        "\nAltura para apontar: %.2f m" +
                                         "\nAltura atual: %s " +
                                         "\nÂngulo atual: %.2f" +
                                         "\nDiametro da base: %.2f m" +
                                         "\nDiametro do centro: %.2f m" +
                                         "\nDiametro do topo: %.2f m",
-                                parteDaTora,
-                                toraAtual,
-                                alturaDesejada,
                                 alturaAtualToraString.replace("-", ""),
                                 anguloAtualTora,
                                 diametroBaseTora,
