@@ -174,21 +174,21 @@
         android:scaleType="centerCrop"
         android:src="@raw/minusyelow"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/configuracoes"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/qtd_barrinha" />
+        app:layout_constraintTop_toBottomOf="@+id/barrinhas" />
 
     <TextView
         android:id="@+id/textViewZoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/background_blue"
         android:padding="16dp"
         android:text="2x"
         android:textColor="#FFFFFF"
-        android:textSize="16sp"
+        android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -200,12 +200,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/background_blue"
         android:padding="16dp"
         android:text="L 0 m"
         android:textColor="#FFFFFF"
+        android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textViewZoom"
         app:layout_constraintTop_toTopOf="parent" />
@@ -213,12 +213,11 @@
 
     <TextView
         android:id="@+id/infos_dev_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/background_blue"
         android:gravity="center"
         android:padding="16dp"
@@ -227,23 +226,23 @@
         android:textColor="#FFFFFF"
         android:textSize="8sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/maisred"
-        app:layout_constraintStart_toEndOf="@+id/angulo_topo"
-        app:layout_constraintTop_toBottomOf="@+id/medida_real_text" />
+        app:layout_constraintEnd_toStartOf="@+id/mais_zoom"
+        app:layout_constraintStart_toEndOf="@+id/medida_real_text"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/infos_dev_text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/background_blue"
         android:gravity="center"
         android:padding="16dp"
         android:text="Método de Newton"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="8sp"
+        android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/altura_real_text"
         app:layout_constraintStart_toEndOf="@+id/menos_zoom"
@@ -251,20 +250,15 @@
 
     <LinearLayout
         android:id="@+id/layout_mediar_volume"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/background_blue"
         android:foregroundGravity="center"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/angulo_topo"
         app:layout_constraintEnd_toStartOf="@+id/angulo_topo"
-        app:layout_constraintStart_toEndOf="@+id/maisyelow"
+        app:layout_constraintStart_toEndOf="@+id/menos_zoom"
         app:layout_constraintTop_toBottomOf="@+id/altura_real_text">
 
         <TextView
@@ -272,9 +266,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:foregroundGravity="center"
-            android:gravity="center"
             android:text="Aponte para base da 1° tora"
             android:textAlignment="center"
             android:textColor="#FFE500"
@@ -289,12 +280,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/background_blue"
         android:padding="16dp"
         android:text="A 0 m"
         android:textColor="#FFFFFF"
+        android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textViewZoom"
         app:layout_constraintTop_toTopOf="parent" />
@@ -318,28 +309,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/background_blue"
         android:padding="16dp"
         android:text="B 0°"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/maisred"
-        app:layout_constraintStart_toEndOf="@+id/maisyelow"
-        app:layout_constraintTop_toTopOf="@+id/qtd_barrinha" />
-
-    <TextView
-        android:id="@+id/instrucao_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:padding="16dp"
-        android:text="Aponte para a base da árvore, em seguida clique em medir."
-        android:textColor="#FFE500"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/maisred"
-        app:layout_constraintStart_toEndOf="@+id/maisyelow" />
+        app:layout_constraintBottom_toBottomOf="@+id/angulo_topo"
+        app:layout_constraintEnd_toStartOf="@+id/angulo_topo" />
 
     <TextView
         android:id="@+id/setinha"
@@ -350,10 +327,83 @@
         android:textColor="#FFFFFF"
         android:textSize="60sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/angulo_base"
+        app:layout_constraintBottom_toTopOf="@+id/qtd_barrinha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/angulo_topo" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrinhas">
+
+        <TextView
+            android:id="@+id/qtd_barrinha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="15"
+            android:textAlignment="textEnd"
+            android:textColor="#00B0FF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/instrucao_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Aponte para a base da árvore, em seguida clique em medir."
+            android:textColor="#FFE500"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/angulo_topo"
+        app:layout_constraintEnd_toStartOf="@+id/maisred"
+        app:layout_constraintStart_toEndOf="@+id/angulo_topo">
+
+        <TextView
+            android:id="@+id/medirDiametroBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="false"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/background_blue"
+            android:padding="16dp"
+            android:text="Medir Diâmetro"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/calAltura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:background="@drawable/background_blue"
+            android:padding="16dp"
+            android:text="Medir ângulo B"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -393,42 +443,11 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/medirDiametroBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="false"
-            android:layout_gravity="center"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/background_blue"
-            android:padding="16dp"
-            android:text="Medir Diâmetro"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/calAltura"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:background="@drawable/background_blue"
-            android:padding="16dp"
-            android:text="Medir ângulo B"
-            android:textColor="#FFFFFF"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:visibility="visible" />
-
-        <TextView
             android:id="@+id/configuracoes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
-            android:layout_marginLeft="8dp"
             android:background="@drawable/background_blue"
             android:padding="16dp"
             android:text="Configurações."
@@ -436,6 +455,16 @@
             android:textSize="10sp"
             android:textStyle="bold" />
 
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_redondo"
+            android:backgroundTint="#2196F3"
+            android:src="@drawable/baseline_keyboard_backspace_24" />
         <ImageButton
             android:id="@+id/restartButton"
             android:layout_width="40sp"
@@ -445,6 +474,8 @@
             android:background="@drawable/background_redondo"
             android:backgroundTint="#2196F3"
             android:src="@drawable/baseline_refresh_24" />
+
+
 
         <ImageButton
             android:id="@+id/print"
@@ -458,20 +489,6 @@
             android:src="@drawable/baseline_add_a_photo_24"
             tools:ignore="MissingConstraints" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/qtd_barrinha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="15"
-        android:textAlignment="textEnd"
-        android:textColor="#00B0FF"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/menosred"
-        app:layout_constraintStart_toEndOf="@+id/menosyelow"
-        app:layout_constraintTop_toBottomOf="@+id/barrinhas" />
 
     <LinearLayout
         android:id="@+id/barrinhas"

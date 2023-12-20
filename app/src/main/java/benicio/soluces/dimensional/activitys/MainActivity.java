@@ -72,6 +72,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -84,8 +86,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
 import benicio.soluces.dimensional.R;
+import benicio.soluces.dimensional.model.ItemRelatorio;
 import benicio.soluces.dimensional.utils.Converter;
 import benicio.soluces.dimensional.utils.GenericUtils;
+import benicio.soluces.dimensional.utils.ItemRelatorioUtil;
 import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
 
@@ -137,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView qtdBarrinhasText;
     // Componentes de medir largura
 
-    private static  final String TAG = "jamirGay";
+    private static  final String TAG = "gustavoABRAKADABRA";
     TextView textZoom, dadosGps, medidaRealText;
     ImageView imageEmpresa;
     private static final float CONST_CHAVE = 0.054347826f;
@@ -200,6 +204,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        findViewById(R.id.backButton).setOnClickListener( view -> {
+            finish();
+            startActivity(new Intent(this, SelecionarMetodoActivity.class));
+        });
 
         infosGenericas = findViewById(R.id.infos_dev_text);
         layoutIntroVolume = findViewById(R.id.layout_mediar_volume);
@@ -447,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("DefaultLocale")
     private void configurarDialogDivisao() {
         AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
-        b.setMessage("Insira a divisão das toras");
+        b.setMessage("Insira a altura comercial de cada tora");
         View dvbinding = LayoutInflater.from(MainActivity.this).inflate(R.layout.input_distancia_horizoltal_layout, null);
 
 
@@ -455,15 +464,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextInputLayout divisaoField = dvbinding.findViewById(R.id.dh_field);
 
         b.setCancelable(false);
-        divisaoField.setHint("Divisão das toras");
+        divisaoField.setHint("Altura comercial");
 
         okBtn.setOnClickListener( view -> {
-            String divisaoString = divisaoField.getEditText().getText().toString();
+            String divisaoString = divisaoField.getEditText().getText().toString().replace(",", ".");
 
             if ( !divisaoString.isEmpty() ){
-                qtdDivisao = Integer.parseInt(divisaoString);
-                if ( qtdDivisao != 0){
-                    tamCadaParte = alturaCalc / qtdDivisao;
+
+//                qtdDivisao = Integer.parseInt(divisaoString);
+                tamCadaParte = Float.parseFloat(divisaoString);
+
+                if ( tamCadaParte != 0){
+
+                    Log.d(TAG, "tamCadaParte: " + tamCadaParte);
+                    Log.d(TAG, "altura: " + alturaCalc);
+
+                    qtdDivisao = (int) Math.floor(alturaCalc/tamCadaParte);
+
                     infosGenericas.setText(
                             String.format("%d divisões\nCada tora com altura de %.2f m",
                                     qtdDivisao, tamCadaParte)
@@ -823,13 +840,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                    if ( toraAtual < qtdDivisao){
 
-                       float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
+                       float volumeToraCalculado = Float.parseFloat(
+                               String.valueOf(MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte )).split("E")[0]
+                       );
+
+//                       float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
                        volumeTotal += volumeToraCalculado;
                        infosGenericas.setText(
                        infosGenericas.getText() + "\n" + String.format(
                                        "Volume Tora %d: %.4f m³",
                                        toraAtual,
-                                       Float.parseFloat(String.valueOf(volumeToraCalculado).split("E")[0])
+                                       volumeToraCalculado
                                        )
                        );
                        ultimoDiametroBase = diametroTopoTora;
@@ -840,20 +861,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                        toraAtual += 1;
                    }else{
                        medirDiametro.setVisibility(View.GONE);
+                       instrucaoTela.clearAnimation();
                        instrucaoTela.setVisibility(View.INVISIBLE);
                        acabouToras = true;
 
-                       float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
+                       float volumeToraCalculado = Float.parseFloat(
+                               String.valueOf(MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte )).split("E")[0]
+                       );
+
+//                       float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
                        volumeTotal += volumeToraCalculado;
                        infosGenericas.setText(
                                infosGenericas.getText() + "\n" + String.format(
                                        "Volume Tora %d: %.4f m³",
                                        toraAtual,
-                                       Float.parseFloat(String.valueOf(volumeToraCalculado).split("E")[0])
+                                       volumeToraCalculado
                                ) + "\n" +
-                                       String.format("Volume total: %.4f m³",
-                                               Float.parseFloat(String.valueOf(volumeTotal).split("E")[0]))
+                                       String.format("Volume total: %.4f m³", volumeTotal)
                        );
+
+                       ItemRelatorio novoItem = new ItemRelatorio();
+                       novoItem.setDadosGps(
+                               dadosGps.getText().toString()
+                       );
+
+                       novoItem.setDadosVolume(
+                               infosGenericas.getText().toString()
+                       );
+
+                       LocalDateTime agora = LocalDateTime.now();
+
+                       // Formatando a data e hora de acordo com o seu gosto
+                       DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                       String dataHoraFormatada = agora.format(formatador);
+
+                       StringBuilder dadosTora = new StringBuilder();
+                       dadosTora.append("Data e Hora: ").append(dataHoraFormatada).append("\n");
+                       dadosTora.append("- Infos gerais -").append("\n");
+                       dadosTora.append("DH: ").append(dh).append("\n");
+                       dadosTora.append("Altura total: ").append(alturaCalc).append("m");
+
+                       novoItem.setDadosTora(
+                               dadosTora.toString()
+                       );
+
+                       List<ItemRelatorio> listaParaAtualiziar = ItemRelatorioUtil.returnLista(this);
+                       listaParaAtualiziar.add(novoItem);
+                       ItemRelatorioUtil.saveList(listaParaAtualiziar, this);
+                       Toast.makeText(this, "Árvore salva no relatório.", Toast.LENGTH_SHORT).show();
 
                    }
                    break;

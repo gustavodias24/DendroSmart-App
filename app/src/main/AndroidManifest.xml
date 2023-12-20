@@ -41,6 +41,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DIMENSIONAL"
         tools:targetApi="31">
+        <activity
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
+            android:name=".activitys.RelatoriosActivity"
+            android:exported="false" />
 
 
         <provider
@@ -54,10 +59,9 @@
         </provider>
 
         <activity
-            android:screenOrientation="landscape"
             android:name=".activitys.SelecionarMetodoActivity"
-            android:exported="false" />
-
+            android:exported="false"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activitys.MainActivity"
             android:exported="false"

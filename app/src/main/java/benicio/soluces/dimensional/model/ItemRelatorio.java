@@ -1,6 +1,6 @@
 package benicio.soluces.dimensional.model;
 
-public class itemRelatorio {
+public class ItemRelatorio {
     String dadosGps;
     String dadosTora;
     String dadosVolume;

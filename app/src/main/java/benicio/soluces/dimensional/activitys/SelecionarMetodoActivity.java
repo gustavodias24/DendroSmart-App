@@ -45,4 +45,8 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
         finish();
         startActivity(new Intent(this, MainActivity.class));
     }
+
+    public void goToRelatórios(View view){
+        startActivity(new Intent(this, RelatoriosActivity.class));
+    }
 }
