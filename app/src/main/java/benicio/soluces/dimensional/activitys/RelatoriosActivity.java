@@ -1,6 +1,9 @@
 package benicio.soluces.dimensional.activitys;
 
+import static benicio.soluces.dimensional.activitys.ConfiguracoesActivity.imageToBase64;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
@@ -20,6 +23,7 @@ import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +47,8 @@ public class RelatoriosActivity extends AppCompatActivity {
     private List<ItemRelatorio> lista = new ArrayList<>();
     private RecyclerView recyclerView;
     private AdapterItens adapterItens;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,20 @@ public class RelatoriosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         configurarRecyclerView();
+
+        preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+        if ( preferences.getString("logoImage", null) != null){
+            byte[] decodedBytes = Base64.decode(preferences.getString("logoImage", null), Base64.DEFAULT);
+            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+            mainBinding.logo.setImageBitmap(decodedBitmap);
+        }
+
+
+        mainBinding.logo.setOnClickListener( view -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, 1);
+        });
     }
 
     private void configurarRecyclerView() {
@@ -101,8 +121,8 @@ public class RelatoriosActivity extends AppCompatActivity {
         if ( !logoEmpresaString.isEmpty() ){
             byte[] decodedBytes = Base64.decode(logoEmpresaString, Base64.DEFAULT);
             Bitmap logoEmpresabmp = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-            Bitmap logoEpresaScaledbmp = Bitmap.createScaledBitmap(logoEmpresabmp, 104, 104, false);
-            canvas.drawBitmap(logoEpresaScaledbmp, 670, 25, paint);
+            Bitmap logoEpresaScaledbmp = Bitmap.createScaledBitmap(logoEmpresabmp, 64, 64, false);
+            canvas.drawBitmap(logoEpresaScaledbmp, 16, 16, paint);
         }
 
         title.setTextSize(25);
@@ -133,7 +153,7 @@ public class RelatoriosActivity extends AppCompatActivity {
             startY = comecouY;
             startX += paddginX;
 
-            for ( String linha : item.getDadosGps().split("\n")){
+            for ( String linha : item.getDadosVolume().split("\n")){
                 canvas.drawText(linha, startX, startY, title);
                 startY += paddginY;
             }
@@ -141,7 +161,7 @@ public class RelatoriosActivity extends AppCompatActivity {
             startY = comecouY;
             startX += paddginX;
 
-            for ( String linha : item.getDadosVolume().split("\n")){
+            for ( String linha : item.getDadosGps().split("\n")){
                 canvas.drawText(linha, startX, startY, title);
                 startY += paddginY;
             }
@@ -191,4 +211,22 @@ public class RelatoriosActivity extends AppCompatActivity {
         // Abre a janela de compartilhamento
         startActivity(Intent.createChooser(shareIntent, "Compartilhar relatório via"));
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+            editor.putString("logoImage", imageToBase64(selectedImageUri, getApplicationContext()));
+            editor.apply();
+
+
+            byte[] decodedBytes = Base64.decode(preferences.getString("logoImage", null), Base64.DEFAULT);
+            Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+            mainBinding.logo.setImageBitmap(decodedBitmap);
+        }
+    }
+
+
 }

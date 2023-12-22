@@ -480,10 +480,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d(TAG, "altura: " + alturaCalc);
 
                     qtdDivisao = (int) Math.floor(alturaCalc/tamCadaParte);
+                    Double mToraPonta = Math.floor(alturaCalc%tamCadaParte);
 
                     infosGenericas.setText(
-                            String.format("%d divisões\nCada tora com altura de %.2f m",
-                                    qtdDivisao, tamCadaParte)
+                            String.format("%d tora(s) de %.2f metro(s)\ntora da ponta: %.2f metro(s)",
+                                    qtdDivisao, tamCadaParte, mToraPonta)
                     );
                     dialogDivisao.dismiss();
                     layoutIntroVolume.setVisibility(View.VISIBLE);
@@ -513,8 +514,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dh = Float.parseFloat(dhString.replace(",", "."));
                 atualizarContagemBarrinhas();
                 if ( etapa == 2){calculateMeasureHeight(); musarParaMedidorDiametro();}
+                dialogInputDH.dismiss();
+
             }
-            dialogInputDH.dismiss();
         });
 
         b.setView(dhlbinding);
@@ -825,15 +827,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                case 3:
                    diametroTopoTora = diametroMarcado;
                    parteDaToraPos++;
-                   medirDiametro.setText("Próxima Tora");
+//                   medirDiametro.setText("Próxima Tora");
+                   parteDaTora = "o centro";
 
                    break;
                default:
-                   parteDaToraPos = 1;
+//                   parteDaToraPos = 1;
                    if (!primeiroCalculoBase){
                        parteDaTora = "a base";
                    }else{
                        parteDaTora = "o centro";
+                       parteDaToraPos = 2;
                        alturaDesejada += (alturaCalc/4);
                    }
                    medirDiametro.setText("Medir Diâmetro");
@@ -844,7 +848,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                String.valueOf(MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte )).split("E")[0]
                        );
 
-//                       float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
                        volumeTotal += volumeToraCalculado;
                        infosGenericas.setText(
                        infosGenericas.getText() + "\n" + String.format(
@@ -869,7 +872,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                String.valueOf(MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte )).split("E")[0]
                        );
 
-//                       float volumeToraCalculado =  MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte );
                        volumeTotal += volumeToraCalculado;
                        infosGenericas.setText(
                                infosGenericas.getText() + "\n" + String.format(

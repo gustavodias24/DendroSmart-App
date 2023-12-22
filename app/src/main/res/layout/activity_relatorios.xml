@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="8dp"
     tools:context=".activitys.RelatoriosActivity">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="@drawable/background_blue"
+        android:src="@raw/emptylogo" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nome_field"
@@ -45,4 +59,4 @@
         android:id="@+id/recycler_arvores"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</LinearLayout>
+</LinearLayout></ScrollView>
