@@ -15,6 +15,7 @@
         android:onClick="escolherMetodo"
         android:text="newton"
         android:textAllCaps="true"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/button5"
         app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"

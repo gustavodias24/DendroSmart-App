@@ -158,8 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     String qualPressionado = "";
     Runnable longPressRunnable;
-    private Dialog dialogInputDH;
-    private Float dh = 0.0f;
+//    private Dialog dialogInputDH;
+    private Float dh ;
+    private Bundle bundle;
     private static final int ALTURA_BARRINHA_NORMAL = 30;
     private static final int ALTURA_BARRINHA_AUMENTADA = 70;
     private Double latitude, longitude;
@@ -204,6 +205,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+
+        bundle = getIntent().getExtras();
+
+        dh = bundle.getFloat("dh");
 
         findViewById(R.id.backButton).setOnClickListener( view -> {
             finish();
@@ -259,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     musarParaMedidorDiametro();
                     dialogDivisao.show();
                 }else{
-                    dialogInputDH.show();
+//                    dialogInputDH.show();
                 }
             }
         });
@@ -269,9 +275,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         configurarIncrementoDecrementoAutomatico();
 
-        configurarDialogDH();
+//        configurarDialogDH();
         configurarDialogDivisao();
-        dialogInputDH.show();
+//        dialogInputDH.show();
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -498,30 +504,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialogDivisao = b.create();
     }
 
-    private void configurarDialogDH() {
-        AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
-        b.setMessage("Insira a distância horizontal");
-        View dhlbinding = LayoutInflater.from(MainActivity.this).inflate(R.layout.input_distancia_horizoltal_layout, null);
-
-        b.setCancelable(false);
-        Button okBtn = dhlbinding.findViewById(R.id.ok_btn);
-        TextInputLayout dhField = dhlbinding.findViewById(R.id.dh_field);
-
-        okBtn.setOnClickListener( view -> {
-            String dhString = dhField.getEditText().getText().toString();
-
-            if ( !dhString.isEmpty() ){
-                dh = Float.parseFloat(dhString.replace(",", "."));
-                atualizarContagemBarrinhas();
-                if ( etapa == 2){calculateMeasureHeight(); musarParaMedidorDiametro();}
-                dialogInputDH.dismiss();
-
-            }
-        });
-
-        b.setView(dhlbinding);
-        dialogInputDH = b.create();
-    }
+//    private void configurarDialogDH() {
+//        AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
+//        b.setMessage("Insira a distância horizontal");
+//        View dhlbinding = LayoutInflater.from(MainActivity.this).inflate(R.layout.input_distancia_horizoltal_layout, null);
+//
+//        b.setCancelable(false);
+//        Button okBtn = dhlbinding.findViewById(R.id.ok_btn);
+//        TextInputLayout dhField = dhlbinding.findViewById(R.id.dh_field);
+//
+//        okBtn.setOnClickListener( view -> {
+//            String dhString = dhField.getEditText().getText().toString();
+//
+//            if ( !dhString.isEmpty() ){
+//                dh = Float.parseFloat(dhString.replace(",", "."));
+//                atualizarContagemBarrinhas();
+//                if ( etapa == 2){calculateMeasureHeight(); musarParaMedidorDiametro();}
+//                dialogInputDH.dismiss();
+//
+//            }
+//        });
+//
+//        b.setView(dhlbinding);
+//        dialogInputDH = b.create();
+//    }
 
 
 
@@ -797,7 +803,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if ( id == findViewById(R.id.configuracoes).getId() ){
             startActivity(new Intent(getApplicationContext(), ConfiguracoesActivity.class));
         }else if ( id == findViewById(R.id.setar_dh).getId() ){
-            dialogInputDH.show();
+//            dialogInputDH.show();
         }else if ( id == medirDiametro.getId()){
 
            switch (parteDaToraPos){

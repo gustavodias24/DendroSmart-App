@@ -42,11 +42,14 @@
         android:theme="@style/Theme.DIMENSIONAL"
         tools:targetApi="31">
         <activity
+            android:name=".activitys.SetarDHActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-            android:name=".activitys.RelatoriosActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".activitys.RelatoriosActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
