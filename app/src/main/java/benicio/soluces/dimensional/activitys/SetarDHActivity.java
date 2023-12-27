@@ -53,7 +53,7 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
         mainBinding.btnProsseguir.setOnClickListener( view -> {
             try{
                 Float dhFloat = Float.parseFloat(
-                        mainBinding.edtDh.getText().toString()
+                        mainBinding.edtDh.getText().toString().replace(",", ".")
                 );
 
                 Intent i = new Intent(this, MainActivity.class);
