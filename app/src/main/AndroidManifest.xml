@@ -42,9 +42,21 @@
         android:theme="@style/Theme.DIMENSIONAL"
         tools:targetApi="31">
         <activity
-            android:name=".activitys.AutenticacaoActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
+            android:name=".activitys.SetarComprimentoToraActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
+        <activity
+            android:name=".activitys.BaterFotoArvoreActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activitys.MenuActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activitys.AutenticacaoActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
         <activity
             android:name=".activitys.SetarDHActivity"
             android:exported="false"
@@ -80,9 +92,7 @@
             android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
         <activity
             android:name=".activitys.SplashActivity"
-
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

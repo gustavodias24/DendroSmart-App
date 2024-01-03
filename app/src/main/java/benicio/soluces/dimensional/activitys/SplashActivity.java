@@ -40,7 +40,7 @@ public class SplashActivity extends AppCompatActivity {
             Intent intent;
             if ( sharedPreferences.getBoolean("islogado", false) ){
                 Toast.makeText(this, "Bem-vindo de volta.", Toast.LENGTH_SHORT).show();
-                intent = new Intent(getApplicationContext(), SelecionarMetodoActivity.class);
+                intent = new Intent(getApplicationContext(), MenuActivity.class);
             }else{
                 intent = new Intent(getApplicationContext(), AutenticacaoActivity.class);
             }

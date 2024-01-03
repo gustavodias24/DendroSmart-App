@@ -213,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.backButton).setOnClickListener( view -> {
             finish();
-            startActivity(new Intent(this, SelecionarMetodoActivity.class));
         });
 
         infosGenericas = findViewById(R.id.infos_dev_text);
@@ -247,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         restartButton.setOnClickListener( view -> {
             Toast.makeText(this, "Reiniciando...", Toast.LENGTH_SHORT).show();
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, BaterFotoArvoreActivity.class));
         });
         medirAngulo.setOnClickListener( view -> {
 

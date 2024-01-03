@@ -42,8 +42,7 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
     }
 
     public void escolherMetodo(View view){
-        finish();
-        startActivity(new Intent(this, SetarDHActivity.class));
+        startActivity(new Intent(this, BaterFotoArvoreActivity.class));
     }
 
     public void goToRelatórios(View view){

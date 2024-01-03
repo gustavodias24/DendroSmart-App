@@ -66,6 +66,8 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
 
         });
 
+        mainBinding.backButton5.setOnClickListener(view -> finish());
+
     }
 
     public static String removerUltimaLetra(String str) {

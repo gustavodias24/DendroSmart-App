@@ -419,7 +419,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
     public void irParaOutraTela(){
         finish();
-        startActivity(new Intent(getApplicationContext(), SelecionarMetodoActivity.class));
+        startActivity(new Intent(getApplicationContext(), MenuActivity.class));
     }
 
 
