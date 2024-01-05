@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activitys.MenuActivity">
+
+    <ImageButton
+        android:id="@+id/backButton2"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:layout_weight="1"
+        android:background="@drawable/background_redondo"
+        android:backgroundTint="#2196F3"
+        android:onClick="escolherMetodoCubagem"
+        android:rotationY="184"
+        android:src="@drawable/baseline_keyboard_backspace_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Bem-vindo "
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="260dp"
+        android:layout_height="330dp"
+        android:layout_marginEnd="32dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/backButton2"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:src="@raw/pinheiro" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#2196F3"
+            android:drawableLeft="@drawable/baseline_picture_as_pdf_24"
+            android:onClick="relatorios"
+            android:text="RELATÓRIOS"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            app:icon="@drawable/baseline_picture_as_pdf_24"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#2196F3"
+            android:onClick="irConfiguracoes"
+            android:text="CONFIGURAÇÕES"
+            android:textAllCaps="true"
+            app:icon="@raw/setting"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#2196F3"
+            android:drawableLeft="@drawable/baseline_videocam_24"
+            android:text="VÍDEOS E\nSUPORTE"
+            android:textAllCaps="true"
+            app:icon="@drawable/baseline_videocam_24"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#2196F3"
+            android:drawableLeft="@drawable/baseline_lock_24"
+            android:text="sobre"
+            android:textAllCaps="true"
+            app:icon="@drawable/baseline_info_24"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            tools:ignore="MissingConstraints" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

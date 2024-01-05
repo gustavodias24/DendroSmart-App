@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // variaveis da divisão
     int qtdDivisao = 0;
     float tamCadaParte = 0.f;
-    Dialog dialogDivisao;
+//    Dialog dialogDivisao;
 
     // variaveis da divisão
 
@@ -210,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bundle = getIntent().getExtras();
 
         dh = bundle.getFloat("dh");
+        tamCadaParte = bundle.getFloat("tamCadaParte");
 
         findViewById(R.id.backButton).setOnClickListener( view -> {
             finish();
@@ -262,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if ( dh != 0){
                     calculateMeasureHeight();
                     musarParaMedidorDiametro();
-                    dialogDivisao.show();
+                    calcularQuantidadeTora();
                 }else{
 //                    dialogInputDH.show();
                 }
@@ -275,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         configurarIncrementoDecrementoAutomatico();
 
 //        configurarDialogDH();
-        configurarDialogDivisao();
+//        configurarDialogDivisao();
 //        dialogInputDH.show();
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
@@ -452,55 +453,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        alturaAtualTora = Float.valueOf(alturaAtualTora) * 100;
+//        alturaAtualTora = Float.valueOf(alturaAtualTora) * 100;
+        alturaAtualTora = Float.valueOf(alturaAtualTora);
 
         alturaAtualToraString = String.format(" %.2f m", alturaAtualTora);
     }
 
 
     @SuppressLint("DefaultLocale")
-    private void configurarDialogDivisao() {
-        AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
-        b.setMessage("Insira a altura comercial de cada tora");
-        View dvbinding = LayoutInflater.from(MainActivity.this).inflate(R.layout.input_distancia_horizoltal_layout, null);
+    private void calcularQuantidadeTora() {
+//        AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
+//        b.setMessage("Insira a altura comercial de cada tora");
+//        View dvbinding = LayoutInflater.from(MainActivity.this).inflate(R.layout.input_distancia_horizoltal_layout, null);
 
 
-        Button okBtn = dvbinding.findViewById(R.id.ok_btn);
-        TextInputLayout divisaoField = dvbinding.findViewById(R.id.dh_field);
+//        Button okBtn = dvbinding.findViewById(R.id.ok_btn);
+//        TextInputLayout divisaoField = dvbinding.findViewById(R.id.dh_field);
+//
+//        b.setCancelable(false);
+//        divisaoField.setHint("Altura comercial");
 
-        b.setCancelable(false);
-        divisaoField.setHint("Altura comercial");
+        qtdDivisao = (int) Math.floor(alturaCalc/tamCadaParte);
+        Double mToraPonta = Math.floor(alturaCalc%tamCadaParte);
 
-        okBtn.setOnClickListener( view -> {
-            String divisaoString = divisaoField.getEditText().getText().toString().replace(",", ".");
+        infosGenericas.setText(
+                String.format("%d tora(s) de %.2f metro(s)\ntora da ponta: %.2f metro(s)",
+                        qtdDivisao, tamCadaParte, mToraPonta)
+        );
+//        dialogDivisao.dismiss();
+        layoutIntroVolume.setVisibility(View.VISIBLE);
 
-            if ( !divisaoString.isEmpty() ){
-
-//                qtdDivisao = Integer.parseInt(divisaoString);
-                tamCadaParte = Float.parseFloat(divisaoString);
-
-                if ( tamCadaParte != 0){
-
-                    Log.d(TAG, "tamCadaParte: " + tamCadaParte);
-                    Log.d(TAG, "altura: " + alturaCalc);
-
-                    qtdDivisao = (int) Math.floor(alturaCalc/tamCadaParte);
-                    Double mToraPonta = Math.floor(alturaCalc%tamCadaParte);
-
-                    infosGenericas.setText(
-                            String.format("%d tora(s) de %.2f metro(s)\ntora da ponta: %.2f metro(s)",
-                                    qtdDivisao, tamCadaParte, mToraPonta)
-                    );
-                    dialogDivisao.dismiss();
-                    layoutIntroVolume.setVisibility(View.VISIBLE);
-                }else{
-                    Toast.makeText(this, "Coloque algum valor válido.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        b.setView(dvbinding);
-        dialogDivisao = b.create();
+//        okBtn.setOnClickListener( view -> {
+//            String divisaoString = divisaoField.getEditText().getText().toString().replace(",", ".");
+//
+//            if ( !divisaoString.isEmpty() ){
+//
+////                qtdDivisao = Integer.parseInt(divisaoString);
+//                tamCadaParte = Float.parseFloat(divisaoString);
+//
+//                if ( tamCadaParte != 0){
+//
+//                    Log.d(TAG, "tamCadaParte: " + tamCadaParte);
+//                    Log.d(TAG, "altura: " + alturaCalc);
+//
+//
+//                }else{
+//                    Toast.makeText(this, "Coloque algum valor válido.", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+//
+//        b.setView(dvbinding);
+//        dialogDivisao = b.create();
     }
 
 //    private void configurarDialogDH() {
@@ -1357,7 +1361,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if ( qtdDivisao != 0){
                     instrucaoTela.setText(
-                            String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada)
+//                            String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada)
+                            String.format("Aponte para %s da %d° tora", parteDaTora, toraAtual)
                     );
                 }
 
