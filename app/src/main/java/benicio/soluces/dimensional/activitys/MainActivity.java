@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView qtdBarrinhasText;
     // Componentes de medir largura
 
-    private static  final String TAG = "gustavoABRAKADABRA";
+    private static  final String TAG = "mayara";
     TextView textZoom, dadosGps, medidaRealText;
     ImageView imageEmpresa;
     private static final float CONST_CHAVE = 0.054347826f;
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private float lastAccelY;
     private float lastAccelZ;
 
-    @SuppressLint({"ResourceType", "MissingInflatedId"})
+    @SuppressLint({"ResourceType", "MissingInflatedId", "DefaultLocale"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -211,6 +211,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         dh = bundle.getFloat("dh");
         tamCadaParte = bundle.getFloat("tamCadaParte");
+
+        medidaRealText = findViewById(R.id.medida_real_text);
+        medidaRealText.setText(
+                String.format("L %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE)/100))
+        );
 
         findViewById(R.id.backButton).setOnClickListener( view -> {
             finish();
@@ -241,7 +246,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textZoom = findViewById(R.id.textViewZoom);
         qtdBarrinhasText = findViewById(R.id.qtd_barrinha);
         dadosGps = findViewById(R.id.dadosGpsText);
-        medidaRealText = findViewById(R.id.medida_real_text);
         imageEmpresa = findViewById(R.id.logoEmpresa);
 
         restartButton.setOnClickListener( view -> {
@@ -474,11 +478,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        divisaoField.setHint("Altura comercial");
 
         qtdDivisao = (int) Math.floor(alturaCalc/tamCadaParte);
-        Double mToraPonta = Math.floor(alturaCalc%tamCadaParte);
+//        Double mToraPonta = (Double) ();
+
+        Log.d(TAG, "calcularQuantidadeTora: " + alturaCalc);
+        Log.d(TAG, "calcularQuantidadeTora: " + tamCadaParte);
+        Log.d(TAG, "calcularQuantidadeTora: " + alturaCalc%tamCadaParte);
+
 
         infosGenericas.setText(
                 String.format("%d tora(s) de %.2f metro(s)\ntora da ponta: %.2f metro(s)",
-                        qtdDivisao, tamCadaParte, mToraPonta)
+                        qtdDivisao, tamCadaParte, alturaCalc%tamCadaParte)
         );
 //        dialogDivisao.dismiss();
         layoutIntroVolume.setVisibility(View.VISIBLE);
