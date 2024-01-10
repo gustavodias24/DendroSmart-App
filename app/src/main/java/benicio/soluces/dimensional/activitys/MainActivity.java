@@ -786,7 +786,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             // Se todas as permissões foram concedidas, inicie as operações que requerem permissões
-            if (allPermissionsGranted) {
+//            if (allPermissionsGranted) {
+            if (true) {
                 startCamera(cameraFacing);
             } else {
                 // Se o usuário recusar alguma permissão, exiba uma mensagem informando a necessidade das permissões
@@ -863,7 +864,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                    if ( toraAtual < qtdDivisao){
 
                        float volumeToraCalculado = Float.parseFloat(
-                               String.valueOf(MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte )).split("E")[0]
+                               String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora/2), (diametroMedioTora/2), (diametroTopoTora/2), tamCadaParte )).split("E")[0]
                        );
 
                        volumeTotal += volumeToraCalculado;
@@ -887,7 +888,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                        acabouToras = true;
 
                        float volumeToraCalculado = Float.parseFloat(
-                               String.valueOf(MetodosUtils.calculoNewton(diametroTopoTora, diametroMedioTora, diametroBaseTora, tamCadaParte )).split("E")[0]
+                               String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora/2), (diametroMedioTora/2), (diametroTopoTora/2), tamCadaParte )).split("E")[0]
                        );
 
                        volumeTotal += volumeToraCalculado;
