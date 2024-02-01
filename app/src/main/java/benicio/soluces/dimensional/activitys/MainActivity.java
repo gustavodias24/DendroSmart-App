@@ -68,9 +68,17 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.BindException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -78,6 +86,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -94,6 +103,7 @@ import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
+    ServerSocket serverSocket = null;
     float alturaDesejada = 0.0f;
     float volumeTotal = 0.0f;
     int qtdPos;
@@ -198,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private float lastAccelX;
     private float lastAccelY;
     private float lastAccelZ;
+    private TextView textIp;
 
     @SuppressLint({"ResourceType", "MissingInflatedId", "DefaultLocale"})
     @Override
@@ -205,6 +216,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        textIp = findViewById(R.id.textIp);
+        textIp.setText(getIPAddress());
+
+        new Thread(() -> {
+            try {
+                serverSocket = new ServerSocket(4203);
+
+                while (true) {
+                    try {
+                        if ( !serverSocket.isClosed()){
+                            Socket socket = serverSocket.accept(); // Espera por conexões
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+
+
+                            final String info = reader.readLine(); // Recebe a string do cliente
+
+                            runOnUiThread(() -> {
+                                String[] command = info.split(" ");
+
+                                Log.d("mayara", info);
+
+                                if (command[0].equals("+") && command[1].equals("red")){
+                                    aumentarVermelho();
+                                }
+                                else if (command[0].equals("-") && command[1].equals("red")){
+                                    diminuirVermelho();
+                                }
+                                else if (command[0].equals("+") && command[1].equals("yellow")){
+                                    aumentarAmerelo();
+                                }else if (command[0].equals("-") && command[1].equals("yellow")){
+                                    diminuirAmerelo();
+                                }else if (command[0].equals("-") && command[1].equals("zoom")){
+                                    menosZoomFuncao();
+                                }else if (command[0].equals("+") && command[1].equals("zoom")){
+                                    maisZoomFuncao();
+                                }
+
+                            });
+
+                            socket.close();
+                        }
+                    } catch (IOException e) {
+                        Log.d(TAG, "Erro ao aceitar conexão: " + e.getMessage());
+                    }
+                }
+
+            } catch (BindException e) {
+                Log.d(TAG, "Porta já está em uso, continuando a ouvir...");
+            } catch (IOException e) {
+                Log.d(TAG, "Erro ao criar o servidor: " + e.getMessage());
+            }
+        }).start();
+
 
 
         bundle = getIntent().getExtras();
@@ -334,6 +400,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         runnableCode.run();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+                Log.d(TAG, "onDestroy: fechado" );
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Erro ao fechar o servidor: " + e.getMessage());
+        }
     }
 
     private void configurarInstrucaoTela() {
@@ -951,9 +1030,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             findViewById(listay.get(indexy - 1)).requestLayout();
 
             findViewById(listay.get(indexy)).setVisibility(View.VISIBLE);
-
-            Log.d(TAG, "aumentarAmerelo: " + indexy);
-
         }
     }
     private void diminuirAmerelo(){
@@ -1014,25 +1090,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 // Quando o botão é pressionado
                 if ( findViewById(listar.get( listar.size() - 1 )).getVisibility() == View.INVISIBLE ){
-                    if ( currentZoomLevel < maxZoomLevel ){
-
-                        divisorPorZoom *= 2;
-
-                        int quantidadeParaAjustar = (indexr+1) + (indexy+1);
-                        for (int i = 0 ; i < quantidadeParaAjustar ; i++){
-                            if (i % 2 == 0){
-                                aumentarAmerelo();
-                            }else{
-                                aumentarVermelho();
-                            }
-                        }
-                        currentZoomLevel = currentZoomLevel*2;
-                        mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
-
-                        String zoomString = currentZoomLevel  + "x";
-                        textZoom.setText(zoomString);
-
-                    }
+                   maisZoomFuncao();
                 }
 
             }
@@ -1042,31 +1100,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.menos_zoom).setOnTouchListener((view, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN){
                 // Quando o botão é pressionado
-                if ( currentZoomLevel > 2){
-
-                    divisorPorZoom /= 2;
-
-                    int quantidadeParaAjustar = ((indexr+1) + (indexy+1)) / 2 ;
-                    Log.d("diminuicao", "configurarEventoDePressionar: " + quantidadeParaAjustar);
-                    for (int i = 0 ; i < quantidadeParaAjustar ; i++){
-                        if (i % 2 == 0){
-                            diminuirAmerelo();
-                        }else{
-                            diminuirVermelho();
-                        }
-                    }
-
-                    currentZoomLevel = currentZoomLevel/2;
-                    mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
-
-                    String zoomString = currentZoomLevel  + "x";
-                    textZoom.setText(zoomString);
-                }else{
-                    Log.d("zoomDiminuir", "não pode zoom: " + currentZoomLevel);
-                }
+                menosZoomFuncao();
             }
             return true;
         });
+    }
+
+    private void menosZoomFuncao(){
+        if ( currentZoomLevel > 2){
+
+            divisorPorZoom /= 2;
+
+            int quantidadeParaAjustar = ((indexr+1) + (indexy+1)) / 2 ;
+            Log.d("diminuicao", "configurarEventoDePressionar: " + quantidadeParaAjustar);
+            for (int i = 0 ; i < quantidadeParaAjustar ; i++){
+                if (i % 2 == 0){
+                    diminuirAmerelo();
+                }else{
+                    diminuirVermelho();
+                }
+            }
+
+            currentZoomLevel = currentZoomLevel/2;
+            mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
+
+            String zoomString = currentZoomLevel  + "x";
+            textZoom.setText(zoomString);
+        }else{
+            Log.d("zoomDiminuir", "não pode zoom: " + currentZoomLevel);
+        }
+    }
+    private void maisZoomFuncao(){
+        if ( currentZoomLevel < maxZoomLevel ){
+
+            divisorPorZoom *= 2;
+
+            int quantidadeParaAjustar = (indexr+1) + (indexy+1);
+            for (int i = 0 ; i < quantidadeParaAjustar ; i++){
+                if (i % 2 == 0){
+                    aumentarAmerelo();
+                }else{
+                    aumentarVermelho();
+                }
+            }
+            currentZoomLevel = currentZoomLevel*2;
+            mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
+
+            String zoomString = currentZoomLevel  + "x";
+            textZoom.setText(zoomString);
+
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -1400,6 +1483,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
+    }
+
+
+    public static String getIPAddress() {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface iface = interfaces.nextElement();
+                Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    if (!addr.isLoopbackAddress() && !addr.isLinkLocalAddress() && addr.isSiteLocalAddress()) {
+                        return addr.getHostAddress();
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

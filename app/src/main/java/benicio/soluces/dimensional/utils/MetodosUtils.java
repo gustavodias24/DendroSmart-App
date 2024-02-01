@@ -23,19 +23,7 @@ public class MetodosUtils {
         float areaMeio = (float) (PI * Math.pow(raioMeio, 2));
         float areaFim = (float) (PI * Math.pow(raioFim, 2));
 
-        Log.d("mayara", "base: " + areaBase);
-        Log.d("mayara", "meio: " + areaMeio);
-        Log.d("mayara", "fim: " + areaFim);
-
-        float umCesto = (float) 1/6;
-
-        Log.d("mayara", "umCesto: " + umCesto);
-
-
-        result = (float) umCesto * ((areaBase + (4*areaMeio) + areaFim ) * comprimento);
-
-        Log.d("mayara", "result: " + result);
-
+        result = (float) 1/6 * ((areaBase + (4*areaMeio) + areaFim ) * comprimento);
 
         return result;
     }
