@@ -6,21 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activitys.SelecionarMetodoActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Escolha o método para os cálulos."
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="260dp"
@@ -44,12 +29,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="Escolha o método para os cálulos."
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#2196F3"
+            android:drawableLeft="@drawable/baseline_lock_24"
+            android:gravity="center"
+            android:onClick="disponivelApeenasV2"
+            android:text="Diâmetro"
+            android:textAllCaps="true"
+            app:icon="@drawable/baseline_lock_24"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            tools:ignore="MissingConstraints" />
+
         <Button
             android:id="@+id/button"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:drawableLeft="@drawable/baseline_lock_open_24"
+            android:gravity="center"
             android:onClick="escolherMetodo"
             android:text="newton"
             android:textAllCaps="true"
@@ -61,10 +78,12 @@
 
         <Button
             android:id="@+id/button5"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:drawableLeft="@drawable/baseline_lock_24"
+            android:gravity="center"
             android:onClick="disponivelApeenasV2"
             android:text="smalian"
             android:textAllCaps="true"
@@ -75,10 +94,12 @@
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:drawableLeft="@drawable/baseline_lock_24"
+            android:gravity="center"
             android:onClick="disponivelApeenasV2"
             android:text="houver"
             android:textAllCaps="true"
@@ -89,26 +110,14 @@
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:drawableLeft="@drawable/baseline_lock_24"
+            android:gravity="center"
             android:onClick="disponivelApeenasV2"
             android:text="frankon"
-            android:textAllCaps="true"
-            app:icon="@drawable/baseline_lock_24"
-            app:iconGravity="textStart"
-            app:iconSize="30dp"
-            tools:ignore="MissingConstraints" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#2196F3"
-            android:drawableLeft="@drawable/baseline_lock_24"
-            android:onClick="disponivelApeenasV2"
-            android:text="Diâmetro"
             android:textAllCaps="true"
             app:icon="@drawable/baseline_lock_24"
             app:iconGravity="textStart"

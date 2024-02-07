@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private float maxZoomLevel = 1f; // Variável para armazenar o zoom máximo
 
-    private float currentZoomLevel = 2.0f;
+    private float currentZoomLevel = 4.0f;
     private String textoFixo = "";
     private Camera mCamera;
     private static final int PERMISSIONS_GERAL = 1;
@@ -217,8 +217,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+
         textIp = findViewById(R.id.textIp);
-        textIp.setText(getIPAddress());
+
+        new Thread(() -> {
+            while ( true ){
+                runOnUiThread( () -> textIp.setText( "IP do controle: " + getIPAddress()));
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+
 
         new Thread(() -> {
             try {
@@ -279,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tamCadaParte = bundle.getFloat("tamCadaParte");
 
         medidaRealText = findViewById(R.id.medida_real_text);
+        if ( divisorPorZoom == 0 ) divisorPorZoom = 1;
         medidaRealText.setText(
                 String.format("L %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE)/100))
         );
@@ -1397,6 +1410,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void atualizarContagemBarrinhas(){
         qtdPos = qtdBarrinhas + (qtdBarrinhas - 1);
         qtdBarrinhasText.setText( qtdPos + "");
+        if ( divisorPorZoom == 0 ) { divisorPorZoom = 1;}
         diametroMarcado = ((dh * (qtdPos / divisorPorZoom) * CONST_CHAVE)/100);
         medidaRealText.setText(
                 String.format("L %.4f m", diametroMarcado)
