@@ -103,6 +103,8 @@ import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
+
+    TextView alturaAtual;
     ServerSocket serverSocket = null;
     float alturaDesejada = 0.0f;
     float volumeTotal = 0.0f;
@@ -151,11 +153,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView qtdBarrinhasText;
     // Componentes de medir largura
 
-    private static  final String TAG = "mayara";
+    private static final String TAG = "mayara";
     TextView textZoom, dadosGps, medidaRealText;
     ImageView imageEmpresa;
     private static final float CONST_CHAVE = 0.054347826f;
-//    private static final float CONST_CHAVE = 0.130266f;
+    //    private static final float CONST_CHAVE = 0.130266f;
     private long lastUpdate;
     SensorManager sensorManager;
     Sensor accelerometer;
@@ -168,8 +170,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     String qualPressionado = "";
     Runnable longPressRunnable;
-//    private Dialog dialogInputDH;
-    private Float dh ;
+    //    private Dialog dialogInputDH;
+    private Float dh;
     private Bundle bundle;
     private static final int ALTURA_BARRINHA_NORMAL = 30;
     private static final int ALTURA_BARRINHA_AUMENTADA = 70;
@@ -217,12 +219,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        alturaAtual = findViewById(R.id.infos_altura_atual);
+
 
         textIp = findViewById(R.id.textIp);
 
         new Thread(() -> {
-            while ( true ){
-                runOnUiThread( () -> textIp.setText( "IP do controle: " + getIPAddress()));
+            while (true) {
+                runOnUiThread(() -> textIp.setText("IP do controle: " + getIPAddress()));
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -238,10 +242,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 while (true) {
                     try {
-                        if ( !serverSocket.isClosed()){
+                        if (!serverSocket.isClosed()) {
                             Socket socket = serverSocket.accept(); // Espera por conexões
                             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
 
 
                             final String info = reader.readLine(); // Recebe a string do cliente
@@ -251,19 +254,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                 Log.d("mayara", info);
 
-                                if (command[0].equals("+") && command[1].equals("red")){
+                                if (command[0].equals("+") && command[1].equals("red")) {
                                     aumentarVermelho();
-                                }
-                                else if (command[0].equals("-") && command[1].equals("red")){
+                                } else if (command[0].equals("-") && command[1].equals("red")) {
                                     diminuirVermelho();
-                                }
-                                else if (command[0].equals("+") && command[1].equals("yellow")){
+                                } else if (command[0].equals("+") && command[1].equals("yellow")) {
                                     aumentarAmerelo();
-                                }else if (command[0].equals("-") && command[1].equals("yellow")){
+                                } else if (command[0].equals("-") && command[1].equals("yellow")) {
                                     diminuirAmerelo();
-                                }else if (command[0].equals("-") && command[1].equals("zoom")){
+                                } else if (command[0].equals("-") && command[1].equals("zoom")) {
                                     menosZoomFuncao();
-                                }else if (command[0].equals("+") && command[1].equals("zoom")){
+                                } else if (command[0].equals("+") && command[1].equals("zoom")) {
                                     maisZoomFuncao();
                                 }
 
@@ -283,20 +284,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }).start();
 
-
-
         bundle = getIntent().getExtras();
 
         dh = bundle.getFloat("dh");
         tamCadaParte = bundle.getFloat("tamCadaParte");
 
         medidaRealText = findViewById(R.id.medida_real_text);
-        if ( divisorPorZoom == 0 ) divisorPorZoom = 1;
+        if (divisorPorZoom == 0) divisorPorZoom = 1;
         medidaRealText.setText(
-                String.format("L %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE)/100))
+                String.format("Diâmetro %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100))
         );
 
-        findViewById(R.id.backButton).setOnClickListener( view -> {
+        findViewById(R.id.backButton).setOnClickListener(view -> {
             finish();
         });
 
@@ -306,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         configurarInstrucaoTela();
         restartButton = findViewById(R.id.restartButton);
-        
+
         maisZoom = findViewById(R.id.mais_zoom);
         menosZoom = findViewById(R.id.menos_zoom);
         btnMaisRed = findViewById(R.id.maisred);
@@ -323,31 +322,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alturaReal = findViewById(R.id.altura_real_text);
 
         textZoom = findViewById(R.id.textViewZoom);
+        animacaoBotaoZoom();
         qtdBarrinhasText = findViewById(R.id.qtd_barrinha);
         dadosGps = findViewById(R.id.dadosGpsText);
         imageEmpresa = findViewById(R.id.logoEmpresa);
 
-        restartButton.setOnClickListener( view -> {
+        restartButton.setOnClickListener(view -> {
             Toast.makeText(this, "Reiniciando...", Toast.LENGTH_SHORT).show();
             finish();
             startActivity(new Intent(this, BaterFotoArvoreActivity.class));
         });
-        medirAngulo.setOnClickListener( view -> {
+        medirAngulo.setOnClickListener(view -> {
 
             medirAngulo.setText("Medir ângulo T");
 
-            if ( etapa <= 2){
+            if (etapa <= 2) {
                 etapa++;
                 instrucaoTela.setText(MSG2);
 
             }
 
-            if( etapa == 2){
-                if ( dh != 0){
+            if (etapa == 2) {
+                if (dh != 0) {
                     calculateMeasureHeight();
                     musarParaMedidorDiametro();
                     calcularQuantidadeTora();
-                }else{
+                } else {
 //                    dialogInputDH.show();
                 }
             }
@@ -392,13 +392,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED
+                        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED
         ) {
             startCamera(cameraFacing);
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA }, PERMISSIONS_GERAL);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, PERMISSIONS_GERAL);
         }
 
 //        calcularTamanhoDaTela();
@@ -415,13 +415,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public void animacaoBotaoZoom(){
+        final AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
+        fadeIn.setDuration(1000); // ajuste a duração conforme necessário
+
+        // Configura a animação de fade out
+        final AlphaAnimation fadeOut = new AlphaAnimation(1.0f, 0.0f);
+        fadeOut.setDuration(1000); // ajuste a duração conforme necessário
+
+        // Torna o textView visível
+//        textZoom.setVisibility(View.VISIBLE);
+
+        // Inicia a animação de fade in
+        textZoom.startAnimation(fadeIn);
+
+        // Programa a tarefa para esconder o textView após 3 segundos
+        new Handler().postDelayed(() -> {
+            // Inicia a animação de fade out
+            textZoom.startAnimation(fadeOut);
+
+            // Torna o textView invisível após a animação
+            textZoom.setVisibility(View.INVISIBLE);
+        }, 3000);
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
-                Log.d(TAG, "onDestroy: fechado" );
+                Log.d(TAG, "onDestroy: fechado");
             }
         } catch (IOException e) {
             Log.e(TAG, "Erro ao fechar o servidor: " + e.getMessage());
@@ -461,7 +486,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        imageAnguloCorreto.startAnimation(blinkAnimation);
     }
 
-    private void musarParaMedidorDiametro(){
+    private void musarParaMedidorDiametro() {
         qtdBarrinhasText.setVisibility(View.VISIBLE);
         maisZoom.setVisibility(View.VISIBLE);
         menosZoom.setVisibility(View.VISIBLE);
@@ -470,9 +495,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnMaisYellow.setVisibility(View.VISIBLE);
         btnMenosYellow.setVisibility(View.VISIBLE);
         barrinhasLayout.setVisibility(View.VISIBLE);
-        layoutIntroVolume.setVisibility(View.VISIBLE);
+
+//        layoutIntroVolume.setVisibility(View.VISIBLE);
         medirDiametro.setVisibility(View.VISIBLE);
 
+
+        alturaAtual.setVisibility(View.INVISIBLE);
         anguloBText.setVisibility(View.GONE);
         anguloTText.setVisibility(View.GONE);
         setinha.setVisibility(View.GONE);
@@ -480,11 +508,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        instrucaoTela.clearAnimation();
 //        instrucaoTela.setVisibility(View.INVISIBLE);
     }
+
     @SuppressLint("DefaultLocale")
     public void calculateMeasureHeight() {
-        Float ValueTA =  (float) Math.tan(Math.toRadians(anguloB));
-        Float ValueTB =  (float) Math.tan(Math.toRadians(anguloT));
-        
+        Float ValueTA = (float) Math.tan(Math.toRadians(anguloB));
+        Float ValueTB = (float) Math.tan(Math.toRadians(anguloT));
+
         if ((ValueTA > 0.0f && ValueTB > 0.0f) || (ValueTA < 0.0f && ValueTB < 0.0f)) {
             if (ValueTA < 0.0f) {
                 ValueTA = ValueTA * (-1.0f);
@@ -502,7 +531,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ValueTA = ValueTA * (-1.0f);
             }
             if (ValueTB < 0.0f) {
-                ValueTB  = ValueTB * (-1.0f);
+                ValueTB = ValueTB * (-1.0f);
             }
 
             alturaCalc = dh * (ValueTA + ValueTB);
@@ -515,12 +544,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // mudança aqui
         alturaCalc = Float.valueOf(alturaCalc);
         alturaReal.setText(String.format("A %.4f m", alturaCalc));
+        alturaReal.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("DefaultLocale")
     public void calcularAlturaTora() {
-        Float ValueTA =  (float) Math.tan(Math.toRadians(anguloBaseTora));
-        Float ValueTB =  (float) Math.tan(Math.toRadians(anguloAtualTora));
+        Float ValueTA = (float) Math.tan(Math.toRadians(anguloBaseTora));
+        Float ValueTB = (float) Math.tan(Math.toRadians(anguloAtualTora));
 
         if ((ValueTA > 0.0f && ValueTB > 0.0f) || (ValueTA < 0.0f && ValueTB < 0.0f)) {
             if (ValueTA < 0.0f) {
@@ -539,7 +569,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ValueTA = ValueTA * (-1.0f);
             }
             if (ValueTB < 0.0f) {
-                ValueTB  = ValueTB * (-1.0f);
+                ValueTB = ValueTB * (-1.0f);
             }
 
             alturaAtualTora = dh * (ValueTA + ValueTB);
@@ -569,20 +599,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        b.setCancelable(false);
 //        divisaoField.setHint("Altura comercial");
 
-        qtdDivisao = (int) Math.floor(alturaCalc/tamCadaParte);
+        qtdDivisao = (int) Math.floor(alturaCalc / tamCadaParte);
 //        Double mToraPonta = (Double) ();
 
         Log.d(TAG, "calcularQuantidadeTora: " + alturaCalc);
         Log.d(TAG, "calcularQuantidadeTora: " + tamCadaParte);
-        Log.d(TAG, "calcularQuantidadeTora: " + alturaCalc%tamCadaParte);
+        Log.d(TAG, "calcularQuantidadeTora: " + alturaCalc % tamCadaParte);
 
 
         infosGenericas.setText(
                 String.format("%d tora(s) de %.2f metro(s)\ntora da ponta: %.2f metro(s)",
-                        qtdDivisao, tamCadaParte, alturaCalc%tamCadaParte)
+                        qtdDivisao, tamCadaParte, alturaCalc % tamCadaParte)
         );
 //        dialogDivisao.dismiss();
-        layoutIntroVolume.setVisibility(View.VISIBLE);
+//        layoutIntroVolume.setVisibility(View.VISIBLE);
 
 //        okBtn.setOnClickListener( view -> {
 //            String divisaoString = divisaoField.getEditText().getText().toString().replace(",", ".");
@@ -634,8 +664,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    }
 
 
-
-    public void pegarLocalizacao(){
+    public void pegarLocalizacao() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -651,10 +680,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 configurarTextInfos();
-                Log.d("latlong", "onSuccess: " +  latitude + " " + longitude);
+                Log.d("latlong", "onSuccess: " + latitude + " " + longitude);
             }
         });
     }
+
     public void startCamera(int cameraFacing) {
         int aspectRatio = aspectRatio(previewView.getWidth(), previewView.getHeight());
         ListenableFuture<ProcessCameraProvider> listenableFuture = ProcessCameraProvider.getInstance(this);
@@ -673,12 +703,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 cameraProvider.unbindAll();
 
-                if ( !this.isDestroyed() ){
+                if (!this.isDestroyed()) {
                     mCamera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
                     mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
                 }
 
-                findViewById(R.id.print).setOnClickListener( view -> {
+                findViewById(R.id.print).setOnClickListener(view -> {
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         activityResultLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                     } else {
@@ -696,7 +726,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void takePrint(ImageCapture imageCapture){
+    public void takePrint(ImageCapture imageCapture) {
         findViewById(R.id.mais_zoom).setVisibility(View.INVISIBLE);
         findViewById(R.id.menos_zoom).setVisibility(View.INVISIBLE);
         findViewById(R.id.configuracoes).setVisibility(View.INVISIBLE);
@@ -709,7 +739,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.imagePreview).setVisibility(View.VISIBLE);
 
 
-
         File documentosDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
 
         File fotoMapaDir = new File(documentosDir, "FOTO MAPA");
@@ -719,7 +748,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         File partesDir = new File(fotoMapaDir, "PARTES");
 
-        if ( !partesDir.exists()){
+        if (!partesDir.exists()) {
             partesDir.mkdirs();
         }
 
@@ -750,7 +779,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                 File partesDir = new File(fotoMapaDir, "PARTES");
 
-                                if ( !partesDir.exists()){
+                                if (!partesDir.exists()) {
                                     partesDir.mkdirs();
                                 }
 
@@ -786,20 +815,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void onError(Exception e) {
                             Log.d("cauda do erro", "onError: " + e.getCause().getMessage());
                             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            findViewById( R.id.imagePreview).setVisibility(View.GONE);
+                            findViewById(R.id.imagePreview).setVisibility(View.GONE);
                         }
                     });
                 });
             }
+
             @Override
             public void onError(@NonNull ImageCaptureException exception) {
-                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erro: "+ exception.getMessage(), Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erro: " + exception.getMessage(), Toast.LENGTH_SHORT).show());
                 startCamera(cameraFacing);
             }
         });
     }
 
-    public  void baterPrintDenovo (){
+    public void baterPrintDenovo() {
         try {
             findViewById(R.id.configuracoes).setVisibility(View.INVISIBLE);
             findViewById(R.id.maisred).setVisibility(View.INVISIBLE);
@@ -854,9 +884,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             findViewById(R.id.imagePreview).setVisibility(View.GONE);
 
         } catch (Throwable e) {
-            Log.d("baterPrintDenovo:",  e.getMessage());
+            Log.d("baterPrintDenovo:", e.getMessage());
         }
     }
+
     private int aspectRatio(int width, int height) {
         double previewRatio = (double) Math.max(width, height) / Math.min(width, height);
         if (Math.abs(previewRatio - 4.0 / 3.0) <= Math.abs(previewRatio - 16.0 / 9.0)) {
@@ -895,142 +926,143 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int id = view.getId();
 
-        if ( id == findViewById(R.id.maisred).getId() ){
+        if (id == findViewById(R.id.maisred).getId()) {
             aumentarVermelho();
-        }else if (id == findViewById(R.id.menosred).getId()){
+        } else if (id == findViewById(R.id.menosred).getId()) {
             diminuirVermelho();
-        }
-        else if (id ==findViewById( R.id.maisyelow).getId()){
+        } else if (id == findViewById(R.id.maisyelow).getId()) {
             aumentarAmerelo();
-        }else if (id == findViewById(R.id.menosyelow).getId()){
+        } else if (id == findViewById(R.id.menosyelow).getId()) {
             diminuirAmerelo();
-        }
-        else if ( id == findViewById(R.id.configuracoes).getId() ){
+        } else if (id == findViewById(R.id.configuracoes).getId()) {
             startActivity(new Intent(getApplicationContext(), ConfiguracoesActivity.class));
-        }else if ( id == findViewById(R.id.setar_dh).getId() ){
+        } else if (id == findViewById(R.id.setar_dh).getId()) {
 //            dialogInputDH.show();
-        }else if ( id == medirDiametro.getId()){
+        } else if (id == medirDiametro.getId()) {
 
-           switch (parteDaToraPos){
-               case 1:
-                   if (!primeiroCalculoBase){
-                       diametroBaseTora = diametroMarcado;
-                       parteDaToraPos++;
-                       parteDaTora = "o centro";
-                       primeiroCalculoBase = true;
-                       alturaDesejada += (alturaCalc/4);
+            switch (parteDaToraPos) {
+                case 1:
+                    if (!primeiroCalculoBase) {
+                        diametroBaseTora = diametroMarcado;
+                        parteDaToraPos++;
+                        parteDaTora = "o centro";
+                        primeiroCalculoBase = true;
+                        alturaDesejada += (alturaCalc / 4);
 
-                   }else{
-                       diametroMedioTora = diametroMarcado;
-                       parteDaToraPos += 2;
-                       parteDaTora = "o topo";
-                       alturaDesejada += (alturaCalc/4);
+                    } else {
+                        diametroMedioTora = diametroMarcado;
+                        parteDaToraPos += 2;
+                        parteDaTora = "o topo";
+                        alturaDesejada += (alturaCalc / 4);
 
-                   }
+                    }
 
-                   break;
-               case 2:
-                   alturaDesejada += (alturaCalc/4);
-                   diametroMedioTora = diametroMarcado;
-                   parteDaToraPos++;
-                   parteDaTora = "o topo";
-                   break;
-               case 3:
-                   diametroTopoTora = diametroMarcado;
-                   parteDaToraPos++;
+                    break;
+                case 2:
+                    alturaDesejada += (alturaCalc / 4);
+                    diametroMedioTora = diametroMarcado;
+                    parteDaToraPos++;
+                    parteDaTora = "o topo";
+                    break;
+                case 3:
+                    diametroTopoTora = diametroMarcado;
+                    parteDaToraPos++;
 //                   medirDiametro.setText("Próxima Tora");
-                   parteDaTora = "o centro";
+                    parteDaTora = "o centro";
 
-                   break;
-               default:
+                    break;
+                default:
 //                   parteDaToraPos = 1;
-                   if (!primeiroCalculoBase){
-                       parteDaTora = "a base";
-                   }else{
-                       parteDaTora = "o centro";
-                       parteDaToraPos = 2;
-                       alturaDesejada += (alturaCalc/4);
-                   }
-                   medirDiametro.setText("Medir Diâmetro");
+                    if (!primeiroCalculoBase) {
+                        parteDaTora = "a base";
+                    } else {
+                        parteDaTora = "o centro";
+                        parteDaToraPos = 2;
+                        alturaDesejada += (alturaCalc / 4);
+                    }
+                    medirDiametro.setText("Medir Diâmetro");
 
-                   if ( toraAtual < qtdDivisao){
+                    if (toraAtual < qtdDivisao) {
 
-                       float volumeToraCalculado = Float.parseFloat(
-                               String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora/2), (diametroMedioTora/2), (diametroTopoTora/2), tamCadaParte )).split("E")[0]
-                       );
+                        float volumeToraCalculado = Float.parseFloat(
+                                String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]
+                        );
 
-                       volumeTotal += volumeToraCalculado;
-                       infosGenericas.setText(
-                       infosGenericas.getText() + "\n" + String.format(
-                                       "Volume Tora %d: %.4f m³",
-                                       toraAtual,
-                                       volumeToraCalculado
-                                       )
-                       );
-                       ultimoDiametroBase = diametroTopoTora;
-                       diametroTopoTora = diametroMedioTora = diametroBaseTora = 0.0f;
+                        volumeTotal += volumeToraCalculado;
+                        infosGenericas.setText(
+                                infosGenericas.getText() + "\n" + String.format(
+                                        "Volume Tora %d: %.4f m³",
+                                        toraAtual,
+                                        volumeToraCalculado
+                                )
+                        );
+                        ultimoDiametroBase = diametroTopoTora;
+                        diametroTopoTora = diametroMedioTora = diametroBaseTora = 0.0f;
 
-                       if(primeiroCalculoBase){diametroBaseTora = ultimoDiametroBase;}
+                        if (primeiroCalculoBase) {
+                            diametroBaseTora = ultimoDiametroBase;
+                        }
 
-                       toraAtual += 1;
-                   }else{
-                       medirDiametro.setVisibility(View.GONE);
-                       instrucaoTela.clearAnimation();
-                       instrucaoTela.setVisibility(View.INVISIBLE);
-                       acabouToras = true;
+                        toraAtual += 1;
+                    } else {
+                        medirDiametro.setVisibility(View.GONE);
+                        instrucaoTela.clearAnimation();
+                        instrucaoTela.setVisibility(View.INVISIBLE);
+                        acabouToras = true;
 
-                       float volumeToraCalculado = Float.parseFloat(
-                               String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora/2), (diametroMedioTora/2), (diametroTopoTora/2), tamCadaParte )).split("E")[0]
-                       );
+                        float volumeToraCalculado = Float.parseFloat(
+                                String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]
+                        );
 
-                       volumeTotal += volumeToraCalculado;
-                       infosGenericas.setText(
-                               infosGenericas.getText() + "\n" + String.format(
-                                       "Volume Tora %d: %.4f m³",
-                                       toraAtual,
-                                       volumeToraCalculado
-                               ) + "\n" +
-                                       String.format("Volume total: %.4f m³", volumeTotal)
-                       );
+                        volumeTotal += volumeToraCalculado;
+                        infosGenericas.setText(
+                                infosGenericas.getText() + "\n" + String.format(
+                                        "Volume Tora %d: %.4f m³",
+                                        toraAtual,
+                                        volumeToraCalculado
+                                ) + "\n" +
+                                        String.format("Volume total: %.4f m³", volumeTotal)
+                        );
 
-                       ItemRelatorio novoItem = new ItemRelatorio();
-                       novoItem.setDadosGps(
-                               dadosGps.getText().toString()
-                       );
+                        ItemRelatorio novoItem = new ItemRelatorio();
+                        novoItem.setDadosGps(
+                                dadosGps.getText().toString()
+                        );
 
-                       novoItem.setDadosVolume(
-                               infosGenericas.getText().toString()
-                       );
+                        novoItem.setDadosVolume(
+                                infosGenericas.getText().toString()
+                        );
 
-                       LocalDateTime agora = LocalDateTime.now();
+                        LocalDateTime agora = LocalDateTime.now();
 
-                       // Formatando a data e hora de acordo com o seu gosto
-                       DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-                       String dataHoraFormatada = agora.format(formatador);
+                        // Formatando a data e hora de acordo com o seu gosto
+                        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                        String dataHoraFormatada = agora.format(formatador);
 
-                       StringBuilder dadosTora = new StringBuilder();
-                       dadosTora.append("Data e Hora: ").append(dataHoraFormatada).append("\n");
-                       dadosTora.append("- Infos gerais -").append("\n");
-                       dadosTora.append("DH: ").append(dh).append("\n");
-                       dadosTora.append("Altura total: ").append(alturaCalc).append("m");
+                        StringBuilder dadosTora = new StringBuilder();
+                        dadosTora.append("Data e Hora: ").append(dataHoraFormatada).append("\n");
+                        dadosTora.append("- Infos gerais -").append("\n");
+                        dadosTora.append("DH: ").append(dh).append("\n");
+                        dadosTora.append("Altura total: ").append(alturaCalc).append("m");
 
-                       novoItem.setDadosTora(
-                               dadosTora.toString()
-                       );
+                        novoItem.setDadosTora(
+                                dadosTora.toString()
+                        );
 
-                       List<ItemRelatorio> listaParaAtualiziar = ItemRelatorioUtil.returnLista(this);
-                       listaParaAtualiziar.add(novoItem);
-                       ItemRelatorioUtil.saveList(listaParaAtualiziar, this);
-                       Toast.makeText(this, "Árvore salva no relatório.", Toast.LENGTH_SHORT).show();
+                        List<ItemRelatorio> listaParaAtualiziar = ItemRelatorioUtil.returnLista(this);
+                        listaParaAtualiziar.add(novoItem);
+                        ItemRelatorioUtil.saveList(listaParaAtualiziar, this);
+                        Toast.makeText(this, "Árvore salva no relatório.", Toast.LENGTH_SHORT).show();
 
-                   }
-                   break;
-           }
+                    }
+                    break;
+            }
         }
     }
-    private void aumentarAmerelo(){
-        if ( indexy < (listay.size() - 1 )){
-            qtdBarrinhas ++ ;
+
+    private void aumentarAmerelo() {
+        if (indexy < (listay.size() - 1)) {
+            qtdBarrinhas++;
             atualizarContagemBarrinhas();
             indexy++;
             dpBarrinhas += 9;
@@ -1045,9 +1077,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             findViewById(listay.get(indexy)).setVisibility(View.VISIBLE);
         }
     }
-    private void diminuirAmerelo(){
-        if ( indexy >= 1){
-            qtdBarrinhas -- ;
+
+    private void diminuirAmerelo() {
+        if (indexy >= 1) {
+            qtdBarrinhas--;
             atualizarContagemBarrinhas();
             dpBarrinhas -= 9;
 
@@ -1062,9 +1095,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             indexy--;
         }
     }
-    private void aumentarVermelho(){
-        if ( indexr < (listar.size() - 1 ) ){
-            qtdBarrinhas ++ ;
+
+    private void aumentarVermelho() {
+        if (indexr < (listar.size() - 1)) {
+            qtdBarrinhas++;
             atualizarContagemBarrinhas();
             indexr++;
             dpBarrinhas += 9;
@@ -1079,9 +1113,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-    private void diminuirVermelho(){
-        if ( indexr >= 1){
-            qtdBarrinhas --;
+
+    private void diminuirVermelho() {
+        if (indexr >= 1) {
+            qtdBarrinhas--;
             atualizarContagemBarrinhas();
             dpBarrinhas -= 9;
             findViewById(listar.get(indexr)).setVisibility(View.INVISIBLE);
@@ -1096,14 +1131,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             indexr--;
         }
     }
+
     @SuppressLint("ClickableViewAccessibility")
-    public void configurarEventoDePressionar(){
+    public void configurarEventoDePressionar() {
 
         findViewById(R.id.mais_zoom).setOnTouchListener((view, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN){
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 // Quando o botão é pressionado
-                if ( findViewById(listar.get( listar.size() - 1 )).getVisibility() == View.INVISIBLE ){
-                   maisZoomFuncao();
+                if (findViewById(listar.get(listar.size() - 1)).getVisibility() == View.INVISIBLE) {
+                    maisZoomFuncao();
                 }
 
             }
@@ -1111,7 +1147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         findViewById(R.id.menos_zoom).setOnTouchListener((view, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN){
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 // Quando o botão é pressionado
                 menosZoomFuncao();
             }
@@ -1119,54 +1155,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void menosZoomFuncao(){
-        if ( currentZoomLevel > 2){
+    private void menosZoomFuncao() {
+        if (currentZoomLevel > 2) {
 
             divisorPorZoom /= 2;
 
-            int quantidadeParaAjustar = ((indexr+1) + (indexy+1)) / 2 ;
+            int quantidadeParaAjustar = ((indexr + 1) + (indexy + 1)) / 2;
             Log.d("diminuicao", "configurarEventoDePressionar: " + quantidadeParaAjustar);
-            for (int i = 0 ; i < quantidadeParaAjustar ; i++){
-                if (i % 2 == 0){
+            for (int i = 0; i < quantidadeParaAjustar; i++) {
+                if (i % 2 == 0) {
                     diminuirAmerelo();
-                }else{
+                } else {
                     diminuirVermelho();
                 }
             }
 
-            currentZoomLevel = currentZoomLevel/2;
+            currentZoomLevel = currentZoomLevel / 2;
             mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
 
-            String zoomString = currentZoomLevel  + "x";
+            String zoomString = currentZoomLevel + "x";
             textZoom.setText(zoomString);
-        }else{
+            animacaoBotaoZoom();
+        } else {
             Log.d("zoomDiminuir", "não pode zoom: " + currentZoomLevel);
         }
     }
-    private void maisZoomFuncao(){
-        if ( currentZoomLevel < maxZoomLevel ){
+
+    private void maisZoomFuncao() {
+        if (currentZoomLevel < maxZoomLevel) {
 
             divisorPorZoom *= 2;
 
-            int quantidadeParaAjustar = (indexr+1) + (indexy+1);
-            for (int i = 0 ; i < quantidadeParaAjustar ; i++){
-                if (i % 2 == 0){
+            int quantidadeParaAjustar = (indexr + 1) + (indexy + 1);
+            for (int i = 0; i < quantidadeParaAjustar; i++) {
+                if (i % 2 == 0) {
                     aumentarAmerelo();
-                }else{
+                } else {
                     aumentarVermelho();
                 }
             }
-            currentZoomLevel = currentZoomLevel*2;
+            currentZoomLevel = currentZoomLevel * 2;
             mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
 
-            String zoomString = currentZoomLevel  + "x";
+            String zoomString = currentZoomLevel + "x";
             textZoom.setText(zoomString);
+            animacaoBotaoZoom();
 
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public void configurarIncrementoDecrementoAutomatico(){
+    public void configurarIncrementoDecrementoAutomatico() {
         findViewById(R.id.maisyelow).setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -1250,11 +1289,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
 
-                if ((!ocupadoRed && ocupadoYellow) || (ocupadoRed && !ocupadoYellow) ){
-                    if ( !firstTime ){
+                if ((!ocupadoRed && ocupadoYellow) || (ocupadoRed && !ocupadoYellow)) {
+                    if (!firstTime) {
                         if (longPressing) {
 
-                            switch (qualPressionado){
+                            switch (qualPressionado) {
                                 case "+Y":
                                     aumentarAmerelo();
                                     break;
@@ -1271,7 +1310,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             handler.postDelayed(this, tempoEspera);
 
                         }
-                    }else{
+                    } else {
                         handler.postDelayed(this, tempoEspera);
                         firstTime = false;
                         tempoEspera = 12;
@@ -1282,11 +1321,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         longPressRunnable.run();
     }
+
     void stopRepeatingTask() {
         handler.removeCallbacks(longPressRunnable);
     }
 
-    public void pegarZoomMaximo(){
+    public void pegarZoomMaximo() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
         cameraProviderFuture.addListener(() -> {
@@ -1323,17 +1363,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }, ContextCompat.getMainExecutor(this));
     }
 
-    private void pegarConfiguracoesAtuais(){
-        if ( preferences.getString("logoImage", null) != null){
+    private void pegarConfiguracoesAtuais() {
+        if (preferences.getString("logoImage", null) != null) {
             byte[] decodedBytes = Base64.decode(preferences.getString("logoImage", null), Base64.DEFAULT);
             Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
             imageEmpresa.setImageBitmap(decodedBitmap);
             findViewById(R.id.logoEmpresa).setVisibility(View.VISIBLE);
         }
 
-        if ( preferences.getBoolean("gps", false) ){
+        if (preferences.getBoolean("gps", false)) {
             findViewById(R.id.dadosGpsText).setVisibility(View.VISIBLE);
-        }else{
+        } else {
             findViewById(R.id.dadosGpsText).setVisibility(View.INVISIBLE);
         }
     }
@@ -1342,10 +1382,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         pegarConfiguracoesAtuais();
-        if (accelerometer == null){
+        if (accelerometer == null) {
             Toast.makeText(this, "Sensor acelerômetro não encontrado no dispositivo", Toast.LENGTH_SHORT).show();
             finish();
-        }else {
+        } else {
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
@@ -1357,7 +1397,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint("SetTextI18n")
-    private void configurarTextInfos(){
+    private void configurarTextInfos() {
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
 
@@ -1407,13 +1447,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
-    private void atualizarContagemBarrinhas(){
+    private void atualizarContagemBarrinhas() {
         qtdPos = qtdBarrinhas + (qtdBarrinhas - 1);
-        qtdBarrinhasText.setText( qtdPos + "");
-        if ( divisorPorZoom == 0 ) { divisorPorZoom = 1;}
-        diametroMarcado = ((dh * (qtdPos / divisorPorZoom) * CONST_CHAVE)/100);
+        qtdBarrinhasText.setText(qtdPos + "");
+        if (divisorPorZoom == 0) {
+            divisorPorZoom = 1;
+        }
+        diametroMarcado = ((dh * (qtdPos / divisorPorZoom) * CONST_CHAVE) / 100);
         medidaRealText.setText(
-                String.format("L %.4f m", diametroMarcado)
+                String.format("Diâmetro %.4f m", diametroMarcado)
         );
     }
 
@@ -1436,19 +1478,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         long j = this.lastUpdate;
 
         if (currentTimeMillis - j > 100) {
-            
+
             long j2 = currentTimeMillis - j;
             this.lastUpdate = currentTimeMillis;
-            
+
             if ((Math.abs(((((f2 + f) + f3) - this.lastAccelX) - this.lastAccelY) - this.lastAccelZ) / ((float) j2)) * 10000.0f > 6.0f) {
 
                 // Para ficar calculando a medida que altera o angulo
-                if ( dh != 0.0 && anguloB != 0.0 && etapa == 1){
+                if (dh != 0.0 && anguloB != 0.0 && etapa == 1) {
                     anguloT = degrees;
                     calculateMeasureHeight();
                 }
 
-                switch (etapa){
+                switch (etapa) {
                     case 0:
                         anguloBText.setText(String.format("B %.2f°", degrees));
                         anguloBaseTora = degrees;
@@ -1460,13 +1502,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                 }
 
-                if ( toraAtual == qtdDivisao && acabouToras){
+                if (toraAtual == qtdDivisao && acabouToras) {
                     layoutIntroVolume.setVisibility(View.INVISIBLE);
                 }
                 calcularAlturaTora();
                 anguloAtualTora = degrees;
 
-                if ( qtdDivisao != 0){
+                if (qtdDivisao != 0) {
                     instrucaoTela.setText(
 //                            String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada)
                             String.format("Aponte para %s da %d° tora", parteDaTora, toraAtual)
@@ -1474,9 +1516,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
 
+                alturaAtual.setText(String.format("Altura atual: %s ", alturaAtualToraString.replace("-", "")));
+
                 infoMedirTora.setText(
                         String.format(
-                                        "\nAltura atual: %s " +
+                                "\nAltura atual: %s " +
                                         "\nÂngulo atual: %.2f" +
                                         "\nDiametro da base: %.2f m" +
                                         "\nDiametro do centro: %.2f m" +
@@ -1518,7 +1562,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return null;
     }
-
 
 
 }

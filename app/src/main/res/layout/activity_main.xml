@@ -99,9 +99,11 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/logoEmpresa"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/qtd_barrinha" />
+        app:layout_constraintTop_toTopOf="@+id/medida_real_text"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
+        android:id="@+id/imageView6"
         android:layout_width="50sp"
         android:layout_height="50sp"
         android:layout_marginStart="4dp"
@@ -118,7 +120,6 @@
         android:layout_alignParentStart="true"
 
         android:layout_alignParentTop="true"
-        android:layout_marginStart="64dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/background_redondo"
@@ -128,9 +129,10 @@
         android:src="@drawable/baseline_zoom_out_24"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/maisyelow"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/altura_real_text"
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32999998"
+        app:layout_constraintVertical_bias="1.0"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <ImageButton
@@ -152,6 +154,7 @@
         app:layout_constraintBottom_toTopOf="@+id/maisred"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <ImageButton
@@ -182,7 +185,8 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrinhas" />
+        app:layout_constraintTop_toBottomOf="@+id/barrinhas"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textViewZoom"
@@ -191,7 +195,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"
         android:background="@drawable/background_blue"
-        android:padding="16dp"
+        android:padding="4dp"
         android:text="4x"
         android:textColor="#FFFFFF"
         android:textSize="10sp"
@@ -206,15 +210,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="231dp"
         android:background="@drawable/background_blue"
-        android:padding="16dp"
-        android:text="L 0 m"
+        android:padding="4dp"
+        android:text="Diâmetro 0 m"
         android:textColor="#FFFFFF"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/textViewZoom"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/qtd_barrinha"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/camera_preview"
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <TextView
@@ -222,18 +229,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/background_blue"
         android:gravity="center"
-        android:padding="16dp"
+        android:padding="4dp"
         android:text="..."
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="8sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/mais_zoom"
-        app:layout_constraintStart_toEndOf="@+id/medida_real_text"
+        app:layout_constraintStart_toEndOf="@+id/textViewZoom"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -241,18 +246,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/background_blue"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:padding="16dp"
-        android:text="Método de Newton"
+        android:text="Newton"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="10sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/altura_real_text"
-        app:layout_constraintStart_toEndOf="@+id/menos_zoom"
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/infos_altura_atual"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="Altura Atual:"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/angulo_topo" />
 
     <LinearLayout
         android:id="@+id/layout_mediar_volume"
@@ -276,6 +295,7 @@
             android:textAlignment="center"
             android:textColor="#FFE500"
             android:textStyle="bold"
+            android:visibility="visible"
             app:layout_constraintEnd_toStartOf="@+id/textViewZoom"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -288,11 +308,12 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="4dp"
         android:background="@drawable/background_blue"
-        android:padding="16dp"
+        android:padding="4dp"
         android:text="A 0 m"
         android:textColor="#FFFFFF"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/textViewZoom"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -343,21 +364,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ip do Controle: 000.000.000.000"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/logoEmpresa"
-        app:layout_constraintStart_toEndOf="@+id/menosyelow"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+        app:layout_constraintStart_toEndOf="@+id/menosyelow" />
 
     <LinearLayout
         android:id="@+id/linearLayout6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrinhas">
+        app:layout_constraintTop_toBottomOf="@+id/medida_real_text">
 
         <TextView
             android:id="@+id/qtd_barrinha"
@@ -414,7 +434,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:background="@drawable/background_blue"
+            android:background="@drawable/dh_background"
             android:padding="16dp"
             android:text="Medir ângulo B"
             android:textColor="#FFFFFF"
@@ -427,7 +447,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/logoEmpresa"
@@ -483,6 +503,7 @@
             android:background="@drawable/background_redondo"
             android:backgroundTint="#2196F3"
             android:src="@drawable/baseline_keyboard_backspace_24" />
+
         <ImageButton
             android:id="@+id/restartButton"
             android:layout_width="40sp"
@@ -492,7 +513,6 @@
             android:background="@drawable/background_redondo"
             android:backgroundTint="#2196F3"
             android:src="@drawable/baseline_refresh_24" />
-
 
 
         <ImageButton

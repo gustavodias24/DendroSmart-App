@@ -183,7 +183,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="400"
+                android:layout_weight="4.5"
                 android:background="@drawable/background_redondo"
                 android:src="@drawable/baseline_keyboard_backspace_24"
                 android:text="Button"
