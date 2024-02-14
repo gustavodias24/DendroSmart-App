@@ -30,7 +30,6 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void escolherMetodoCubagem(View view){
-        finish();
         startActivity(new Intent(this, SelecionarMetodoActivity.class));
     }
     public void relatorios(View view){

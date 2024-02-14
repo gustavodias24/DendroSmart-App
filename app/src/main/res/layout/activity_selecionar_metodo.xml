@@ -10,24 +10,22 @@
         android:id="@+id/imageView"
         android:layout_width="260dp"
         android:layout_height="330dp"
-        android:layout_marginEnd="32dp"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:src="@raw/pinheiro" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="318dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView"
-        app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintStart_toEndOf="@+id/backButton6"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textView"
@@ -44,22 +42,6 @@
             tools:ignore="MissingConstraints" />
 
         <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="#2196F3"
-            android:drawableLeft="@drawable/baseline_lock_24"
-            android:gravity="center"
-            android:onClick="disponivelApeenasV2"
-            android:text="Diâmetro"
-            android:textAllCaps="true"
-            app:icon="@drawable/baseline_lock_24"
-            app:iconGravity="textStart"
-            app:iconSize="30dp"
-            tools:ignore="MissingConstraints" />
-
-        <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,6 +54,22 @@
             android:textAllCaps="true"
             android:textColor="#FFFFFF"
             app:icon="@drawable/baseline_lock_open_24"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#2196F3"
+            android:drawableLeft="@drawable/baseline_lock_24"
+            android:gravity="center"
+            android:onClick="disponivelApeenasV2"
+            android:text="Diâmetro"
+            android:textAllCaps="true"
+            app:icon="@drawable/baseline_lock_24"
             app:iconGravity="textStart"
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
@@ -123,5 +121,21 @@
             app:iconGravity="textStart"
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
+
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/backButton6"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/background_redondo"
+        android:backgroundTint="#2196F3"
+        android:onClick="voltar"
+        android:rotationY="1"
+        android:src="@drawable/baseline_keyboard_backspace_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -104,6 +104,7 @@ import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
+    float toraDaponta = 0.0f;
     TextView alturaAtual;
     ServerSocket serverSocket = null;
     float alturaDesejada = 0.0f;
@@ -291,9 +292,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         medidaRealText = findViewById(R.id.medida_real_text);
         if (divisorPorZoom == 0) divisorPorZoom = 1;
-        medidaRealText.setText(
-                String.format("Diâmetro %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100))
-        );
+        medidaRealText.setText(String.format("Diâmetro %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
 
         findViewById(R.id.backButton).setOnClickListener(view -> {
             finish();
@@ -371,8 +370,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ListaBarrinhasUtils.preencherListas(listay, listar, this);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         previewView = findViewById(R.id.camera_preview);
 
@@ -390,12 +388,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         configurarEventoDePressionar();
         pegarZoomMaximo();
 
-        if (
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
             startCamera(cameraFacing);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, PERMISSIONS_GERAL);
@@ -415,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void animacaoBotaoZoom(){
+    public void animacaoBotaoZoom() {
         final AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
         fadeIn.setDuration(1000); // ajuste a duração conforme necessário
 
@@ -606,11 +599,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "calcularQuantidadeTora: " + tamCadaParte);
         Log.d(TAG, "calcularQuantidadeTora: " + alturaCalc % tamCadaParte);
 
-
-        infosGenericas.setText(
-                String.format("%d tora(s) de %.2f metro(s)\ntora da ponta: %.2f metro(s)",
-                        qtdDivisao, tamCadaParte, alturaCalc % tamCadaParte)
-        );
+        toraDaponta = alturaCalc % tamCadaParte;
+        infosGenericas.setText(String.format("%d tora(s) de %.2f metro(s)\ntora da ponta: %.2f metro(s)", qtdDivisao, tamCadaParte, toraDaponta));
 //        dialogDivisao.dismiss();
 //        layoutIntroVolume.setVisibility(View.VISIBLE);
 
@@ -695,11 +685,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Preview preview = new Preview.Builder().setTargetAspectRatio(aspectRatio).build();
 
-                ImageCapture imageCapture = new ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                        .setTargetRotation(getWindowManager().getDefaultDisplay().getRotation()).build();
+                ImageCapture imageCapture = new ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY).setTargetRotation(getWindowManager().getDefaultDisplay().getRotation()).build();
 
-                CameraSelector cameraSelector = new CameraSelector.Builder()
-                        .requireLensFacing(cameraFacing).build();
+                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(cameraFacing).build();
 
                 cameraProvider.unbindAll();
 
@@ -873,8 +861,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             findViewById(R.id.menos_zoom).setVisibility(View.VISIBLE);
             startCamera(cameraFacing);
 
-            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(MainActivity.this),
-                    "benicio.soluces.dimensional.provider", imageFile);
+            Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(MainActivity.this), "benicio.soluces.dimensional.provider", imageFile);
 
             Intent viewImageIntent = new Intent(Intent.ACTION_VIEW);
             viewImageIntent.setDataAndType(uri, "image/*");
@@ -984,18 +971,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     if (toraAtual < qtdDivisao) {
 
-                        float volumeToraCalculado = Float.parseFloat(
-                                String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]
-                        );
+                        float volumeToraCalculado = Float.parseFloat(String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]);
 
                         volumeTotal += volumeToraCalculado;
-                        infosGenericas.setText(
-                                infosGenericas.getText() + "\n" + String.format(
-                                        "Volume Tora %d: %.4f m³",
-                                        toraAtual,
-                                        volumeToraCalculado
-                                )
-                        );
+                        infosGenericas.setText(infosGenericas.getText() + "\n" + String.format("Volume Tora %d: %.4f m³", toraAtual, volumeToraCalculado));
                         ultimoDiametroBase = diametroTopoTora;
                         diametroTopoTora = diametroMedioTora = diametroBaseTora = 0.0f;
 
@@ -1010,28 +989,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         instrucaoTela.setVisibility(View.INVISIBLE);
                         acabouToras = true;
 
-                        float volumeToraCalculado = Float.parseFloat(
-                                String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]
-                        );
+                        float volumeToraCalculado = Float.parseFloat(String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]);
+
 
                         volumeTotal += volumeToraCalculado;
-                        infosGenericas.setText(
-                                infosGenericas.getText() + "\n" + String.format(
-                                        "Volume Tora %d: %.4f m³",
-                                        toraAtual,
-                                        volumeToraCalculado
-                                ) + "\n" +
-                                        String.format("Volume total: %.4f m³", volumeTotal)
-                        );
+
+                        float volumePonta = Float.parseFloat(String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), toraDaponta)).split("E")[0]);
+
+                        infosGenericas.setText(infosGenericas.getText() + "\n" + String.format("Volume Tora %d: %.4f m³", toraAtual, volumeToraCalculado) + "\n" + String.format("Volume da ponta: %.4f m³", volumePonta) + "\n" + String.format("Volume total: %.4f m³", volumeTotal));
 
                         ItemRelatorio novoItem = new ItemRelatorio();
-                        novoItem.setDadosGps(
-                                dadosGps.getText().toString()
-                        );
+                        novoItem.setDadosGps(dadosGps.getText().toString());
 
-                        novoItem.setDadosVolume(
-                                infosGenericas.getText().toString()
-                        );
+                        novoItem.setDadosVolume(infosGenericas.getText().toString());
 
                         LocalDateTime agora = LocalDateTime.now();
 
@@ -1045,9 +1015,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         dadosTora.append("DH: ").append(dh).append("\n");
                         dadosTora.append("Altura total: ").append(alturaCalc).append("m");
 
-                        novoItem.setDadosTora(
-                                dadosTora.toString()
-                        );
+                        novoItem.setDadosTora(dadosTora.toString());
 
                         List<ItemRelatorio> listaParaAtualiziar = ItemRelatorioUtil.returnLista(this);
                         listaParaAtualiziar.add(novoItem);
@@ -1334,9 +1302,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
 
                 // Selecionar a câmera traseira como padrão
-                CameraSelector cameraSelector = new CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                        .build();
+                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
 
                 // Configurar o Preview da câmera
                 Preview preview = new Preview.Builder().build();
@@ -1416,11 +1382,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @SuppressLint("DefaultLocale") String cordenadas = String.format("Lat: %f Long: %f", latitude, longitude);
 
-        dadosGps.setText(
-                String.format("%s ás %s", formattedDate, formattedTime) + "\n" +
-                        cordenadas + "\n" +
-                        "Operador: " + operador
-        );
+        dadosGps.setText(String.format("%s ás %s", formattedDate, formattedTime) + "\n" + cordenadas + "\n" + "Operador: " + operador);
 
 
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -1431,13 +1393,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (!addresses.isEmpty()) {
                 Address address = addresses.get(0);
                 String[] fullAddress = address.getAddressLine(0).split(",");
-                dadosGps.setText(
-                        String.format("%s ás %s", formattedDate, formattedTime) + "\n" +
-                                cordenadas + "\n" +
-                                fullAddress[0] + ", " + fullAddress[1] + "\n" +
-                                fullAddress[2] + fullAddress[3] + "\n" +
-                                "Operador: " + operador
-                );
+                dadosGps.setText(String.format("%s ás %s", formattedDate, formattedTime) + "\n" + cordenadas + "\n" + fullAddress[0] + ", " + fullAddress[1] + "\n" + fullAddress[2] + fullAddress[3] + "\n" + "Operador: " + operador);
             } else {
                 Log.d("Address", "No address found");
             }
@@ -1454,9 +1410,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             divisorPorZoom = 1;
         }
         diametroMarcado = ((dh * (qtdPos / divisorPorZoom) * CONST_CHAVE) / 100);
-        medidaRealText.setText(
-                String.format("Diâmetro %.4f m", diametroMarcado)
-        );
+        medidaRealText.setText(String.format("Diâmetro %.4f m", diametroMarcado));
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale", "ResourceType"})
@@ -1511,27 +1465,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (qtdDivisao != 0) {
                     instrucaoTela.setText(
 //                            String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada)
-                            String.format("Aponte para %s da %d° tora", parteDaTora, toraAtual)
-                    );
+                            String.format("Aponte para %s da %d° tora", parteDaTora, toraAtual));
                 }
 
 
                 alturaAtual.setText(String.format("Altura atual: %s ", alturaAtualToraString.replace("-", "")));
 
-                infoMedirTora.setText(
-                        String.format(
-                                "\nAltura atual: %s " +
-                                        "\nÂngulo atual: %.2f" +
-                                        "\nDiametro da base: %.2f m" +
-                                        "\nDiametro do centro: %.2f m" +
-                                        "\nDiametro do topo: %.2f m",
-                                alturaAtualToraString.replace("-", ""),
-                                anguloAtualTora,
-                                diametroBaseTora,
-                                diametroMedioTora,
-                                diametroTopoTora
-                        )
-                );
+                infoMedirTora.setText(String.format("\nAltura atual: %s " + "\nÂngulo atual: %.2f" + "\nDiametro da base: %.2f m" + "\nDiametro do centro: %.2f m" + "\nDiametro do topo: %.2f m", alturaAtualToraString.replace("-", ""), anguloAtualTora, diametroBaseTora, diametroMedioTora, diametroTopoTora));
             }
             this.lastAccelX = f2;
             this.lastAccelY = f;

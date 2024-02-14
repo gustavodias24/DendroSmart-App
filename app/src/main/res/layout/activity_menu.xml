@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".activitys.MenuActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="260dp"
+        android:layout_height="330dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@raw/pinheiro" />
+
     <ImageButton
         android:id="@+id/backButton2"
         android:layout_width="80sp"
@@ -21,17 +32,6 @@
         android:src="@drawable/baseline_keyboard_backspace_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="260dp"
-        android:layout_height="330dp"
-        android:layout_marginEnd="32dp"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/backButton2"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:src="@raw/pinheiro" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -80,7 +80,7 @@
             android:onClick="irConfiguracoes"
             android:text="CONFIGURAÇÕES"
             android:textAllCaps="true"
-            app:icon="@raw/setting"
+            app:icon="@drawable/setting"
             app:iconGravity="textStart"
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
@@ -112,5 +112,8 @@
             app:iconGravity="textStart"
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
+
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,6 +29,18 @@
         android:backgroundTint="#2196F3"
         android:src="@drawable/baseline_keyboard_backspace_24" />
 
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="1dp"
+        android:gravity="center"
+        android:text=" tire um foto geral da árvore"
+        android:textColor="#FFFFFF" />
+
     <ImageButton
         android:id="@+id/capture"
         android:layout_width="60sp"

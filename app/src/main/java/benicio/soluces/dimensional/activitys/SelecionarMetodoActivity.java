@@ -36,7 +36,9 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
         Picasso.get().load(R.raw.pinheiro).into(mainBinding.imageView);
     }
 
-
+    public void voltar(View view){
+        finish();
+    }
     public void disponivelApeenasV2(View view){
         d.show();
     }
