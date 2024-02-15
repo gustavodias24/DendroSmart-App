@@ -493,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         medirDiametro.setVisibility(View.VISIBLE);
 
 
-        alturaAtual.setVisibility(View.INVISIBLE);
+        alturaAtual.setVisibility(View.VISIBLE);
         anguloBText.setVisibility(View.GONE);
         anguloTText.setVisibility(View.GONE);
         setinha.setVisibility(View.GONE);
@@ -1464,12 +1464,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (qtdDivisao != 0) {
                     instrucaoTela.setText(
-//                            String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada)
-                            String.format("Aponte para %s da %d° tora", parteDaTora, toraAtual));
+                            String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada));
+//                            String.format("Aponte para %s da %d° tora", parteDaTora, toraAtual));
                 }
 
 
-                alturaAtual.setText(String.format("Altura atual: %s ", alturaAtualToraString.replace("-", "")));
+                alturaAtual.setText(String.format("Altura Istantânea: %s ", alturaAtualToraString.replace("-", "")));
 
                 infoMedirTora.setText(String.format("\nAltura atual: %s " + "\nÂngulo atual: %.2f" + "\nDiametro da base: %.2f m" + "\nDiametro do centro: %.2f m" + "\nDiametro do topo: %.2f m", alturaAtualToraString.replace("-", ""), anguloAtualTora, diametroBaseTora, diametroMedioTora, diametroTopoTora));
             }

@@ -40,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars[2]" />
 
     <ImageView
         android:id="@+id/logoEmpresa"
@@ -70,37 +70,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/maisred"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="centerCrop"
-        android:src="@raw/plusred"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/barrinhas"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mais_zoom" />
+    <TextView
+        android:id="@+id/textIp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ip do Controle: 000.000.000.000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/logoEmpresa" />
 
-    <ImageButton
-        android:id="@+id/menosred"
-
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:layout_below="@+id/maisred"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="centerCrop"
-        android:src="@raw/negativered"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/logoEmpresa"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/medida_real_text"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/maisred"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop"
+            android:src="@raw/plusred"
+            android:visibility="invisible" />
+
+        <ImageButton
+            android:id="@+id/menosred"
+
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:layout_below="@+id/maisred"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop"
+            android:src="@raw/negativered"
+            android:visibility="invisible" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView6"
@@ -113,80 +121,37 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageButton
-        android:id="@+id/menos_zoom"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:layout_alignParentStart="true"
-
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/background_redondo"
-        android:backgroundTint="@color/yelow"
-        android:padding="6dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/baseline_zoom_out_24"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/maisyelow"
-        app:layout_constraintEnd_toStartOf="@+id/altura_real_text"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <ImageButton
-        android:id="@+id/mais_zoom"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:layout_alignParentTop="true"
-
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/background_redondo"
-        android:backgroundTint="@color/red"
-        android:padding="6dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/baseline_zoom_in_24"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/maisred"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <ImageButton
-        android:id="@+id/maisyelow"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="centerCrop"
-        android:src="@raw/plusyelow"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/barrinhas"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menos_zoom" />
-
-    <ImageButton
-        android:id="@+id/menosyelow"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:layout_below="@+id/maisyelow"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="centerCrop"
-        android:src="@raw/minusyelow"
-        android:visibility="invisible"
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrinhas"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/maisyelow"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop"
+            android:src="@raw/plusyelow"
+            android:visibility="invisible" />
+
+        <ImageButton
+            android:id="@+id/menosyelow"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:layout_below="@+id/maisyelow"
+            android:layout_alignParentStart="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop"
+            android:src="@raw/minusyelow"
+            android:visibility="invisible" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textViewZoom"
@@ -269,6 +234,7 @@
         android:textColor="#FFFFFF"
         android:textSize="10sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/angulo_topo" />
@@ -328,8 +294,9 @@
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/barrinhas"
-        app:layout_constraintEnd_toStartOf="@+id/maisred"
-        app:layout_constraintStart_toEndOf="@+id/maisyelow" />
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/angulo_base" />
 
     <TextView
         android:id="@+id/angulo_base"
@@ -342,8 +309,12 @@
         android:text="B 0°"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/angulo_topo"
-        app:layout_constraintEnd_toStartOf="@+id/angulo_topo" />
+        app:layout_constraintBottom_toBottomOf="@+id/infos_altura_atual"
+        app:layout_constraintEnd_toStartOf="@+id/angulo_topo"
+        app:layout_constraintHorizontal_bias="0.68"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/camera_preview"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/setinha"
@@ -358,15 +329,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/angulo_topo" />
-
-    <TextView
-        android:id="@+id/textIp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ip do Controle: 000.000.000.000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/logoEmpresa"
-        app:layout_constraintStart_toEndOf="@+id/menosyelow" />
 
     <LinearLayout
         android:id="@+id/linearLayout6"
@@ -408,8 +370,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/angulo_topo"
-        app:layout_constraintEnd_toStartOf="@+id/maisred"
+        app:layout_constraintBottom_toBottomOf="@+id/infos_altura_atual"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/angulo_topo">
 
         <TextView
@@ -498,17 +461,49 @@
             android:layout_height="40sp"
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:background="@drawable/background_redondo"
             android:backgroundTint="#2196F3"
             android:src="@drawable/baseline_keyboard_backspace_24" />
 
         <ImageButton
+            android:id="@+id/menos_zoom"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_alignParentStart="true"
+
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/background_redondo"
+            android:backgroundTint="#2196F3"
+            android:padding="6dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/baseline_zoom_out_24"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/mais_zoom"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_alignParentTop="true"
+
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/background_redondo"
+            android:backgroundTint="#2196F3"
+            android:padding="6dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/baseline_zoom_in_24"
+            android:visibility="gone" />
+
+        <ImageButton
             android:id="@+id/restartButton"
             android:layout_width="40sp"
             android:layout_height="40sp"
             android:layout_gravity="center"
-            android:layout_marginLeft="8dp"
             android:background="@drawable/background_redondo"
             android:backgroundTint="#2196F3"
             android:src="@drawable/baseline_refresh_24" />
@@ -529,15 +524,16 @@
 
     <LinearLayout
         android:id="@+id/barrinhas"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
+        android:layout_marginStart="24dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/camera_preview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/raio_image"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout7"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView

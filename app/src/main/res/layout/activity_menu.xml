@@ -55,14 +55,14 @@
             android:textStyle="bold"
             tools:ignore="MissingConstraints" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
-            android:drawableLeft="@drawable/baseline_picture_as_pdf_24"
             android:onClick="relatorios"
+            android:src="@drawable/baseline_picture_as_pdf_24"
             android:text="RELATÓRIOS"
             android:textAllCaps="true"
             android:textColor="#FFFFFF"
@@ -71,27 +71,27 @@
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:onClick="irConfiguracoes"
+            android:src="@drawable/setting"
             android:text="CONFIGURAÇÕES"
             android:textAllCaps="true"
-            app:icon="@drawable/setting"
             app:iconGravity="textStart"
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
-            android:drawableLeft="@drawable/baseline_videocam_24"
+            android:src="@drawable/suport"
             android:text="VÍDEOS E\nSUPORTE"
             android:textAllCaps="true"
             app:icon="@drawable/baseline_videocam_24"
@@ -99,13 +99,13 @@
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
-            android:drawableLeft="@drawable/baseline_lock_24"
+            android:src="@drawable/baseline_info_24"
             android:text="sobre"
             android:textAllCaps="true"
             app:icon="@drawable/baseline_info_24"
