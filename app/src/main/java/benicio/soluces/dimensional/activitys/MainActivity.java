@@ -494,9 +494,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         alturaAtual.setVisibility(View.VISIBLE);
-        anguloBText.setVisibility(View.GONE);
-        anguloTText.setVisibility(View.GONE);
-        setinha.setVisibility(View.GONE);
+        anguloBText.setVisibility(View.INVISIBLE);
+        anguloTText.setVisibility(View.INVISIBLE);
+        setinha.setVisibility(View.INVISIBLE);
         medirAngulo.setVisibility(View.GONE);
 //        instrucaoTela.clearAnimation();
 //        instrucaoTela.setVisibility(View.INVISIBLE);

@@ -76,9 +76,11 @@
         android:layout_height="wrap_content"
         android:text="Ip do Controle: 000.000.000.000"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/logoEmpresa" />
+        app:layout_constraintEnd_toStartOf="@+id/logoEmpresa"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -175,7 +177,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="231dp"
         android:background="@drawable/background_blue"
         android:padding="4dp"
         android:text="Diâmetro 0 m"
@@ -185,8 +186,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/qtd_barrinha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/camera_preview"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/setinha" />
 
 
     <TextView
@@ -311,7 +311,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/infos_altura_atual"
         app:layout_constraintEnd_toStartOf="@+id/angulo_topo"
-        app:layout_constraintHorizontal_bias="0.68"
+        app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toEndOf="@+id/camera_preview"
         app:layout_constraintStart_toStartOf="parent" />
@@ -334,9 +334,7 @@
         android:id="@+id/linearLayout6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/medida_real_text">
@@ -410,11 +408,11 @@
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textIp"
         app:layout_constraintEnd_toStartOf="@+id/logoEmpresa"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
 
         <TextView
             android:id="@+id/dadosGpsText"
@@ -526,13 +524,12 @@
         android:id="@+id/barrinhas"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_marginStart="24dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/camera_preview"
-        app:layout_constraintEnd_toEndOf="@+id/raio_image"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout9"
         app:layout_constraintStart_toEndOf="@+id/linearLayout7"
         app:layout_constraintTop_toTopOf="parent">
 

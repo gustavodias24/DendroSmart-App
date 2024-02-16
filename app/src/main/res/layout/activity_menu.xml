@@ -34,22 +34,20 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
             android:text="Bem-vindo "
             android:textSize="24sp"
             android:textStyle="bold"
@@ -57,8 +55,8 @@
 
         <ImageButton
             android:id="@+id/button"
-            android:layout_width="80sp"
-            android:layout_height="80sp"
+            android:layout_width="70sp"
+            android:layout_height="70sp"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:onClick="relatorios"
@@ -73,8 +71,8 @@
 
         <ImageButton
             android:id="@+id/button5"
-            android:layout_width="80sp"
-            android:layout_height="80sp"
+            android:layout_width="70sp"
+            android:layout_height="70sp"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:onClick="irConfiguracoes"
@@ -87,8 +85,8 @@
 
         <ImageButton
             android:id="@+id/button3"
-            android:layout_width="80sp"
-            android:layout_height="80sp"
+            android:layout_width="70sp"
+            android:layout_height="70sp"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:src="@drawable/suport"
@@ -101,8 +99,8 @@
 
         <ImageButton
             android:id="@+id/button2"
-            android:layout_width="80sp"
-            android:layout_height="80sp"
+            android:layout_width="70sp"
+            android:layout_height="70sp"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:src="@drawable/baseline_info_24"
@@ -112,7 +110,6 @@
             app:iconGravity="textStart"
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
-
 
 
     </LinearLayout>
