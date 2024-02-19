@@ -104,6 +104,7 @@ import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
+    ImageView imagemIlustrativaArvore;
     float toraDaponta = 0.0f;
     TextView alturaAtual;
     ServerSocket serverSocket = null;
@@ -143,7 +144,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Componentes de medir altura
     float anguloB, anguloT, alturaCalc = 0.0f;
     int etapa = 0; // 0 medir b 1 medir t 2 medir largura
-    TextView anguloBText, anguloTText, setinha, medirAngulo, alturaReal, medirDiametro;
+    TextView anguloBText, anguloTText, setinha, alturaReal;
+    ImageButton medirAngulo, medirDiametro;
     // Componentes de medir altura
 
     // Componentes de medir largura
@@ -211,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private float lastAccelX;
     private float lastAccelY;
     private float lastAccelZ;
-    private TextView textIp;
+
 
     @SuppressLint({"ResourceType", "MissingInflatedId", "DefaultLocale"})
     @Override
@@ -220,21 +222,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        imagemIlustrativaArvore = findViewById(R.id.imagemIlustrativaArvore);
+
         alturaAtual = findViewById(R.id.infos_altura_atual);
-
-
-        textIp = findViewById(R.id.textIp);
-
-        new Thread(() -> {
-            while (true) {
-                runOnUiThread(() -> textIp.setText("IP do controle: " + getIPAddress()));
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
 
 
         new Thread(() -> {
@@ -302,7 +292,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layoutIntroVolume = findViewById(R.id.layout_mediar_volume);
         infoMedirTora = findViewById(R.id.info_medir_volume_tora);
 
-        configurarInstrucaoTela();
         restartButton = findViewById(R.id.restartButton);
 
         maisZoom = findViewById(R.id.mais_zoom);
@@ -326,6 +315,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dadosGps = findViewById(R.id.dadosGpsText);
         imageEmpresa = findViewById(R.id.logoEmpresa);
 
+        configurarInstrucaoTela();
+
+
         restartButton.setOnClickListener(view -> {
             Toast.makeText(this, "Reiniciando...", Toast.LENGTH_SHORT).show();
             finish();
@@ -333,10 +325,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         medirAngulo.setOnClickListener(view -> {
 
-            medirAngulo.setText("Medir ângulo T");
+//            medirAngulo.setText("Medir ângulo T");
 
             if (etapa <= 2) {
                 etapa++;
+                Picasso.get().load(R.drawable.angulo_topo_arvore).into(imagemIlustrativaArvore);
                 instrucaoTela.setText(MSG2);
 
             }
@@ -476,6 +469,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Inicia a animação
         instrucaoTela.startAnimation(blinkAnimation);
+        medirAngulo.startAnimation(blinkAnimation);
+        medirDiametro.startAnimation(blinkAnimation);
+
 //        imageAnguloCorreto.startAnimation(blinkAnimation);
     }
 
@@ -488,6 +484,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnMaisYellow.setVisibility(View.VISIBLE);
         btnMenosYellow.setVisibility(View.VISIBLE);
         barrinhasLayout.setVisibility(View.VISIBLE);
+        imagemIlustrativaArvore.setVisibility(View.INVISIBLE);
 
 //        layoutIntroVolume.setVisibility(View.VISIBLE);
         medirDiametro.setVisibility(View.VISIBLE);
@@ -497,6 +494,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         anguloBText.setVisibility(View.INVISIBLE);
         anguloTText.setVisibility(View.INVISIBLE);
         setinha.setVisibility(View.INVISIBLE);
+        medirAngulo.clearAnimation();
         medirAngulo.setVisibility(View.GONE);
 //        instrucaoTela.clearAnimation();
 //        instrucaoTela.setVisibility(View.INVISIBLE);
@@ -967,7 +965,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         parteDaToraPos = 2;
                         alturaDesejada += (alturaCalc / 4);
                     }
-                    medirDiametro.setText("Medir Diâmetro");
+//                    medirDiametro.setText("Medir Diâmetro");
 
                     if (toraAtual < qtdDivisao) {
 
@@ -1393,7 +1391,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (!addresses.isEmpty()) {
                 Address address = addresses.get(0);
                 String[] fullAddress = address.getAddressLine(0).split(",");
-                dadosGps.setText(String.format("%s ás %s", formattedDate, formattedTime) + "\n" + cordenadas + "\n" + fullAddress[0] + ", " + fullAddress[1] + "\n" + fullAddress[2] + fullAddress[3] + "\n" + "Operador: " + operador);
+                dadosGps.setText(fullAddress[0] + ", " + fullAddress[1] + "\n" + fullAddress[2] + fullAddress[3] + "\n" + cordenadas + "\n" + String.format("%s ás %s", formattedDate, formattedTime) +  "\n" + "Operador: " + operador + "\n" + "Newton");
             } else {
                 Log.d("Address", "No address found");
             }

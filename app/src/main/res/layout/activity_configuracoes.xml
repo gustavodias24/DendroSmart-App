@@ -38,6 +38,13 @@
         android:layout_height="3dp"
         android:background="?android:attr/listDivider" />
 
+    <TextView
+        android:id="@+id/textIpConfig"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Ip do Controle: SEM INFORMAÇÃO" />
+
     <CheckBox
         android:id="@+id/exibirGps"
         android:layout_width="match_parent"

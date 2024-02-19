@@ -46,11 +46,11 @@
         android:id="@+id/logoEmpresa"
         android:layout_width="50sp"
         android:layout_height="50sp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/raio_image"
@@ -75,8 +75,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ip do Controle: 000.000.000.000"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/logoEmpresa"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/dadosGpsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:padding="4dp"
+        android:text="Carregando..."
+        android:textAlignment="viewStart"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
@@ -183,10 +199,9 @@
         android:textColor="#FFFFFF"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/qtd_barrinha"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setinha" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <TextView
@@ -194,7 +209,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/background_blue"
         android:gravity="center"
         android:padding="4dp"
@@ -203,25 +218,10 @@
         android:textColor="#FFFFFF"
         android:textSize="8sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/textViewZoom"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/infos_dev_text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Newton"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="10sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/infos_altura_atual"
@@ -235,9 +235,9 @@
         android:textSize="10sp"
         android:textStyle="bold"
         android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/setinha"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/angulo_topo" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/layout_mediar_volume"
@@ -248,9 +248,8 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/angulo_topo"
-        app:layout_constraintStart_toEndOf="@+id/menos_zoom"
-        app:layout_constraintTop_toBottomOf="@+id/altura_real_text">
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/info_medir_volume_tora"
@@ -283,38 +282,37 @@
         app:layout_constraintEnd_toStartOf="@+id/textViewZoom"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/angulo_topo"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/background_blue"
-        android:padding="16dp"
-        android:text="T 0°"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/barrinhas"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout5"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/angulo_base" />
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imagemIlustrativaArvore"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/angulo_base"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/background_blue"
-        android:padding="16dp"
-        android:text="B 0°"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/infos_altura_atual"
-        app:layout_constraintEnd_toStartOf="@+id/angulo_topo"
-        app:layout_constraintHorizontal_bias="0.87"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toEndOf="@+id/camera_preview"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/angulo_topo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/background_blue"
+            android:padding="16dp"
+            android:text="T 0°"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/angulo_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/background_blue"
+            android:padding="16dp"
+            android:text="B 0°"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/setinha"
@@ -325,19 +323,29 @@
         android:textColor="#FFFFFF"
         android:textSize="60sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/qtd_barrinha"
+        app:layout_constraintBottom_toTopOf="@+id/medida_real_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/angulo_topo" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewZoom"
+        app:layout_constraintVertical_bias="0.88" />
+
+    <ImageView
+        android:id="@+id/imagemIlustrativaArvore"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:src="@drawable/angulo_base_arvore"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout7"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/textIp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/medida_real_text">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/qtd_barrinha"
@@ -367,36 +375,40 @@
         android:id="@+id/linearLayout5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/infos_altura_atual"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/angulo_topo">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout9"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <ImageButton
             android:id="@+id/medirDiametroBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="false"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:background="@drawable/background_blue"
+            android:background="@drawable/dh_background"
             android:padding="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/botaoconfirmacao"
             android:text="Medir Diâmetro"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
             android:visibility="gone" />
 
-        <TextView
+        <ImageButton
             android:id="@+id/calAltura"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:background="@drawable/dh_background"
             android:padding="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/botaoconfirmacao"
             android:text="Medir ângulo B"
             android:textColor="#FFFFFF"
             android:textSize="10sp"
@@ -409,23 +421,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/textIp"
-        app:layout_constraintEnd_toStartOf="@+id/logoEmpresa"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
-
-        <TextView
-            android:id="@+id/dadosGpsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:padding="16dp"
-            android:text="Carregando..."
-            android:textAlignment="textEnd"
-            android:textColor="#FFEB3B"
-            android:textSize="10sp"
-            android:textStyle="bold" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/setar_dh"

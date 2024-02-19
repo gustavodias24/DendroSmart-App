@@ -1,5 +1,7 @@
 package benicio.soluces.dimensional.activitys;
 
+import static benicio.soluces.dimensional.activitys.MainActivity.getIPAddress;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +18,13 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivityConfiguracoesBinding;
 
 public class ConfiguracoesActivity extends AppCompatActivity {
@@ -29,6 +33,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
 
     private ActivityConfiguracoesBinding mainBinding;
+    private TextView textIp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,19 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getSupportActionBar().setTitle("Configurações");
+
+        textIp = findViewById(R.id.textIpConfig);
+
+        new Thread(() -> {
+            while (true) {
+                runOnUiThread(() -> textIp.setText("IP do controle: " + getIPAddress()));
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
