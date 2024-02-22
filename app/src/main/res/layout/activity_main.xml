@@ -71,16 +71,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textIp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ip do Controle: 000.000.000.000"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
         android:id="@+id/dadosGpsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -102,7 +92,8 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32">
 
         <ImageButton
             android:id="@+id/maisred"
@@ -146,7 +137,9 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32"
+        >
 
         <ImageButton
             android:id="@+id/maisyelow"
@@ -176,7 +169,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
         android:background="@drawable/background_blue"
         android:padding="4dp"
         android:text="4x"
@@ -185,7 +177,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infos_altura_atual"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -199,9 +191,9 @@
         android:textColor="#FFFFFF"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setinha" />
 
 
     <TextView
@@ -220,7 +212,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
+        app:layout_constraintTop_toBottomOf="@+id/altura_real_text"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -228,6 +220,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="4dp"
         android:gravity="center"
         android:text="Altura Atual:"
         android:textAlignment="center"
@@ -235,9 +228,9 @@
         android:textSize="10sp"
         android:textStyle="bold"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/setinha"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/layout_mediar_volume"
@@ -271,7 +264,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="4dp"
         android:background="@drawable/background_blue"
         android:padding="4dp"
         android:text="A 0 m"
@@ -279,8 +271,8 @@
         android:textSize="10sp"
         android:textStyle="bold"
         android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/textViewZoom"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -323,11 +315,11 @@
         android:textColor="#FFFFFF"
         android:textSize="60sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/medida_real_text"
+        app:layout_constraintBottom_toBottomOf="@+id/barrinhas"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewZoom"
-        app:layout_constraintVertical_bias="0.88" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imagemIlustrativaArvore"
@@ -342,8 +334,9 @@
         android:id="@+id/linearLayout6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/textIp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -421,7 +414,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 

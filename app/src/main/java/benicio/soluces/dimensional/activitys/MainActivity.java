@@ -476,7 +476,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void musarParaMedidorDiametro() {
-        qtdBarrinhasText.setVisibility(View.VISIBLE);
+//        qtdBarrinhasText.setVisibility(View.VISIBLE);
         maisZoom.setVisibility(View.VISIBLE);
         menosZoom.setVisibility(View.VISIBLE);
         btnMaisRed.setVisibility(View.VISIBLE);
