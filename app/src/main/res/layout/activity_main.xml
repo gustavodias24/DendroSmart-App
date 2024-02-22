@@ -89,6 +89,7 @@
         android:id="@+id/linearLayout9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -134,12 +135,12 @@
         android:id="@+id/linearLayout7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32"
-        >
+        app:layout_constraintVertical_bias="0.32">
 
         <ImageButton
             android:id="@+id/maisyelow"
@@ -185,12 +186,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/background_blue"
         android:padding="4dp"
         android:text="Diâmetro 0 m"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setinha" />
@@ -212,6 +213,8 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toEndOf="@+id/raio_image"
         app:layout_constraintTop_toBottomOf="@+id/altura_real_text"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -264,14 +267,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/background_blue"
+        android:layout_marginEnd="4dp"
         android:padding="4dp"
         android:text="A 0 m"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="10sp"
         android:textStyle="bold"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toEndOf="@+id/raio_image"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout9" />
 
     <LinearLayout
@@ -290,7 +296,7 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/background_blue"
             android:padding="16dp"
-            android:text="T 0°"
+            android:text="Topo 0°"
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
 
@@ -301,7 +307,7 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/background_blue"
             android:padding="16dp"
-            android:text="B 0°"
+            android:text="Base 0°"
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
     </LinearLayout>
@@ -376,8 +382,8 @@
 
         <ImageButton
             android:id="@+id/medirDiametroBtn"
-            android:layout_width="60sp"
-            android:layout_height="60sp"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
@@ -394,8 +400,8 @@
 
         <ImageButton
             android:id="@+id/calAltura"
-            android:layout_width="60sp"
-            android:layout_height="60sp"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:background="@drawable/dh_background"
@@ -413,6 +419,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

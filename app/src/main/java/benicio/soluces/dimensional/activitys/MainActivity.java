@@ -445,7 +445,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Cria a animação
         Animation blinkAnimation = new AlphaAnimation(1, 0); // De totalmente visível para totalmente transparente
-        blinkAnimation.setDuration(1000); // Define a duração da animação em milissegundos
+        blinkAnimation.setDuration(666); // Define a duração da animação em milissegundos
         blinkAnimation.setRepeatMode(Animation.REVERSE); // Inverte a animação ao chegar ao fim
         blinkAnimation.setRepeatCount(Animation.INFINITE); // Repete a animação infinitamente
 
@@ -482,6 +482,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnMaisRed.setVisibility(View.VISIBLE);
         btnMenosRed.setVisibility(View.VISIBLE);
         btnMaisYellow.setVisibility(View.VISIBLE);
+        medidaRealText.setVisibility(View.VISIBLE);
         btnMenosYellow.setVisibility(View.VISIBLE);
         barrinhasLayout.setVisibility(View.VISIBLE);
         imagemIlustrativaArvore.setVisibility(View.INVISIBLE);
@@ -534,7 +535,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // mudança aqui
         alturaCalc = Float.valueOf(alturaCalc);
-        alturaReal.setText(String.format("A %.4f m", alturaCalc));
+        alturaReal.setText(String.format("Altura Total\n%.4f m", alturaCalc));
         alturaReal.setVisibility(View.VISIBLE);
     }
 
@@ -1444,12 +1445,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 switch (etapa) {
                     case 0:
-                        anguloBText.setText(String.format("B %.2f°", degrees));
+                        anguloBText.setText(String.format("Base %.2f°", degrees));
                         anguloBaseTora = degrees;
                         anguloB = degrees;
                         break;
                     case 1:
-                        anguloTText.setText(String.format("T %.2f°", degrees));
+                        anguloTText.setText(String.format("Topo %.2f°", degrees));
                         anguloT = degrees;
                         break;
                 }
