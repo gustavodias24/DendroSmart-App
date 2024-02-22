@@ -89,7 +89,7 @@
         android:id="@+id/linearLayout9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,6 +102,7 @@
             android:layout_height="60sp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="centerCrop"
             android:src="@raw/plusred"
@@ -114,6 +115,7 @@
             android:layout_height="60sp"
             android:layout_below="@+id/maisred"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="centerCrop"
             android:src="@raw/negativered"
@@ -135,7 +137,7 @@
         android:id="@+id/linearLayout7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -148,6 +150,7 @@
             android:layout_height="60sp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="centerCrop"
             android:src="@raw/plusyelow"
@@ -159,6 +162,7 @@
             android:layout_height="60sp"
             android:layout_below="@+id/maisyelow"
             android:layout_alignParentStart="true"
+            android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="centerCrop"
             android:src="@raw/minusyelow"
@@ -294,7 +298,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/background_blue"
             android:padding="16dp"
             android:text="Topo 0°"
             android:textColor="#FFFFFF"
@@ -305,7 +308,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/background_blue"
             android:padding="16dp"
             android:text="Base 0°"
             android:textColor="#FFFFFF"
@@ -376,9 +378,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/infos_dev_text"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout9"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.76">
 
         <ImageButton
             android:id="@+id/medirDiametroBtn"
@@ -417,9 +420,9 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -438,7 +441,7 @@
             android:textColor="#FFFFFF"
             android:textSize="10sp"
             android:textStyle="bold"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
 
         <ImageButton
@@ -458,7 +461,6 @@
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_weight="1"
             android:background="@drawable/background_redondo"
             android:backgroundTint="#2196F3"
             android:src="@drawable/baseline_keyboard_backspace_24" />
@@ -477,7 +479,7 @@
             android:padding="6dp"
             android:scaleType="centerCrop"
             android:src="@drawable/baseline_zoom_out_24"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <ImageButton
             android:id="@+id/mais_zoom"
@@ -493,7 +495,7 @@
             android:padding="6dp"
             android:scaleType="centerCrop"
             android:src="@drawable/baseline_zoom_in_24"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <ImageButton
             android:id="@+id/restartButton"
