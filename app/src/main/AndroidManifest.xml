@@ -42,9 +42,12 @@
         android:theme="@style/Theme.DIMENSIONAL"
         tools:targetApi="31">
         <activity
-            android:name=".activitys.SetarComprimentoToraActivity"
-            android:screenOrientation="landscape"
+            android:name=".activitys.SmalianCalculoActivity"
             android:exported="false" />
+        <activity
+            android:name=".activitys.SetarComprimentoToraActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activitys.BaterFotoArvoreActivity"
             android:exported="false"

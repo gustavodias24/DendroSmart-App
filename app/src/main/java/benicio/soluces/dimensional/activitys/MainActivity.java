@@ -103,7 +103,8 @@ import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
-
+    boolean smalianFirstCalc = true;
+    float disDireta = 0.0f;
     ImageView imagemIlustrativaArvore;
     float toraDaponta = 0.0f;
     TextView alturaAtual;
@@ -127,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Float diametroTopoTora = 0.0f;
 
     Float ultimoDiametroBase = 0.0f;
-    boolean primeiroCalculoBase = false;
 
     // variaveis da divisão
     int qtdDivisao = 0;
@@ -157,9 +157,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Componentes de medir largura
 
     private static final String TAG = "mayara";
+    private static final String TAG1 = "mayara1";
+    private static final String TAG2 = "mayara2";
     TextView textZoom, dadosGps, medidaRealText;
     ImageView imageEmpresa;
-    private static final float CONST_CHAVE = 0.054347826f;
+    private static final float CONST_CHAVE = 0.054347826f * 0.48484848f;
     //    private static final float CONST_CHAVE = 0.130266f;
     private long lastUpdate;
     SensorManager sensorManager;
@@ -221,6 +223,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        qtdPos = qtdBarrinhas + (qtdBarrinhas - 1);
 
         imagemIlustrativaArvore = findViewById(R.id.imagemIlustrativaArvore);
 
@@ -445,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Cria a animação
         Animation blinkAnimation = new AlphaAnimation(1, 0); // De totalmente visível para totalmente transparente
-        blinkAnimation.setDuration(666); // Define a duração da animação em milissegundos
+        blinkAnimation.setDuration(500); // Define a duração da animação em milissegundos
         blinkAnimation.setRepeatMode(Animation.REVERSE); // Inverte a animação ao chegar ao fim
         blinkAnimation.setRepeatCount(Animation.INFINITE); // Repete a animação infinitamente
 
@@ -592,6 +596,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        divisaoField.setHint("Altura comercial");
 
         qtdDivisao = (int) Math.floor(alturaCalc / tamCadaParte);
+        Log.d(TAG, "calcularQuantidadeTora: " + qtdDivisao);
 //        Double mToraPonta = (Double) ();
 
         Log.d(TAG, "calcularQuantidadeTora: " + alturaCalc);
@@ -925,106 +930,158 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == findViewById(R.id.setar_dh).getId()) {
 //            dialogInputDH.show();
         } else if (id == medirDiametro.getId()) {
-
-            switch (parteDaToraPos) {
-                case 1:
-                    if (!primeiroCalculoBase) {
-                        diametroBaseTora = diametroMarcado;
-                        parteDaToraPos++;
-                        parteDaTora = "o centro";
-                        primeiroCalculoBase = true;
-                        alturaDesejada += (alturaCalc / 4);
-
-                    } else {
-                        diametroMedioTora = diametroMarcado;
-                        parteDaToraPos += 2;
-                        parteDaTora = "o topo";
-                        alturaDesejada += (alturaCalc / 4);
-
-                    }
-
-                    break;
-                case 2:
-                    alturaDesejada += (alturaCalc / 4);
-                    diametroMedioTora = diametroMarcado;
-                    parteDaToraPos++;
-                    parteDaTora = "o topo";
-                    break;
-                case 3:
-                    diametroTopoTora = diametroMarcado;
-                    parteDaToraPos++;
-//                   medirDiametro.setText("Próxima Tora");
-                    parteDaTora = "o centro";
-
-                    break;
-                default:
-//                   parteDaToraPos = 1;
-                    if (!primeiroCalculoBase) {
-                        parteDaTora = "a base";
-                    } else {
-                        parteDaTora = "o centro";
-                        parteDaToraPos = 2;
-                        alturaDesejada += (alturaCalc / 4);
-                    }
-//                    medirDiametro.setText("Medir Diâmetro");
-
-                    if (toraAtual < qtdDivisao) {
-
-                        float volumeToraCalculado = Float.parseFloat(String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]);
-
-                        volumeTotal += volumeToraCalculado;
-                        infosGenericas.setText(infosGenericas.getText() + "\n" + String.format("Volume Tora %d: %.4f m³", toraAtual, volumeToraCalculado));
-                        ultimoDiametroBase = diametroTopoTora;
-                        diametroTopoTora = diametroMedioTora = diametroBaseTora = 0.0f;
-
-                        if (primeiroCalculoBase) {
-                            diametroBaseTora = ultimoDiametroBase;
-                        }
-
-                        toraAtual += 1;
-                    } else {
-                        medirDiametro.setVisibility(View.GONE);
-                        instrucaoTela.clearAnimation();
-                        instrucaoTela.setVisibility(View.INVISIBLE);
-                        acabouToras = true;
-
-                        float volumeToraCalculado = Float.parseFloat(String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]);
-
-
-                        volumeTotal += volumeToraCalculado;
-
-                        float volumePonta = Float.parseFloat(String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), toraDaponta)).split("E")[0]);
-
-                        infosGenericas.setText(infosGenericas.getText() + "\n" + String.format("Volume Tora %d: %.4f m³", toraAtual, volumeToraCalculado) + "\n" + String.format("Volume da ponta: %.4f m³", volumePonta) + "\n" + String.format("Volume total: %.4f m³", volumeTotal));
-
-                        ItemRelatorio novoItem = new ItemRelatorio();
-                        novoItem.setDadosGps(dadosGps.getText().toString());
-
-                        novoItem.setDadosVolume(infosGenericas.getText().toString());
-
-                        LocalDateTime agora = LocalDateTime.now();
-
-                        // Formatando a data e hora de acordo com o seu gosto
-                        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-                        String dataHoraFormatada = agora.format(formatador);
-
-                        StringBuilder dadosTora = new StringBuilder();
-                        dadosTora.append("Data e Hora: ").append(dataHoraFormatada).append("\n");
-                        dadosTora.append("- Infos gerais -").append("\n");
-                        dadosTora.append("DH: ").append(dh).append("\n");
-                        dadosTora.append("Altura total: ").append(alturaCalc).append("m");
-
-                        novoItem.setDadosTora(dadosTora.toString());
-
-                        List<ItemRelatorio> listaParaAtualiziar = ItemRelatorioUtil.returnLista(this);
-                        listaParaAtualiziar.add(novoItem);
-                        ItemRelatorioUtil.saveList(listaParaAtualiziar, this);
-                        Toast.makeText(this, "Árvore salva no relatório.", Toast.LENGTH_SHORT).show();
-
-                    }
-                    break;
+            if (preferences.getString("metodo", "").equals("Newton")) {
+                configurarSwitchNewton();
+            } else if (preferences.getString("metodo", "").equals("Smalian")) {
+                configurarSwitchSmalian();
             }
+
         }
+
+    }
+
+    private void configurarSwitchSmalian() {
+        switch (parteDaToraPos) {
+            case 1:
+
+                diametroBaseTora = diametroMarcado;
+                parteDaToraPos++;
+                parteDaTora = "o topo";
+                alturaDesejada += (alturaCalc / 4);
+
+                break;
+            case 2:
+
+                if (!smalianFirstCalc) {
+                    diametroBaseTora = diametroTopoTora;
+                }
+
+                smalianFirstCalc = false;
+
+                diametroTopoTora = diametroMarcado;
+
+
+                alturaDesejada += (alturaCalc / 4);
+
+                if (toraAtual < qtdDivisao) {
+                    fazerCaluloVolume();
+                } else {
+                    fazerCalculoFinalVolume();
+                    salvarArvoreRelatorio();
+                }
+
+                toraAtual += 1;
+
+                break;
+        }
+    }
+
+    private void configurarSwitchNewton() {
+        switch (parteDaToraPos) {
+            case 1:
+
+                diametroBaseTora = diametroMarcado;
+                parteDaToraPos++;
+                parteDaTora = "o centro";
+                alturaDesejada += (alturaCalc / 4);
+
+                break;
+            case 2:
+
+                alturaDesejada += (alturaCalc / 4);
+                diametroMedioTora = diametroMarcado;
+                parteDaToraPos++;
+                parteDaTora = "o topo";
+
+                break;
+            case 3:
+                diametroTopoTora = diametroMarcado;
+                parteDaTora = "o centro";
+                parteDaToraPos = 2;
+
+                diametroBaseTora = ultimoDiametroBase;
+
+                if (toraAtual < qtdDivisao) {
+                    fazerCaluloVolume();
+                } else {
+                    fazerCalculoFinalVolume();
+                    salvarArvoreRelatorio();
+                }
+
+                toraAtual += 1;
+                break;
+        }
+    }
+
+    private void fazerCaluloVolume() {
+
+        float volumeToraCalculado = 0.f;
+        if (preferences.getString("metodo", "").equals("Newton")) {
+            volumeToraCalculado = Float.parseFloat(String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]);
+        } else if (preferences.getString("metodo", "").equals("Smalian")) {
+            volumeToraCalculado = Float.parseFloat(String.valueOf(MetodosUtils.calculoSmalian((diametroBaseTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]);
+        }
+
+        volumeTotal += volumeToraCalculado;
+        infosGenericas.setText(infosGenericas.getText() + "\n" + String.format("Volume Tora %d: %.4f m³", toraAtual, volumeToraCalculado));
+        ultimoDiametroBase = diametroTopoTora;
+        diametroTopoTora = diametroMedioTora = diametroBaseTora = 0.0f;
+
+    }
+
+    private void fazerCalculoFinalVolume() {
+        medirDiametro.setVisibility(View.GONE);
+        instrucaoTela.clearAnimation();
+        instrucaoTela.setVisibility(View.INVISIBLE);
+        acabouToras = true;
+
+
+        float volumeToraCalculado = 0.f;
+        if (preferences.getString("metodo", "").equals("Newton")) {
+            volumeToraCalculado = Float.parseFloat(String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]);
+        } else if (preferences.getString("metodo", "").equals("Smalian")) {
+            volumeToraCalculado = Float.parseFloat(String.valueOf(MetodosUtils.calculoSmalian((diametroBaseTora / 2), (diametroTopoTora / 2), tamCadaParte)).split("E")[0]);
+        }
+
+        volumeTotal += volumeToraCalculado;
+
+        float volumePonta = 0.f;
+        if (preferences.getString("metodo", "").equals("Newton")) {
+            volumePonta = Float.parseFloat(String.valueOf(MetodosUtils.novoCalculoNewton((diametroBaseTora / 2), (diametroMedioTora / 2), (diametroTopoTora / 2), toraDaponta)).split("E")[0]);
+        } else if (preferences.getString("metodo", "").equals("Smalian")) {
+            volumePonta = Float.parseFloat(String.valueOf(MetodosUtils.calculoSmalian((diametroBaseTora / 2), (diametroTopoTora / 2), toraDaponta)).split("E")[0]);
+        }
+
+
+        infosGenericas.setText(infosGenericas.getText() + "\n" + String.format("Volume Tora %d: %.4f m³", toraAtual, volumeToraCalculado) + "\n" + String.format("Volume da ponta: %.4f m³", volumePonta) + "\n" + String.format("Volume total: %.4f m³", volumeTotal));
+
+    }
+
+    private void salvarArvoreRelatorio() {
+
+        ItemRelatorio novoItem = new ItemRelatorio();
+        novoItem.setDadosGps(dadosGps.getText().toString());
+
+        novoItem.setDadosVolume(infosGenericas.getText().toString());
+
+        LocalDateTime agora = LocalDateTime.now();
+
+        // Formatando a data e hora de acordo com o seu gosto
+        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String dataHoraFormatada = agora.format(formatador);
+
+        StringBuilder dadosTora = new StringBuilder();
+        dadosTora.append("Data e Hora: ").append(dataHoraFormatada).append("\n");
+        dadosTora.append("- Infos gerais -").append("\n");
+        dadosTora.append("DH: ").append(dh).append("\n");
+        dadosTora.append("Altura total: ").append(alturaCalc).append("m");
+
+        novoItem.setDadosTora(dadosTora.toString());
+
+        List<ItemRelatorio> listaParaAtualiziar = ItemRelatorioUtil.returnLista(this);
+        listaParaAtualiziar.add(novoItem);
+        ItemRelatorioUtil.saveList(listaParaAtualiziar, this);
+        Toast.makeText(this, "Árvore salva no relatório.", Toast.LENGTH_SHORT).show();
     }
 
     private void aumentarAmerelo() {
@@ -1273,6 +1330,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 case "-R":
                                     diminuirVermelho();
                                     break;
+                                case "angle":
+                                    // TO DO
+                                    break;
                             }
                             handler.postDelayed(this, tempoEspera);
 
@@ -1392,7 +1452,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (!addresses.isEmpty()) {
                 Address address = addresses.get(0);
                 String[] fullAddress = address.getAddressLine(0).split(",");
-                dadosGps.setText(fullAddress[0] + ", " + fullAddress[1] + "\n" + fullAddress[2] + fullAddress[3] + "\n" + cordenadas + "\n" + String.format("%s ás %s", formattedDate, formattedTime) +  "\n" + "Operador: " + operador + "\n" + "Newton");
+                dadosGps.setText(fullAddress[0] + ", " + fullAddress[1] + "\n" + fullAddress[2] + fullAddress[3] + "\n" + cordenadas + "\n" + String.format("%s ás %s", formattedDate, formattedTime) + "\n" + "Operador: " + operador + "\n" + preferences.getString("metodo", ""));
             } else {
                 Log.d("Address", "No address found");
             }
@@ -1430,7 +1490,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         long currentTimeMillis = System.currentTimeMillis();
         long j = this.lastUpdate;
 
-        if (currentTimeMillis - j > 100) {
+        // 100
+        if (currentTimeMillis - j > 0) {
 
             long j2 = currentTimeMillis - j;
             this.lastUpdate = currentTimeMillis;
@@ -1460,6 +1521,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 calcularAlturaTora();
                 anguloAtualTora = degrees;
+
+                float anguloRadiano = (float) Math.toRadians(anguloAtualTora);
+                float cos = (float) Math.cos(anguloRadiano);
+
+                disDireta = dh / cos;
+
+                diametroMarcado = ((disDireta * (qtdPos / divisorPorZoom) * CONST_CHAVE) / 100);
+                medidaRealText.setText(String.format("Diâmetro %.4f m", diametroMarcado));
 
                 if (qtdDivisao != 0) {
                     instrucaoTela.setText(
@@ -1501,6 +1570,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return null;
     }
-
-
 }

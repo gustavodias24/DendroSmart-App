@@ -27,4 +27,15 @@ public class MetodosUtils {
 
         return result;
     }
+
+    public static float calculoSmalian(float dMaior, float dMenor, float comprimento){
+        float result;
+
+        float circuMaior = (float) (Math.pow(dMaior, 2) * PI);
+        float circuMenor = (float) (Math.pow(dMenor, 2) * PI);
+
+        result = (float) ((circuMaior + circuMenor) * comprimento)/2;
+
+        return result;
+    }
 }

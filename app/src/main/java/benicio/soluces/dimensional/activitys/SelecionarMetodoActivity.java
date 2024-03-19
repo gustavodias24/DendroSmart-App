@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -18,6 +20,8 @@ import benicio.soluces.dimensional.databinding.ActivitySelecionarMetodoBinding;
 public class SelecionarMetodoActivity extends AppCompatActivity {
 
     ActivitySelecionarMetodoBinding mainBinding;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
     Dialog d;
     @SuppressLint("ResourceType")
     @Override
@@ -27,6 +31,10 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        prefs = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
+        editor = prefs.edit();
+
+
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setTitle("Atenção!");
         b.setMessage("Essa método só está disponível na versão 2 do aplicativo.");
@@ -34,6 +42,10 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
         d = b.create();
 
         Picasso.get().load(R.raw.pinheiro).into(mainBinding.imageView);
+
+        mainBinding.newton.setOnClickListener( view -> escolherMetodo("Newton"));
+        mainBinding.smalian.setOnClickListener( view -> escolherMetodo("Smalian"));
+
     }
 
     public void voltar(View view){
@@ -43,7 +55,8 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
         d.show();
     }
 
-    public void escolherMetodo(View view){
+    public void escolherMetodo(String metodo){
+        editor.putString("metodo", metodo).apply();
         startActivity(new Intent(this, BaterFotoArvoreActivity.class));
     }
 

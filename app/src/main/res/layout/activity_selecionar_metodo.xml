@@ -42,17 +42,32 @@
             tools:ignore="MissingConstraints" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/newton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:drawableLeft="@drawable/baseline_lock_open_24"
             android:gravity="center"
-            android:onClick="escolherMetodo"
             android:text="newton  "
             android:textAllCaps="true"
             android:textColor="#FFFFFF"
+            app:icon="@drawable/baseline_lock_open_24"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/smalian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#2196F3"
+            android:drawableLeft="@drawable/baseline_lock_open_24"
+            android:gravity="center"
+            android:onClick="disponivelApeenasV2"
+            android:text="smalian "
+            android:textAllCaps="true"
             app:icon="@drawable/baseline_lock_open_24"
             app:iconGravity="textStart"
             app:iconSize="30dp"
@@ -74,21 +89,7 @@
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
 
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="#2196F3"
-            android:drawableLeft="@drawable/baseline_lock_24"
-            android:gravity="center"
-            android:onClick="disponivelApeenasV2"
-            android:text="smalian "
-            android:textAllCaps="true"
-            app:icon="@drawable/baseline_lock_24"
-            app:iconGravity="textStart"
-            app:iconSize="30dp"
-            tools:ignore="MissingConstraints" />
+
 
         <Button
             android:id="@+id/button3"
