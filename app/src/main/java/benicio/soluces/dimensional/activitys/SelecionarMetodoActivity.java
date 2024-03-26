@@ -46,6 +46,12 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
         mainBinding.newton.setOnClickListener( view -> escolherMetodo("Newton"));
         mainBinding.smalian.setOnClickListener( view -> escolherMetodo("Smalian"));
 
+        mainBinding.diametro.setOnClickListener( view -> {
+            Intent i = new Intent(this, SetarDHActivity.class);
+            i.putExtra("diametro", true);
+            startActivity(i);
+        });
+
     }
 
     public void voltar(View view){

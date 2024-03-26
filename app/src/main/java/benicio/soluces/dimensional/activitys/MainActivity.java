@@ -281,6 +281,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         bundle = getIntent().getExtras();
 
+
+
         dh = bundle.getFloat("dh");
         tamCadaParte = bundle.getFloat("tamCadaParte");
 
@@ -402,6 +404,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
 
         runnableCode.run();
+
+
+        if ( bundle != null && bundle.getBoolean("diametro", false)){
+
+            musarParaMedidorDiametro();
+
+            instrucaoTela.clearAnimation();
+            medirDiametro.clearAnimation();
+            medirAngulo.clearAnimation();
+
+            findViewById(R.id.linearLayout5).setVisibility(View.INVISIBLE);
+            instrucaoTela.setVisibility(View.INVISIBLE);
+            infosGenericas.setVisibility(View.INVISIBLE);
+            medirDiametro.setVisibility(View.INVISIBLE);
+            alturaAtual.setVisibility(View.INVISIBLE);
+            medirAngulo.setVisibility(View.INVISIBLE);
+
+            restartButton.setVisibility(View.GONE);
+
+        }
 
     }
 

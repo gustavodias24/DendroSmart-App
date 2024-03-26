@@ -20,12 +20,17 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
 
     private ActivitySetarDhactivityBinding mainBinding;
     private Boolean isPrimeiraVez = true;
+    private Bundle b;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainBinding = ActivitySetarDhactivityBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        b = getIntent().getExtras();
+
+
 
         mainBinding.btn0.setOnClickListener(this);
         mainBinding.btn1.setOnClickListener(this);
@@ -59,6 +64,10 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
                 Intent i = new Intent(this, MainActivity.class);
                 i.putExtra("dh", dhFloat);
                 i.putExtra("tamCadaParte", getIntent().getExtras().getFloat("tamCadaParte", 0.0f));
+
+                if ( b != null && b.getBoolean("diametro", false)){
+                    i.putExtra("diametro", true);
+                }
 
                 startActivity(i);
             }catch (Exception e){
