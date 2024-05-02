@@ -66,6 +66,7 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
                 i.putExtra("tamCadaParte", getIntent().getExtras().getFloat("tamCadaParte", 0.0f));
 
                 if ( b != null && b.getBoolean("diametro", false)){
+                    mainBinding.textView3.setText("MEÇA COM O LASER E INFORME A DISTÂNCIA DIRETA");
                     i.putExtra("diametro", true);
                 }
 
