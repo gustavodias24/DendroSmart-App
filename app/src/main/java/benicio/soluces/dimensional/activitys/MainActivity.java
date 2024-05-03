@@ -432,12 +432,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @SuppressLint("DefaultLocale")
     private void configurarTeclado() {
         Button b0, b1, b2 , b3, b4, b5 , b6, b7 , b8 , b9 , bVirgula;
         ImageButton bConfirmar, bApagar;
+        TextView minimizar_teclado;
 
-
+        minimizar_teclado = findViewById(R.id.minimizar_teclado);
         edt_dh = findViewById(R.id.edt_dh);
+        minimizar_teclado.setVisibility(View.VISIBLE);
+
+        minimizar_teclado.setOnClickListener(v -> {
+            LinearLayout LayoutTeclado = findViewById(R.id.LayoutTeclado);
+            if (LayoutTeclado.getVisibility() == View.VISIBLE){
+                LayoutTeclado.setVisibility(View.INVISIBLE);
+            }else{
+                LayoutTeclado.setVisibility(View.VISIBLE);
+            }
+        });
 
         b0 = findViewById(R.id.btn0);
         b1 = findViewById(R.id.btn1);
@@ -447,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         b5 = findViewById(R.id.btn5);
         b6 = findViewById(R.id.btn6);
         b7 = findViewById(R.id.btn7);
-        b8 = findViewById(R.id.btn9);
+        b8 = findViewById(R.id.btn8);
         b9 = findViewById(R.id.btn9);
 
         bVirgula = findViewById(R.id.btnVirgula);
@@ -483,6 +495,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dh = Float.parseFloat(
                         edt_dh.getText().toString().replace(",", ".")
                 );
+
+                medidaRealText.setText(String.format("Diâmetro %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
             }catch (Exception ignored){
                 Toast.makeText(this, "Digite um número válido!", Toast.LENGTH_SHORT).show();
             }
@@ -1637,7 +1651,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 disDireta = dh / cos;
 
                 diametroMarcado = ((disDireta * (qtdPos / divisorPorZoom) * CONST_CHAVE) / 100);
-                medidaRealText.setText(String.format("Diâmetro %.4f m", diametroMarcado));
+                if ( bundle == null && !bundle.getBoolean("diametro", false)){
+                    medidaRealText.setText(String.format("Diâmetro %.4f m", diametroMarcado));
+                }
 
                 if (qtdDivisao != 0) {
                     instrucaoTela.setText(

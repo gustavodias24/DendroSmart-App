@@ -53,10 +53,19 @@
         android:text="Exibir dados do GPS na tela." />
 
     <View
-        android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/informacaoDoAparelho"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        android:text="..."
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dap_field"
@@ -91,6 +100,12 @@
             android:inputType="number|numberDecimal|numberSigned" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="?android:attr/listDivider" />
 
     <View
         android:id="@+id/divider4"

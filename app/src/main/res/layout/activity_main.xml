@@ -423,7 +423,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:alpha="0.4"
         android:background="@drawable/background_blue"
@@ -615,6 +615,30 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/minimizar_teclado"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:alpha="0.4"
+        android:background="@drawable/dh_background"
+        android:backgroundTint="#FF2222"
+        android:ems="10"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:text="-"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/LayoutTeclado"
+        app:layout_constraintTop_toTopOf="@+id/LayoutTeclado" />
 
     <LinearLayout
         android:id="@+id/linearLayout"

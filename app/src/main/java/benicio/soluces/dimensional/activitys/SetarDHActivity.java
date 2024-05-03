@@ -16,11 +16,12 @@ import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivitySelecionarMetodoBinding;
 import benicio.soluces.dimensional.databinding.ActivitySetarDhactivityBinding;
 
-public class SetarDHActivity extends AppCompatActivity implements View.OnClickListener{
+public class SetarDHActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivitySetarDhactivityBinding mainBinding;
     private Boolean isPrimeiraVez = true;
     private Bundle b;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,9 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
 
         b = getIntent().getExtras();
 
-
+        if (b != null && b.getBoolean("diametro", false)) {
+            mainBinding.textView3.setText("MEÇA COM O LASER E INFORME A DISTÂNCIA DIRETA");
+        }
 
         mainBinding.btn0.setOnClickListener(this);
         mainBinding.btn1.setOnClickListener(this);
@@ -43,20 +46,20 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
         mainBinding.btn8.setOnClickListener(this);
         mainBinding.btn9.setOnClickListener(this);
         mainBinding.btnVirgula.setOnClickListener(this);
-        mainBinding.btnApagar.setOnClickListener( view -> {
+        mainBinding.btnApagar.setOnClickListener(view -> {
             String textoExistente = mainBinding.edtDh.getText().toString();
 
-            if ( textoExistente.length() == 1 ){
+            if (textoExistente.length() == 1) {
                 mainBinding.edtDh.setText("0");
-            }else{
+            } else {
                 mainBinding.edtDh.setText(
                         removerUltimaLetra(textoExistente)
                 );
             }
         });
 
-        mainBinding.btnProsseguir.setOnClickListener( view -> {
-            try{
+        mainBinding.btnProsseguir.setOnClickListener(view -> {
+            try {
                 Float dhFloat = Float.parseFloat(
                         mainBinding.edtDh.getText().toString().replace(",", ".")
                 );
@@ -65,13 +68,13 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
                 i.putExtra("dh", dhFloat);
                 i.putExtra("tamCadaParte", getIntent().getExtras().getFloat("tamCadaParte", 0.0f));
 
-                if ( b != null && b.getBoolean("diametro", false)){
+                if (b != null && b.getBoolean("diametro", false)) {
                     mainBinding.textView3.setText("MEÇA COM O LASER E INFORME A DISTÂNCIA DIRETA");
                     i.putExtra("diametro", true);
                 }
 
                 startActivity(i);
-            }catch (Exception e){
+            } catch (Exception e) {
                 Toast.makeText(this, "Digite um número válido!", Toast.LENGTH_SHORT).show();
             }
 
@@ -98,10 +101,10 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
         Button button = (Button) view;
         String novoTexto = button.getText().toString();
 
-        if (isPrimeiraVez || mainBinding.edtDh.getText().equals("0")){
+        if (isPrimeiraVez || mainBinding.edtDh.getText().equals("0")) {
             mainBinding.edtDh.setText(novoTexto);
             isPrimeiraVez = false;
-        }else{
+        } else {
             String textoExistente = mainBinding.edtDh.getText().toString();
             mainBinding.edtDh.setText(textoExistente + novoTexto);
         }

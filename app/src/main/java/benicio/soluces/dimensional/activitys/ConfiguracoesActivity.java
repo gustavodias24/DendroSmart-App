@@ -13,11 +13,15 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +45,33 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getSupportActionBar().setTitle("Configurações");
+
+
+        String androidVersion = "Android " + Build.VERSION.RELEASE;
+
+        // Obtendo o tamanho da tela
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+        String screenSize = screenWidth + "x" + screenHeight;
+
+        // Obtendo a marca e o modelo do dispositivo
+        String deviceManufacturer = Build.MANUFACTURER;
+        String deviceModel = Build.MODEL;
+
+        // Construindo a string formatada
+        StringBuilder deviceInfo = new StringBuilder();
+        deviceInfo.append("* Informações Sobre o Aparelho *").append("\n");
+        deviceInfo.append("Android Version: ").append(androidVersion).append("\n");
+        deviceInfo.append("Screen Size: ").append(screenSize).append("\n");
+        deviceInfo.append("Manufacturer: ").append(deviceManufacturer).append("\n");
+        deviceInfo.append("Model: ").append(deviceModel);
+
+
+        mainBinding.informacaoDoAparelho.setText(deviceInfo.toString());
 
         textIp = findViewById(R.id.textIpConfig);
 
