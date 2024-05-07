@@ -285,7 +285,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bundle = getIntent().getExtras();
 
 
-
         dh = bundle.getFloat("dh");
         tamCadaParte = bundle.getFloat("tamCadaParte");
 
@@ -409,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         runnableCode.run();
 
 
-        if ( bundle != null && bundle.getBoolean("diametro", false)){
+        if (bundle != null && bundle.getBoolean("diametro", false)) {
 
             configurarTeclado();
             musarParaMedidorDiametro();
@@ -419,6 +418,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             medirAngulo.clearAnimation();
 
             findViewById(R.id.LayoutTeclado).setVisibility(View.VISIBLE);
+            new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+
+                    try {
+                        sleep(4000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    runOnUiThread(() -> findViewById(R.id.LayoutTeclado).setVisibility(View.INVISIBLE));
+                }
+            }.start();
+
             findViewById(R.id.linearLayout5).setVisibility(View.INVISIBLE);
             instrucaoTela.setVisibility(View.INVISIBLE);
             infosGenericas.setVisibility(View.INVISIBLE);
@@ -434,19 +447,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("DefaultLocale")
     private void configurarTeclado() {
-        Button b0, b1, b2 , b3, b4, b5 , b6, b7 , b8 , b9 , bVirgula;
+        Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bVirgula;
         ImageButton bConfirmar, bApagar;
         TextView minimizar_teclado;
 
         minimizar_teclado = findViewById(R.id.minimizar_teclado);
         edt_dh = findViewById(R.id.edt_dh);
+        edt_dh.setText(bundle.getFloat("dh") + "");
         minimizar_teclado.setVisibility(View.VISIBLE);
 
         minimizar_teclado.setOnClickListener(v -> {
             LinearLayout LayoutTeclado = findViewById(R.id.LayoutTeclado);
-            if (LayoutTeclado.getVisibility() == View.VISIBLE){
+            if (LayoutTeclado.getVisibility() == View.VISIBLE) {
                 LayoutTeclado.setVisibility(View.INVISIBLE);
-            }else{
+            } else {
                 LayoutTeclado.setVisibility(View.VISIBLE);
             }
         });
@@ -478,26 +492,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         b9.setOnClickListener(this);
         bVirgula.setOnClickListener(this);
 
-        bApagar.setOnClickListener( view -> {
+        bApagar.setOnClickListener(view -> {
             String textoExistente = edt_dh.getText().toString();
 
-            if ( textoExistente.length() == 1 ){
+            if (textoExistente.length() == 1) {
                 edt_dh.setText("0");
-            }else{
+            } else {
                 edt_dh.setText(
                         SetarDHActivity.removerUltimaLetra(textoExistente)
                 );
             }
         });
 
-        bConfirmar.setOnClickListener( v -> {
+        bConfirmar.setOnClickListener(v -> {
             try {
                 dh = Float.parseFloat(
                         edt_dh.getText().toString().replace(",", ".")
                 );
 
                 medidaRealText.setText(String.format("Diâmetro %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
-            }catch (Exception ignored){
+            } catch (Exception ignored) {
                 Toast.makeText(this, "Digite um número válido!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -1038,24 +1052,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         } else if (
                 id == R.id.btn0 ||
-                id == R.id.btn1 ||
-                id == R.id.btn2 ||
-                id == R.id.btn3 ||
-                id == R.id.btn4 ||
-                id == R.id.btn5 ||
-                id == R.id.btn6 ||
-                id == R.id.btn7 ||
-                id == R.id.btn8 ||
-                id == R.id.btn9 ||
-                id == R.id.btnVirgula
-        ){
+                        id == R.id.btn1 ||
+                        id == R.id.btn2 ||
+                        id == R.id.btn3 ||
+                        id == R.id.btn4 ||
+                        id == R.id.btn5 ||
+                        id == R.id.btn6 ||
+                        id == R.id.btn7 ||
+                        id == R.id.btn8 ||
+                        id == R.id.btn9 ||
+                        id == R.id.btnVirgula
+        ) {
             Button button = (Button) view;
             String novoTexto = button.getText().toString();
 
-            if (isPrimeiraVez || edt_dh.getText().equals("0")){
+            if (isPrimeiraVez || edt_dh.getText().equals("0")) {
                 edt_dh.setText(novoTexto);
                 isPrimeiraVez = false;
-            }else{
+            } else {
                 String textoExistente = edt_dh.getText().toString();
                 edt_dh.setText(textoExistente + novoTexto);
             }
@@ -1651,7 +1665,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 disDireta = dh / cos;
 
                 diametroMarcado = ((disDireta * (qtdPos / divisorPorZoom) * CONST_CHAVE) / 100);
-                if ( bundle == null && !bundle.getBoolean("diametro", false)){
+                if (bundle == null && !bundle.getBoolean("diametro", false)) {
                     medidaRealText.setText(String.format("Diâmetro %.4f m", diametroMarcado));
                 }
 

@@ -33,6 +33,7 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
 
         if (b != null && b.getBoolean("diametro", false)) {
             mainBinding.textView3.setText("MEÇA COM O LASER E INFORME A DISTÂNCIA DIRETA");
+            mainBinding.imageView3.setImageResource(R.drawable.observacaodireta);
         }
 
         mainBinding.btn0.setOnClickListener(this);
