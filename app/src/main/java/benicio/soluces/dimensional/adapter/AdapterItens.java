@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,15 +42,18 @@ public class AdapterItens extends RecyclerView.Adapter<AdapterItens.MyViewHolder
         ItemRelatorio item = lista.get(position);
         holder.itemView.getRootView().setClickable(false);
         Picasso.get().load(R.raw.lixo).into(holder.btnExcluir);
+
         holder.infos1.setText(item.getDadosTora());
-        holder.infos2.setText(item.getDadosGps());
-        holder.infos3.setText(item.getDadosVolume());
+        holder.infos2.setText(item.getDadosVolume());
+        holder.infos3.setText(item.getDadosGps());
 
         holder.btnExcluir.setOnClickListener( view -> {
             lista.remove(position);
             this.notifyDataSetChanged();
             ItemRelatorioUtil.saveList(lista, c);
         });
+
+        Picasso.get().load(item.getImagemArvore()).into(holder.imagem_da_arvore);
     }
 
     @Override
@@ -63,12 +67,15 @@ public class AdapterItens extends RecyclerView.Adapter<AdapterItens.MyViewHolder
         TextView infos2;
         TextView infos3;
         ImageButton btnExcluir;
+
+        ImageView imagem_da_arvore;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             infos1 = itemView.findViewById(R.id.text_info_generic1);
             infos2 = itemView.findViewById(R.id.text_info_generic2);
             infos3 = itemView.findViewById(R.id.text_info_generic3);
             btnExcluir = itemView.findViewById(R.id.btn_excluir);
+            imagem_da_arvore = itemView.findViewById(R.id.imagem_da_arvore);
 
         }
     }

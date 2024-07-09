@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,49 +11,84 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="50"
-        android:orientation="horizontal">
+        android:background="@drawable/borda"
+        android:orientation="horizontal"
+        android:padding="4dp">
 
         <ImageButton
             android:id="@+id/btn_excluir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:backgroundTint="#00090808"
+            android:padding="8dp"
             tools:src="@raw/lixo" />
 
-        <TextView
-            android:id="@+id/text_info_generic1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="50"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="10sp"
-            android:textStyle="bold|italic" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text_info_generic2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="50"
-            android:text="TextView"
-            android:textAlignment="viewStart"
-            android:textColor="#000000"
-            android:textSize="10sp"
-            android:textStyle="bold|italic" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:gravity="center"
+                android:text="Informações da(s) Tora(s):" />
 
-        <TextView
-            android:id="@+id/text_info_generic3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="50"
-            android:text="TextView"
-            android:textAlignment="viewStart"
-            android:textColor="#000000"
-            android:textSize="10sp"
-            android:textStyle="bold|italic" />
+            <TextView
+                android:id="@+id/text_info_generic1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="50"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="10sp"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/text_info_generic2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="50"
+                android:text="TextView"
+                android:textAlignment="viewStart"
+                android:textColor="#000000"
+                android:textSize="10sp"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="50"
+                android:gravity="center"
+                android:text="Endereço:" />
+
+            <TextView
+                android:id="@+id/text_info_generic3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="50"
+                android:text="TextView"
+                android:textAlignment="viewStart"
+                android:textColor="#000000"
+                android:textSize="10sp"
+                android:textStyle="bold|italic" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imagem_da_arvore"
+            android:layout_width="500dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/angulo_base_arvore" />
+
     </LinearLayout>
 
 </LinearLayout>

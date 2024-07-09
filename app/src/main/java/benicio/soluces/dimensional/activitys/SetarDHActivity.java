@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,9 +13,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivitySelecionarMetodoBinding;
 import benicio.soluces.dimensional.databinding.ActivitySetarDhactivityBinding;
+import benicio.soluces.dimensional.model.ItemRelatorio;
 
 public class SetarDHActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,6 +26,7 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
     private Boolean isPrimeiraVez = true;
     private Bundle b;
 
+    private ItemRelatorio itemRelatorio;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +35,10 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         b = getIntent().getExtras();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            itemRelatorio = Objects.requireNonNull(getIntent().getExtras()).getSerializable("itemRelatorio", ItemRelatorio.class);
+        }
 
         if (b != null && b.getBoolean("diametro", false)) {
             mainBinding.textView3.setText("MEÇA COM O LASER E INFORME A DISTÂNCIA DIRETA");
@@ -67,6 +76,8 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
 
                 Intent i = new Intent(this, MainActivity.class);
                 i.putExtra("dh", dhFloat);
+                itemRelatorio.setDh(String.valueOf(dhFloat));
+                i.putExtra("itemRelatorio", itemRelatorio);
                 i.putExtra("tamCadaParte", getIntent().getExtras().getFloat("tamCadaParte", 0.0f));
 
                 if (b != null && b.getBoolean("diametro", false)) {

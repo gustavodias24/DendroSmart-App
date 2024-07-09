@@ -20,6 +20,7 @@ import android.hardware.camera2.CameraManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -103,7 +104,7 @@ import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
-
+    private ItemRelatorio itemRelatorio;
     TextView edt_dh;
     private Boolean isPrimeiraVez = true;
     boolean smalianFirstCalc = true;
@@ -226,6 +227,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            itemRelatorio = Objects.requireNonNull(getIntent().getExtras()).getSerializable("itemRelatorio", ItemRelatorio.class);
+        }
 
         qtdPos = qtdBarrinhas + (qtdBarrinhas - 1);
 
@@ -1197,6 +1202,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void salvarArvoreRelatorio() {
 
         ItemRelatorio novoItem = new ItemRelatorio();
+        novoItem.setDh(itemRelatorio.getDh());
+        novoItem.setTamanhoCadaTora(itemRelatorio.getTamanhoCadaTora());
+        novoItem.setImagemArvore(itemRelatorio.getImagemArvore());
         novoItem.setDadosGps(dadosGps.getText().toString());
 
         novoItem.setDadosVolume(infosGenericas.getText().toString());

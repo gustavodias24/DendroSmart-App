@@ -3,12 +3,14 @@ package benicio.soluces.dimensional.activitys;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.camera.core.AspectRatio;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
@@ -16,19 +18,30 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.concurrent.ExecutionException;
 
 import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivityBaterFotoArvoreBinding;
 import benicio.soluces.dimensional.databinding.ActivityMenuBinding;
+import benicio.soluces.dimensional.model.ItemRelatorio;
 
 public class BaterFotoArvoreActivity extends AppCompatActivity {
 
@@ -105,7 +118,46 @@ public class BaterFotoArvoreActivity extends AppCompatActivity {
                 }
 
                 mainBinding.capture.setOnClickListener( view -> {
-                    startActivity(new Intent(this, SetarComprimentoToraActivity.class));
+                    File photoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                            System.currentTimeMillis() + ".jpg");
+
+                    ImageCapture.OutputFileOptions outputOptions = new ImageCapture.OutputFileOptions.Builder(photoFile).build();
+                    imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(this), new ImageCapture.OnImageSavedCallback() {
+                        @Override
+                        public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                            Uri savedUri = Uri.fromFile(photoFile);
+                            // Aqui você pode fazer o que quiser com o URI, como salvar em uma variável
+                            Log.d("ImageCapture", "Imagem salva em: " + savedUri.toString());
+
+                            // Salva a imagem na galeria
+                            ContentValues values = new ContentValues();
+                            values.put(MediaStore.MediaColumns.DISPLAY_NAME, photoFile.getName());
+                            values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+                            values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+
+                            ContentResolver resolver = getContentResolver();
+                            Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+                            try (OutputStream out = resolver.openOutputStream(imageUri)) {
+                                Files.copy(photoFile.toPath(), out);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            // Inicie outra atividade ou faça qualquer outra ação
+                            Intent i = new Intent(BaterFotoArvoreActivity.this, SetarComprimentoToraActivity.class);
+                            ItemRelatorio itemRelatorio = new ItemRelatorio();
+                            itemRelatorio.setImagemArvore(savedUri.toString());
+                            i.putExtra("itemRelatorio", itemRelatorio);
+                            startActivity(i);
+                        }
+
+                        @Override
+                        public void onError(@NonNull ImageCaptureException exception) {
+                            Log.e("ImageCapture", "Erro ao salvar imagem: " + exception.getMessage());
+                        }
+                    });
+//                    startActivity(new Intent(this, SetarComprimentoToraActivity.class));
                 });
 
 

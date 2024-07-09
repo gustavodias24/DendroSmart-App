@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -65,6 +66,7 @@ public class RelatoriosActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
+
         if ( preferences.getString("logoImage", null) != null){
             byte[] decodedBytes = Base64.decode(preferences.getString("logoImage", null), Base64.DEFAULT);
             Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
@@ -78,6 +80,7 @@ public class RelatoriosActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void configurarRecyclerView() {
         recyclerView = mainBinding.recyclerArvores;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -85,7 +88,9 @@ public class RelatoriosActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         lista.addAll(ItemRelatorioUtil.returnLista(this));
 
-        if( !lista.isEmpty()){mainBinding.textAvisoLista.setVisibility(View.GONE);}
+        if( !lista.isEmpty()){
+            mainBinding.textAvisoLista.setText("Informações de Registros:");
+        }
 
         adapterItens = new AdapterItens(this, lista);
         recyclerView.setAdapter(adapterItens);

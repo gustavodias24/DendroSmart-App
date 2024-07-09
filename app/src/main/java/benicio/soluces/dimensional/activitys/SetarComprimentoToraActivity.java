@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,15 +13,19 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivityBaterFotoArvoreBinding;
 import benicio.soluces.dimensional.databinding.ActivitySetarComprimentoToraBinding;
 import benicio.soluces.dimensional.databinding.ActivitySetarDhactivityBinding;
+import benicio.soluces.dimensional.model.ItemRelatorio;
 
 public class SetarComprimentoToraActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivitySetarComprimentoToraBinding mainBinding;
     private Boolean isPrimeiraVez = true;
+    private ItemRelatorio itemRelatorio;
 
     @SuppressLint("ResourceType")
     @Override
@@ -33,6 +38,10 @@ public class SetarComprimentoToraActivity extends AppCompatActivity implements V
         mainBinding.backButton4.setOnClickListener(view -> finish());
         Picasso.get().load(R.raw.pinheirocortado).into(mainBinding.imageView4);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            itemRelatorio = Objects.requireNonNull(getIntent().getExtras()).getSerializable("itemRelatorio", ItemRelatorio.class);
+        }
+
         mainBinding.btnProsseguir.setOnClickListener( view -> {
             try{
                 Float tamCadaParte = Float.parseFloat(
@@ -41,6 +50,8 @@ public class SetarComprimentoToraActivity extends AppCompatActivity implements V
 
                 Intent i = new Intent(this, SetarDHActivity.class);
                 i.putExtra("tamCadaParte", tamCadaParte);
+                itemRelatorio.setTamanhoCadaTora(String.valueOf(tamCadaParte));
+                i.putExtra("itemRelatorio", itemRelatorio);
 
                 startActivity(i);
             }catch (Exception e){

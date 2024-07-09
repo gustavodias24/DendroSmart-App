@@ -22,13 +22,37 @@
         android:background="@drawable/background_blue"
         android:src="@raw/emptylogo" />
 
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Clique para alterar a logo da empresa." />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nome_field"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nome do projeto"
-        >
+        android:layout_marginTop="16dp"
+        android:hint="Nome do projeto">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:gravity="center" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/observacoes_field"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:hint="Observações">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -52,8 +76,10 @@
         android:id="@+id/textAvisoLista"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Nenhuma árvore registrada ainda..." />
+        android:text="Nenhuma árvore registrada ainda..."
+        android:textAlignment="textStart" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_arvores"
