@@ -5,24 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:orientation="vertical">
+    android:background="@color/azulbb"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <ImageButton
+        android:id="@+id/btn_excluir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#00090808"
+        android:padding="8dp"
+        tools:src="@raw/lixo" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="50"
-        android:background="@drawable/borda"
         android:orientation="horizontal"
         android:padding="4dp">
-
-        <ImageButton
-            android:id="@+id/btn_excluir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="#00090808"
-            android:padding="8dp"
-            tools:src="@raw/lixo" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,13 +83,13 @@
                 android:textStyle="bold|italic" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imagem_da_arvore"
-            android:layout_width="500dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/angulo_base_arvore" />
-
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imagem_da_arvore"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/angulo_base_arvore" />
 
 </LinearLayout>

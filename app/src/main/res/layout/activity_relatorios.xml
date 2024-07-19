@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Nome do projeto">
+        android:hint="Nome do Projeto">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -63,13 +63,28 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/metodo_field"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:hint="Método Aplicado"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/operador_field"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:hint="Nome do Operador"/>
+
 
     <Button
         android:id="@+id/btn_compartilhar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#FF0000"
-        android:onClick="gerarRelatório"
         android:text="Compartilhar PDF" />
 
     <TextView
