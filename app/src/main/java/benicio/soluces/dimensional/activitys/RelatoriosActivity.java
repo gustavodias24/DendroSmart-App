@@ -172,7 +172,7 @@ public class RelatoriosActivity extends AppCompatActivity {
                 byte[] decodedBytes = Base64.decode(preferences.getString("logoImage", null), Base64.DEFAULT);
                 Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
                 // Adicionar a imagem decodificada ao PDF em coordenadas específicas
-                Bitmap logoScaledBitmap = Bitmap.createScaledBitmap(decodedBitmap, 160, 160, false);
+                Bitmap logoScaledBitmap = Bitmap.createScaledBitmap(decodedBitmap, 160, 155, false);
                 canvas.drawBitmap(logoScaledBitmap, 75, 28, paint);
             }
 

@@ -83,19 +83,46 @@
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
 
-        <ImageButton
-            android:id="@+id/button3"
-            android:layout_width="70sp"
-            android:layout_height="70sp"
-            android:layout_gravity="center"
-            android:backgroundTint="#2196F3"
-            android:src="@drawable/suport"
-            android:text="VÍDEOS E\nSUPORTE"
-            android:textAllCaps="true"
-            app:icon="@drawable/baseline_videocam_24"
-            app:iconGravity="textStart"
-            app:iconSize="30dp"
-            tools:ignore="MissingConstraints" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageButton
+                android:id="@+id/button3"
+                android:layout_width="70sp"
+                android:layout_height="70sp"
+                android:layout_gravity="center"
+                android:backgroundTint="#2196F3"
+                android:onClick="gotonotifications"
+                android:scaleType="fitCenter"
+                android:src="@drawable/conversacao"
+                android:text="VÍDEOS E\nSUPORTE"
+                android:textAllCaps="true"
+                app:icon="@drawable/baseline_videocam_24"
+                app:iconGravity="textStart"
+                app:iconSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:background="@drawable/back_notifications"
+                android:padding="4dp"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/button3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton
             android:id="@+id/button2"
@@ -151,4 +178,5 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/web" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
