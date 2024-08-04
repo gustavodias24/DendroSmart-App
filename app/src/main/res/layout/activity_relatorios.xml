@@ -77,15 +77,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:hint="Nome do Operador"/>
+        android:hint="Nome do Operador">
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-    <Button
-        android:id="@+id/btn_compartilhar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#FF0000"
-        android:text="Compartilhar PDF" />
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_compartilhar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF0000"
+            android:drawableStart="@drawable/pdficon"
+            android:drawableTint="#FFFFFF"
+            android:text="Compartilhar PDF"
+            app:icon="@drawable/pdficon"
+            app:iconGravity="top"
+            app:iconSize="54dp" />
+
+        <Button
+            android:id="@+id/btn_kmz"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:backgroundTint="#2196F3"
+            android:text="Compartilhar KMZ"
+            app:icon="@drawable/kmzicon"
+            app:iconGravity="top"
+            app:iconSize="54dp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textAvisoLista"

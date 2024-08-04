@@ -53,18 +53,15 @@
             android:textStyle="bold"
             tools:ignore="MissingConstraints" />
 
-        <ImageButton
+        <Button
             android:id="@+id/button"
             android:layout_width="70sp"
             android:layout_height="70sp"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:onClick="relatorios"
-            android:src="@drawable/baseline_picture_as_pdf_24"
-            android:text="RELATÓRIOS"
             android:textAllCaps="true"
-            android:textColor="#FFFFFF"
-            app:icon="@drawable/baseline_picture_as_pdf_24"
+            app:icon="@drawable/compartilharicon"
             app:iconGravity="textStart"
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />

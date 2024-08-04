@@ -50,6 +50,7 @@ import benicio.soluces.dimensional.adapter.AdapterItens;
 import benicio.soluces.dimensional.databinding.ActivityRelatoriosBinding;
 import benicio.soluces.dimensional.model.ItemRelatorio;
 import benicio.soluces.dimensional.utils.ItemRelatorioUtil;
+import benicio.soluces.dimensional.utils.KMZUtils;
 
 public class RelatoriosActivity extends AppCompatActivity {
 
@@ -104,6 +105,11 @@ public class RelatoriosActivity extends AppCompatActivity {
                 }
             }
 
+        });
+
+        mainBinding.btnCompartilhar.setOnClickListener(v -> {
+            Toast.makeText(this, "Gerando kmz", Toast.LENGTH_SHORT).show();
+//            KMZUtils.gerarArquivoKML(this);
         });
     }
 
@@ -222,11 +228,10 @@ public class RelatoriosActivity extends AppCompatActivity {
 
             // informacoes tora
             int linha = 740;
-            for (String dado : item.getDadosVolume().split("\n")){
+            for (String dado : item.getDadosVolume().split("\n")) {
                 canvas.drawText(dado, 70, linha, title);
                 linha += 32;
             }
-
 
 
             // foto da arvore
