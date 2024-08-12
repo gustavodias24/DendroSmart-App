@@ -221,16 +221,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private float lastAccelZ;
 
 
-    @SuppressLint({"ResourceType", "MissingInflatedId", "DefaultLocale"})
+    @SuppressLint({"ResourceType", "MissingInflatedId", "DefaultLocale", "NewApi"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            itemRelatorio = Objects.requireNonNull(getIntent().getExtras()).getSerializable("itemRelatorio", ItemRelatorio.class);
-        }
 
         qtdPos = qtdBarrinhas + (qtdBarrinhas - 1);
 
@@ -447,7 +444,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             restartButton.setVisibility(View.GONE);
 
         }
-
+        // itemRelatorio
+        itemRelatorio = new ItemRelatorio();
+        itemRelatorio.setDh(String.valueOf(dh));
+        itemRelatorio.setTamanhoCadaTora(String.valueOf(tamCadaParte));
+        itemRelatorio.setImagemArvore(getIntent().getExtras().getString("link", ""));
     }
 
     @SuppressLint("DefaultLocale")

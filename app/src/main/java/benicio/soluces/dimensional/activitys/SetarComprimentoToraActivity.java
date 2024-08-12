@@ -1,5 +1,6 @@
 package benicio.soluces.dimensional.activitys;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -25,9 +26,8 @@ public class SetarComprimentoToraActivity extends AppCompatActivity implements V
 
     private ActivitySetarComprimentoToraBinding mainBinding;
     private Boolean isPrimeiraVez = true;
-    private ItemRelatorio itemRelatorio;
 
-    @SuppressLint("ResourceType")
+    @SuppressLint({"ResourceType"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,23 +38,24 @@ public class SetarComprimentoToraActivity extends AppCompatActivity implements V
         mainBinding.backButton4.setOnClickListener(view -> finish());
         Picasso.get().load(R.raw.pinheirocortado).into(mainBinding.imageView4);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            itemRelatorio = Objects.requireNonNull(getIntent().getExtras()).getSerializable("itemRelatorio", ItemRelatorio.class);
-        }
-
-        mainBinding.btnProsseguir.setOnClickListener( view -> {
-            try{
+        mainBinding.btnProsseguir.setOnClickListener(view -> {
+            try {
                 Float tamCadaParte = Float.parseFloat(
                         mainBinding.edtDh.getText().toString().replace(",", ".")
                 );
 
                 Intent i = new Intent(this, SetarDHActivity.class);
                 i.putExtra("tamCadaParte", tamCadaParte);
-                itemRelatorio.setTamanhoCadaTora(String.valueOf(tamCadaParte));
-                i.putExtra("itemRelatorio", itemRelatorio);
+                i.putExtra("link", getIntent().getExtras().getString("link", ""));
 
                 startActivity(i);
-            }catch (Exception e){
+            } catch (Exception e) {
+                AlertDialog.Builder b = new AlertDialog.Builder(this);
+                b.setTitle("Atenção!");
+                b.setMessage("Você digitou " + mainBinding.edtDh.getText().toString() + " e é um número inválido...\nDevido:\n" + e.getMessage());
+                b.setPositiveButton("ok", null);
+                b.show();
+
                 Toast.makeText(this, "Digite um número válido!", Toast.LENGTH_SHORT).show();
             }
 
@@ -72,12 +73,12 @@ public class SetarComprimentoToraActivity extends AppCompatActivity implements V
         mainBinding.btn8.setOnClickListener(this);
         mainBinding.btn9.setOnClickListener(this);
         mainBinding.btnVirgula.setOnClickListener(this);
-        mainBinding.btnApagar.setOnClickListener( view -> {
+        mainBinding.btnApagar.setOnClickListener(view -> {
             String textoExistente = mainBinding.edtDh.getText().toString();
 
-            if ( textoExistente.length() == 1 ){
+            if (textoExistente.length() == 1) {
                 mainBinding.edtDh.setText("0");
-            }else{
+            } else {
                 mainBinding.edtDh.setText(
                         removerUltimaLetra(textoExistente)
                 );
@@ -100,10 +101,10 @@ public class SetarComprimentoToraActivity extends AppCompatActivity implements V
         Button button = (Button) view;
         String novoTexto = button.getText().toString();
 
-        if (isPrimeiraVez || mainBinding.edtDh.getText().equals("0")){
+        if (isPrimeiraVez || mainBinding.edtDh.getText().equals("0")) {
             mainBinding.edtDh.setText(novoTexto);
             isPrimeiraVez = false;
-        }else{
+        } else {
             String textoExistente = mainBinding.edtDh.getText().toString();
             mainBinding.edtDh.setText(textoExistente + novoTexto);
         }

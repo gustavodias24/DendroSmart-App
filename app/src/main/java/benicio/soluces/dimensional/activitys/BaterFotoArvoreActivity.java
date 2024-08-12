@@ -146,9 +146,7 @@ public class BaterFotoArvoreActivity extends AppCompatActivity {
 
                             // Inicie outra atividade ou faça qualquer outra ação
                             Intent i = new Intent(BaterFotoArvoreActivity.this, SetarComprimentoToraActivity.class);
-                            ItemRelatorio itemRelatorio = new ItemRelatorio();
-                            itemRelatorio.setImagemArvore(savedUri.toString());
-                            i.putExtra("itemRelatorio", itemRelatorio);
+                            i.putExtra("link", savedUri.toString());
                             startActivity(i);
                         }
 

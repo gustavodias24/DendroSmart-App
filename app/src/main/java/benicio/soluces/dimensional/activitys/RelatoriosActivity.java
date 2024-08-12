@@ -107,7 +107,7 @@ public class RelatoriosActivity extends AppCompatActivity {
 
         });
 
-        mainBinding.btnCompartilhar.setOnClickListener(v -> {
+        mainBinding.btnKmz.setOnClickListener(v -> {
             Toast.makeText(this, "Gerando kmz", Toast.LENGTH_SHORT).show();
 //            KMZUtils.gerarArquivoKML(this);
         });

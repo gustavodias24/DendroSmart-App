@@ -1,16 +1,23 @@
 package benicio.soluces.dimensional.activitys;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +30,7 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     Dialog d;
+
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,30 +51,53 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
 
         Picasso.get().load(R.raw.pinheiro).into(mainBinding.imageView);
 
-        mainBinding.newton.setOnClickListener( view -> escolherMetodo("Newton"));
-        mainBinding.smalian.setOnClickListener( view -> escolherMetodo("Smalian"));
+        mainBinding.newton.setOnClickListener(view -> escolherMetodo("Newton"));
+        mainBinding.smalian.setOnClickListener(view -> escolherMetodo("Smalian"));
 
-        mainBinding.diametro.setOnClickListener( view -> {
+        mainBinding.diametro.setOnClickListener(view -> {
             Intent i = new Intent(this, SetarDHActivity.class);
             i.putExtra("diametro", true);
             startActivity(i);
         });
 
+
     }
 
-    public void voltar(View view){
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permissões concedidas", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permissões negadas", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    public void voltar(View view) {
         finish();
     }
-    public void disponivelApeenasV2(View view){
+
+    public void disponivelApeenasV2(View view) {
         d.show();
     }
 
-    public void escolherMetodo(String metodo){
-        editor.putString("metodo", metodo).apply();
-        startActivity(new Intent(this, BaterFotoArvoreActivity.class));
+    public void escolherMetodo(String metodo) {
+
+        if (
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        ) {
+            editor.putString("metodo", metodo).apply();
+            startActivity(new Intent(this, BaterFotoArvoreActivity.class));
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA}, 1);
+        }
+
     }
 
-    public void goToRelatórios(View view){
+    public void goToRelatórios(View view) {
         startActivity(new Intent(this, RelatoriosActivity.class));
     }
 }
