@@ -50,7 +50,6 @@
             android:name=".activitys.NotificacoesActivity"
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-            android:screenOrientation="portrait"
             />
         <activity
             android:name=".activitys.SmalianCalculoActivity"

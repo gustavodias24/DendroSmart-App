@@ -107,7 +107,12 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
         Button button = (Button) view;
         String novoTexto = button.getText().toString();
 
-        if (isPrimeiraVez || mainBinding.edtDh.getText().equals("0")) {
+        // Verifica se o novoTexto começa com uma vírgula ou ponto e adiciona o "0" na frente
+        if (novoTexto.startsWith(",") || novoTexto.startsWith(".")) {
+            novoTexto = "0" + novoTexto;
+        }
+
+        if (isPrimeiraVez || mainBinding.edtDh.getText().toString().equals("0")) {
             mainBinding.edtDh.setText(novoTexto);
             isPrimeiraVez = false;
         } else {

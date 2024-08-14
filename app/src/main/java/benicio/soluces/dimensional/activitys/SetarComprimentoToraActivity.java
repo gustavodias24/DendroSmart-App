@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,13 +13,9 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.Objects;
 
 import benicio.soluces.dimensional.R;
-import benicio.soluces.dimensional.databinding.ActivityBaterFotoArvoreBinding;
 import benicio.soluces.dimensional.databinding.ActivitySetarComprimentoToraBinding;
-import benicio.soluces.dimensional.databinding.ActivitySetarDhactivityBinding;
-import benicio.soluces.dimensional.model.ItemRelatorio;
 
 public class SetarComprimentoToraActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -101,11 +96,21 @@ public class SetarComprimentoToraActivity extends AppCompatActivity implements V
         Button button = (Button) view;
         String novoTexto = button.getText().toString();
 
-        if (isPrimeiraVez || mainBinding.edtDh.getText().equals("0")) {
+        if (isPrimeiraVez || mainBinding.edtDh.getText().toString().equals("0")) {
+            // Verifica se o novoTexto começa com uma vírgula ou ponto e adiciona o "0" na frente
+            if (novoTexto.startsWith(",") || novoTexto.startsWith(".")) {
+                novoTexto = "0" + novoTexto;
+            }
             mainBinding.edtDh.setText(novoTexto);
             isPrimeiraVez = false;
         } else {
             String textoExistente = mainBinding.edtDh.getText().toString();
+
+            // Verifica se o texto existente mais o novoTexto começa com uma vírgula ou ponto
+            if ((textoExistente + novoTexto).startsWith(",") || (textoExistente + novoTexto).startsWith(".")) {
+                textoExistente = "0" + textoExistente;
+            }
+
             mainBinding.edtDh.setText(textoExistente + novoTexto);
         }
     }
