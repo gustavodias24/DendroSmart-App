@@ -109,7 +109,14 @@ public class RelatoriosActivity extends AppCompatActivity {
 
         mainBinding.btnKmz.setOnClickListener(v -> {
             Toast.makeText(this, "Gerando kmz", Toast.LENGTH_SHORT).show();
-//            KMZUtils.gerarArquivoKML(this);
+            nomeProjeto = mainBinding.nomeField.getEditText().getText().toString().replace(" ", "_").replace("\n", "_");
+
+            if (!nomeProjeto.isEmpty()) {
+                KMZUtils.gerarArquivoKML(RelatoriosActivity.this, lista, nomeProjeto);
+            } else {
+                Toast.makeText(this, "Nome do projeto vazio.", Toast.LENGTH_SHORT).show();
+            }
+
         });
     }
 
