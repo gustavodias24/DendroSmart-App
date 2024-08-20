@@ -171,8 +171,7 @@
                     android:layout_height="60dp"
                     android:layout_gravity="center"
                     android:background="@drawable/background_redondo"
-                    android:backgroundTint="#2196F3"
-                    android:rotationY="180"
+                    android:backgroundTint="#757575"
                     android:src="@drawable/baseline_keyboard_backspace_24"
                     android:text="Button"
                     app:tint="#FFFFFF" />
