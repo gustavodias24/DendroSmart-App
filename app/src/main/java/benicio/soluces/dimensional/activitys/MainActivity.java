@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -104,6 +105,7 @@ import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
+    private ImageButton relatoriobtn;
     private ItemRelatorio itemRelatorio;
     TextView edt_dh;
     private Boolean isPrimeiraVez = true;
@@ -228,7 +230,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-
+        relatoriobtn = findViewById(R.id.relatoriobtn);
+        relatoriobtn.setOnClickListener(view -> startActivity(new Intent(this, RelatoriosActivity.class)));
         qtdPos = qtdBarrinhas + (qtdBarrinhas - 1);
 
         imagemIlustrativaArvore = findViewById(R.id.imagemIlustrativaArvore);
@@ -525,6 +528,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public void animarBotao(View v) {
+        // Animação de fade in
+        final AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
+        fadeIn.setDuration(1000);
+
+        // Animação de fade out
+        final AlphaAnimation fadeOut = new AlphaAnimation(1.0f, 0.0f);
+        fadeOut.setDuration(1000);
+
+        // Listener para reiniciar a animação ao terminar
+        fadeIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                // Nada a fazer aqui
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // Inicia a animação de fade out após o fade in terminar
+                v.startAnimation(fadeOut);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // Nada a fazer aqui
+            }
+        });
+
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                // Nada a fazer aqui
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // Inicia a animação de fade in após o fade out terminar
+                v.startAnimation(fadeIn);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // Nada a fazer aqui
+            }
+        });
+
+        // Inicia a animação de fade in
+        v.startAnimation(fadeIn);
+    }
+
     public void animacaoBotaoZoom() {
         final AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
         fadeIn.setDuration(1000); // ajuste a duração conforme necessário
@@ -793,6 +846,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (location != null) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
+
                 configurarTextInfos();
                 Log.d("latlong", "onSuccess: " + latitude + " " + longitude);
             }
@@ -1202,13 +1256,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void salvarArvoreRelatorio() {
 
-        ItemRelatorio novoItem = new ItemRelatorio();
-        novoItem.setDh(itemRelatorio.getDh());
-        novoItem.setTamanhoCadaTora(itemRelatorio.getTamanhoCadaTora());
-        novoItem.setImagemArvore(itemRelatorio.getImagemArvore());
-        novoItem.setDadosGps(dadosGps.getText().toString());
-
-        novoItem.setDadosVolume(infosGenericas.getText().toString());
+        itemRelatorio.setDadosGps(dadosGps.getText().toString());
+        itemRelatorio.setDadosVolume(infosGenericas.getText().toString());
 
         LocalDateTime agora = LocalDateTime.now();
 
@@ -1222,11 +1271,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dadosTora.append("DH: ").append(dh).append("\n");
         dadosTora.append("Altura total: ").append(alturaCalc).append("m");
 
-        novoItem.setDadosTora(dadosTora.toString());
+        itemRelatorio.setDadosTora(dadosTora.toString());
 
         List<ItemRelatorio> listaParaAtualiziar = ItemRelatorioUtil.returnLista(this);
-        listaParaAtualiziar.add(novoItem);
+        listaParaAtualiziar.add(itemRelatorio);
         ItemRelatorioUtil.saveList(listaParaAtualiziar, this);
+        animarBotao(restartButton);
+        relatoriobtn.setVisibility(View.VISIBLE);
         Toast.makeText(this, "Árvore salva no relatório.", Toast.LENGTH_SHORT).show();
     }
 
@@ -1542,7 +1593,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             findViewById(R.id.logoEmpresa).setVisibility(View.VISIBLE);
         }
 
-        if (preferences.getBoolean("gps", false)) {
+        if (preferences.getBoolean("gps", true)) {
             findViewById(R.id.dadosGpsText).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.dadosGpsText).setVisibility(View.INVISIBLE);
@@ -1587,6 +1638,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @SuppressLint("DefaultLocale") String cordenadas = String.format("Lat: %f Long: %f", latitude, longitude);
 
+        itemRelatorio.setLatitude(latitude + "");
+        itemRelatorio.setLongitude(longitude + "");
+
         dadosGps.setText(String.format("%s ás %s", formattedDate, formattedTime) + "\n" + cordenadas + "\n" + "Operador: " + operador);
 
 
@@ -1598,7 +1652,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (!addresses.isEmpty()) {
                 Address address = addresses.get(0);
                 String[] fullAddress = address.getAddressLine(0).split(",");
-                dadosGps.setText(fullAddress[0] + ", " + fullAddress[1] + "\n" + fullAddress[2] + fullAddress[3] + "\n" + cordenadas + "\n" + String.format("%s ás %s", formattedDate, formattedTime) + "\n" + "Operador: " + operador + "\n" + preferences.getString("metodo", ""));
+                dadosGps.setText(fullAddress[0] + ", " + fullAddress[1] + "\n" + fullAddress[2] + fullAddress[3] + "\n" + cordenadas + "\n" + String.format("%s ás %s", formattedDate, formattedTime) + "\n" + "Operador: " + operador + "\n" + "Método: " + preferences.getString("metodo", ""));
             } else {
                 Log.d("Address", "No address found");
             }

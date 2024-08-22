@@ -53,26 +53,13 @@ public class KMZUtils {
             kmlBuilder.append(returnCascadingStyle(highlightId, normalId));
             kmlBuilder.append(returnStyleMap(normalId, highlightId, styleMapId));
 
-            String data = itemRelatorio.getDadosGps();
-            // Encontra a posição inicial da latitude e longitude na string
-            int latStartIndex = data.indexOf("Lat:") + 5;
-            int latEndIndex = data.indexOf("Long:") - 1;
-            int longStartIndex = data.indexOf("Long:") + 6;
-            // Extrai as substrings correspondentes à latitude e longitude
-
-            String latitude = data.substring(latStartIndex, latEndIndex).trim();
-            String longitude = data.substring(longStartIndex).trim().split("\n")[0];
-
-            Log.d("mayaraCord", "latidude: " + latitude);
-            Log.d("mayaraCord", "longitudo: " + longitude);
-
             kmlBuilder.append(returnPlacemark(
                     placeMarkId,
                     styleMapId,
                     "Árvore",
                     itemRelatorio.getDadosVolume() + "\n" + itemRelatorio.getDadosTora(),
-                    longitude,
-                    latitude
+                    itemRelatorio.getLongitude(),
+                    itemRelatorio.getLatitude()
             ));
         }
 

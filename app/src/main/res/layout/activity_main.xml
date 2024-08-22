@@ -735,16 +735,6 @@
             android:visibility="visible" />
 
         <ImageButton
-            android:id="@+id/restartButton"
-            android:layout_width="40sp"
-            android:layout_height="40sp"
-            android:layout_gravity="center"
-            android:background="@drawable/background_redondo"
-            android:backgroundTint="#2196F3"
-            android:src="@drawable/baseline_refresh_24" />
-
-
-        <ImageButton
             android:id="@+id/print"
             android:layout_width="40sp"
             android:layout_height="40sp"
@@ -756,7 +746,38 @@
             android:src="@drawable/baseline_add_a_photo_24"
             tools:ignore="MissingConstraints" />
 
+        <ImageButton
+            android:id="@+id/restartButton"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_gravity="center"
+            android:background="@drawable/background_redondo"
+            android:backgroundTint="#2196F3"
+            android:src="@drawable/baseline_refresh_24" />
+
+
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/relatoriobtn"
+        android:layout_width="70sp"
+        android:layout_height="40sp"
+        android:layout_gravity="center"
+        android:backgroundTint="#2196F3"
+        android:onClick="relatorios"
+        android:scaleType="fitXY"
+        android:src="@drawable/pdfkmz"
+        android:text="PDF/KMZ"
+        android:textAllCaps="true"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:cornerRadius="10dp"
+        app:iconSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout6"
+        app:layout_constraintTop_toBottomOf="@+id/LayoutTeclado"
+        tools:ignore="MissingConstraints" />
 
     <LinearLayout
         android:id="@+id/barrinhas"

@@ -53,13 +53,15 @@
             android:textStyle="bold"
             tools:ignore="MissingConstraints" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button"
             android:layout_width="70sp"
             android:layout_height="70sp"
             android:layout_gravity="center"
             android:backgroundTint="#2196F3"
             android:onClick="relatorios"
+            android:scaleType="fitXY"
+            android:src="@drawable/pdfkmz"
             android:text="PDF/KMZ"
             android:textAllCaps="true"
             android:textSize="10sp"

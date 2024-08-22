@@ -42,6 +42,7 @@ import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -129,6 +130,7 @@ public class RelatoriosActivity extends AppCompatActivity {
         lista.addAll(ItemRelatorioUtil.returnLista(this));
 
         if (!lista.isEmpty()) {
+            Collections.reverse(lista);
             mainBinding.textAvisoLista.setText("Informações de Registros:");
         }
 
