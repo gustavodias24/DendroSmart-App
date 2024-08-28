@@ -24,6 +24,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import benicio.soluces.dimensional.model.ItemRelatorio;
+import benicio.soluces.dimensional.model.ProjetoModel;
 
 public class KMZUtils {
     @SuppressLint("SimpleDateFormat")
@@ -111,6 +112,15 @@ public class KMZUtils {
 
             Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(context),
                     "benicio.soluces.dimensional.provider", kmzFile);
+
+            List<ProjetoModel> existente = ProjetosUtils.returnList(context);
+            ProjetoModel novoProjeto = new ProjetoModel(
+                    nomeProjeto + ".kmz",
+                    new SimpleDateFormat("dd/MM/yyyy").format(new Date()),
+                    uri.toString()
+            );
+            existente.add(novoProjeto);
+            ProjetosUtils.saveList(existente, context);
 
             intent.setDataAndType(uri, "application/vnd.google-earth.kmz");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

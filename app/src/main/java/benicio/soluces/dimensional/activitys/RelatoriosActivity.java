@@ -50,8 +50,10 @@ import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.adapter.AdapterItens;
 import benicio.soluces.dimensional.databinding.ActivityRelatoriosBinding;
 import benicio.soluces.dimensional.model.ItemRelatorio;
+import benicio.soluces.dimensional.model.ProjetoModel;
 import benicio.soluces.dimensional.utils.ItemRelatorioUtil;
 import benicio.soluces.dimensional.utils.KMZUtils;
+import benicio.soluces.dimensional.utils.ProjetosUtils;
 
 public class RelatoriosActivity extends AppCompatActivity {
 
@@ -76,6 +78,8 @@ public class RelatoriosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         configurarRecyclerView();
+
+        mainBinding.verLista.setOnClickListener(v -> startActivity(new Intent(this, ProjetosSalvosActivity.class)));
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -263,13 +267,27 @@ public class RelatoriosActivity extends AppCompatActivity {
 
         // Cria um arquivo temporário para armazenar o PDF
         File pdfFile = new File(documentsFolder, "Relatorio_" + nomeProjeto + ".pdf");
+        Uri fileUri = null;
 
         try {
             // Salva o PDF no arquivo temporário
             pdfDocument.writeTo(Files.newOutputStream(pdfFile.toPath()));
+
+            fileUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", pdfFile);
+
+            ProjetoModel novoProjeto = new ProjetoModel(
+                    "Relatorio_" + nomeProjeto + ".pdf",
+                    new SimpleDateFormat("dd/MM/yyyy").format(new Date()),
+                    fileUri.toString()
+            );
+
+            List<ProjetoModel> existente = ProjetosUtils.returnList(this);
+            existente.add(novoProjeto);
+            ProjetosUtils.saveList(existente, this);
+
+
             sharePdf(pdfFile);
         } catch (IOException e) {
-            Log.d("mayara", "gerarRelatorio: " + e.getMessage());
             e.printStackTrace();
         } finally {
             pdfDocument.close();
