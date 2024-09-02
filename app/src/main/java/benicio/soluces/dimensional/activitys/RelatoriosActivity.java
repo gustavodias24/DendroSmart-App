@@ -84,6 +84,10 @@ public class RelatoriosActivity extends AppCompatActivity {
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
+        mainBinding.nomeField.getEditText().setText(
+                preferences.getString("nomeProjeto", "")
+        );
+
         if (preferences.getString("logoImage", null) != null) {
             byte[] decodedBytes = Base64.decode(preferences.getString("logoImage", null), Base64.DEFAULT);
             Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);

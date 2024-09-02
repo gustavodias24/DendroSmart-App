@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivitySelecionarMetodoBinding;
+import benicio.soluces.dimensional.databinding.NomeProjetoLayoutBinding;
 
 public class SelecionarMetodoActivity extends AppCompatActivity {
 
@@ -90,7 +92,19 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
         ) {
             editor.putString("metodo", metodo).apply();
-            startActivity(new Intent(this, BaterFotoArvoreActivity.class));
+            AlertDialog.Builder confimarNomeDialog = new AlertDialog.Builder(SelecionarMetodoActivity.this);
+            NomeProjetoLayoutBinding projetoLayoutBinding = NomeProjetoLayoutBinding.inflate(getLayoutInflater());
+            projetoLayoutBinding.nomeProjeto.setText(
+                    prefs.getString("nomeProjeto", "")
+            );
+            projetoLayoutBinding.confirmar.setOnClickListener(v -> {
+                editor.putString("nomeProjeto", projetoLayoutBinding.nomeProjeto.getText().toString()).apply();
+                startActivity(new Intent(this, BaterFotoArvoreActivity.class));
+
+            });
+
+            confimarNomeDialog.setView(projetoLayoutBinding.getRoot());
+            confimarNomeDialog.create().show();
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA}, 1);
         }

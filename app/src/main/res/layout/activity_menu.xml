@@ -66,6 +66,7 @@
             android:textAllCaps="true"
             android:textSize="10sp"
             android:textStyle="bold"
+            android:tint="#FFFFFF"
             app:cornerRadius="10dp"
             app:iconSize="30dp"
             tools:ignore="MissingConstraints" />
