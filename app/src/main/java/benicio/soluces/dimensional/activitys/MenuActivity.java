@@ -65,6 +65,8 @@ public class MenuActivity extends AppCompatActivity {
             startActivity(i);
         });
 
+        mainBinding.button2.setOnClickListener(v -> startActivity(new Intent(this, InformacoesActivity.class)));
+
 
         RetrofitUtil.createServiceMsg(
                 RetrofitUtil.createRetrofitMsg()

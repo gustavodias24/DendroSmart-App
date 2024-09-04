@@ -47,9 +47,14 @@
         android:theme="@style/Theme.DIMENSIONAL"
         tools:targetApi="31">
         <activity
-            android:name=".activitys.ProjetosSalvosActivity"
+            android:name=".activitys.InformacoesActivity"
+            android:exported="false"
             android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-            android:exported="false" />
+            />
+        <activity
+            android:name=".activitys.ProjetosSalvosActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
         <activity
             android:name=".activitys.NotificacoesActivity"
             android:exported="false"
