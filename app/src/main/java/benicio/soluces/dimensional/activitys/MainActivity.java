@@ -138,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // variaveis da divisão
     int qtdDivisao = 0;
     float tamCadaParte = 0.f;
-//    Dialog dialogDivisao;
 
     // variaveis da divisão
 
@@ -163,11 +162,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Componentes de medir largura
 
     private static final String TAG = "mayara";
-    private static final String TAG1 = "mayara1";
-    private static final String TAG2 = "mayara2";
     TextView textZoom, dadosGps, medidaRealText;
     ImageView imageEmpresa;
-    private static final float CONST_CHAVE = 0.054347826f * 0.48484848f;
+
+    private float CONST_CHAVE = 0.054347826f;
+
     //    private static final float CONST_CHAVE = 0.130266f;
     private long lastUpdate;
     SensorManager sensorManager;
@@ -181,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     String qualPressionado = "";
     Runnable longPressRunnable;
-    //    private Dialog dialogInputDH;
     private Float dh;
     private Bundle bundle;
     private static final int ALTURA_BARRINHA_NORMAL = 30;
@@ -199,13 +197,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     List<Integer> listay = new ArrayList<>();
     List<Integer> listar = new ArrayList<>();
     private int qtdBarrinhas = 8;
-    private int ACRESCENTADOR = 0;
-    private int LIMITER = 0;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private float maxZoomLevel = 1f; // Variável para armazenar o zoom máximo
 
     private float currentZoomLevel = 4.0f;
-    private String textoFixo = "";
     private Camera mCamera;
     private static final int PERMISSIONS_GERAL = 1;
     int cameraFacing = CameraSelector.LENS_FACING_BACK;
@@ -229,6 +224,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
+        editor = preferences.edit();
+
+        CONST_CHAVE = CONST_CHAVE * preferences.getFloat("corretivo", 0.48484848f);
 
         relatoriobtn = findViewById(R.id.relatoriobtn);
         relatoriobtn.setOnClickListener(view -> startActivity(new Intent(this, RelatoriosActivity.class)));
@@ -367,8 +367,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        configurarDialogDivisao();
 //        dialogInputDH.show();
 
-        preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
-        editor = preferences.edit();
+
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -1691,62 +1690,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         long j = this.lastUpdate;
 
         // 100
-        if (currentTimeMillis - j > 0) {
+//        if (currentTimeMillis - j > 0) {
 
-            long j2 = currentTimeMillis - j;
-            this.lastUpdate = currentTimeMillis;
+        long j2 = currentTimeMillis - j;
+        this.lastUpdate = currentTimeMillis;
 
-            if ((Math.abs(((((f2 + f) + f3) - this.lastAccelX) - this.lastAccelY) - this.lastAccelZ) / ((float) j2)) * 10000.0f > 6.0f) {
+        if ((Math.abs(((((f2 + f) + f3) - this.lastAccelX) - this.lastAccelY) - this.lastAccelZ) / ((float) j2)) * 10000.0f > 6.0f) {
 
-                // Para ficar calculando a medida que altera o angulo
-                if (dh != 0.0 && anguloB != 0.0 && etapa == 1) {
-                    anguloT = degrees;
-                    calculateMeasureHeight();
-                }
-
-                switch (etapa) {
-                    case 0:
-                        anguloBText.setText(String.format("Base %.2f°", degrees));
-                        anguloBaseTora = degrees;
-                        anguloB = degrees;
-                        break;
-                    case 1:
-                        anguloTText.setText(String.format("Topo %.2f°", degrees));
-                        anguloT = degrees;
-                        break;
-                }
-
-                if (toraAtual == qtdDivisao && acabouToras) {
-                    layoutIntroVolume.setVisibility(View.INVISIBLE);
-                }
-                calcularAlturaTora();
-                anguloAtualTora = degrees;
-
-                float anguloRadiano = (float) Math.toRadians(anguloAtualTora);
-                float cos = (float) Math.cos(anguloRadiano);
-
-                disDireta = dh / cos;
-
-                diametroMarcado = ((disDireta * (qtdPos / divisorPorZoom) * CONST_CHAVE) / 100);
-                if (bundle == null && !bundle.getBoolean("diametro", false)) {
-                    medidaRealText.setText(String.format("Diâmetro %.4f m", diametroMarcado));
-                }
-
-                if (qtdDivisao != 0) {
-                    instrucaoTela.setText(
-                            String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada));
-//                            String.format("Aponte para %s da %d° tora", parteDaTora, toraAtual));
-                }
-
-
-                alturaAtual.setText(String.format("Altura Istantânea: %s ", alturaAtualToraString.replace("-", "")));
-
-                infoMedirTora.setText(String.format("\nAltura atual: %s " + "\nÂngulo atual: %.2f" + "\nDiametro da base: %.2f m" + "\nDiametro do centro: %.2f m" + "\nDiametro do topo: %.2f m", alturaAtualToraString.replace("-", ""), anguloAtualTora, diametroBaseTora, diametroMedioTora, diametroTopoTora));
+            // Para ficar calculando a medida que altera o angulo
+            if (dh != 0.0 && anguloB != 0.0 && etapa == 1) {
+                anguloT = degrees;
+                calculateMeasureHeight();
             }
-            this.lastAccelX = f2;
-            this.lastAccelY = f;
-            this.lastAccelZ = f3;
+
+            switch (etapa) {
+                case 0:
+                    anguloBText.setText(String.format("Base %.2f°", degrees));
+                    anguloBaseTora = degrees;
+                    anguloB = degrees;
+                    break;
+                case 1:
+                    anguloTText.setText(String.format("Topo %.2f°", degrees));
+                    anguloT = degrees;
+                    break;
+            }
+
+            if (toraAtual == qtdDivisao && acabouToras) {
+                layoutIntroVolume.setVisibility(View.INVISIBLE);
+            }
+            calcularAlturaTora();
+            anguloAtualTora = degrees;
+
+            float anguloRadiano = (float) Math.toRadians(anguloAtualTora);
+            float cos = (float) Math.cos(anguloRadiano);
+
+            disDireta = dh / cos;
+
+            diametroMarcado = ((disDireta * (qtdPos / divisorPorZoom) * CONST_CHAVE) / 100);
+            if (bundle == null && !bundle.getBoolean("diametro", false)) {
+                medidaRealText.setText(String.format("Diâmetro %.4f m", diametroMarcado));
+            }
+
+            if (qtdDivisao != 0) {
+                instrucaoTela.setText(
+                        String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada));
+//                            String.format("Aponte para %s da %d° tora", parteDaTora, toraAtual));
+            }
+
+
+            alturaAtual.setText(String.format("Altura Istantânea: %s ", alturaAtualToraString.replace("-", "")));
+
+            infoMedirTora.setText(String.format("\nAltura atual: %s " + "\nÂngulo atual: %.2f" + "\nDiametro da base: %.2f m" + "\nDiametro do centro: %.2f m" + "\nDiametro do topo: %.2f m", alturaAtualToraString.replace("-", ""), anguloAtualTora, diametroBaseTora, diametroMedioTora, diametroTopoTora));
         }
+        this.lastAccelX = f2;
+        this.lastAccelY = f;
+        this.lastAccelZ = f3;
+//        }
     }
 
     @Override

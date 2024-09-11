@@ -38,6 +38,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     private ActivityConfiguracoesBinding mainBinding;
     private TextView textIp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,42 +93,66 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
+        mainBinding.fatorCorretivoField.getEditText().setText(
+                String.valueOf(
+                        preferences.getFloat("corretivo", 0.48484848f)
+                ).replace(".", ",")
+        );
+
         configurarDadosSalvos();
 
-        mainBinding.logo.setOnClickListener( view -> {
+        mainBinding.logo.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, 1);
         });
-        
+
         mainBinding.dapField.getEditText().setText(
                 preferences.getString("dap", "")
         );
-        
+
         mainBinding.toleranciaField.getEditText().setText(
                 preferences.getString("tolerancia", "")
         );
-        
-        
-        mainBinding.exibirGps.setOnClickListener( view -> {
-            if ( mainBinding.exibirGps.isChecked() ){
+
+
+        mainBinding.exibirGps.setOnClickListener(view -> {
+            if (mainBinding.exibirGps.isChecked()) {
                 editor.putBoolean("gps", true);
-            }else{
+            } else {
                 editor.putBoolean("gps", false);
             }
 
             editor.apply();
 
         });
-        
-        mainBinding.btnSalvar.setOnClickListener( view -> {
-            editor.putString("dap", mainBinding.dapField.getEditText().getText().toString()).apply();
-            editor.putString("tolerancia", mainBinding.toleranciaField.getEditText().getText().toString()).apply();
-            Toast.makeText(this, "Configurações salvas!", Toast.LENGTH_SHORT).show();
+
+        mainBinding.btnSalvar.setOnClickListener(view -> {
+
+            String senhaDigitada = mainBinding.senhaField.getEditText().getText().toString();
+
+            if (senhaDigitada.equals(getSharedPreferences("preferencias_usuario", MODE_PRIVATE).getString("senha", "errado"))) {
+                editor.putString("dap", mainBinding.dapField.getEditText().getText().toString()).apply();
+                editor.putString("tolerancia", mainBinding.toleranciaField.getEditText().getText().toString()).apply();
+                try {
+                    String fatorString = mainBinding.fatorCorretivoField.getEditText().getText().toString().replace(",", ".").trim();
+                    editor.putFloat("corretivo",
+                            Float.parseFloat(fatorString)).apply();
+                    Toast.makeText(this, "Configurações salvas!", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(this, "Valor de fator inválido", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                Toast.makeText(this, "Senha Incorreta", Toast.LENGTH_SHORT).show();
+            }
+
+
+
         });
 
     }
-    private void configurarDadosSalvos(){
-        if ( preferences.getString("logoImage", null) != null){
+
+    private void configurarDadosSalvos() {
+        if (preferences.getString("logoImage", null) != null) {
             byte[] decodedBytes = Base64.decode(preferences.getString("logoImage", null), Base64.DEFAULT);
             Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
             mainBinding.logo.setImageBitmap(decodedBitmap);
@@ -137,6 +162,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 preferences.getBoolean("gps", false)
         );
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -155,7 +181,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if ( item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
