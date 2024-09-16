@@ -45,6 +45,16 @@
         android:padding="8dp"
         android:text="Ip do Controle: SEM INFORMAÇÃO" />
 
+    <TextView
+        android:id="@+id/informacaoDoAparelho"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        android:text="..."
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
     <CheckBox
         android:id="@+id/exibirGps"
         android:layout_width="match_parent"
@@ -57,15 +67,41 @@
         android:layout_height="3dp"
         android:background="?android:attr/listDivider" />
 
-    <TextView
-        android:id="@+id/informacaoDoAparelho"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/velha_senha_adm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Senha adm antiga" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nova_senha_adm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Senha adm nova" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/trocar_senha_adm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp"
-        android:text="..."
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:text="Trocar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="?android:attr/listDivider" />
+
+
 
     <TextView
         android:id="@+id/textView9"
@@ -159,7 +195,7 @@
         android:id="@+id/btn_salvar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="salvar" />
+        android:text="Salvar" />
 
     <Button
         android:id="@+id/sair"

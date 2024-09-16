@@ -48,6 +48,21 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Configurações");
 
 
+        mainBinding.trocarSenhaAdm.setOnClickListener( v -> {
+            String old_pass = mainBinding.velhaSenhaAdm.getText().toString();
+            String new_pass = mainBinding.novaSenhaAdm.getText().toString();
+
+            String atual_pass = getSharedPreferences("preferencias_usuario", MODE_PRIVATE).getString("senhaAdmin", "adm123");
+
+            if ( old_pass.equals(atual_pass)){
+                getSharedPreferences("preferencias_usuario", MODE_PRIVATE).edit().putString("senhaAdmin", new_pass).apply();
+            }else{
+                Toast.makeText(this, "Senha do adm antiga errada", Toast.LENGTH_SHORT).show();
+            }
+
+
+        });
+
         String androidVersion = "Android " + Build.VERSION.RELEASE;
 
         // Obtendo o tamanho da tela
@@ -130,7 +145,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
             String senhaDigitada = mainBinding.senhaField.getEditText().getText().toString();
 
-            if (senhaDigitada.equals(getSharedPreferences("preferencias_usuario", MODE_PRIVATE).getString("senha", "errado"))) {
+            if (senhaDigitada.equals(getSharedPreferences("preferencias_usuario", MODE_PRIVATE).getString("senhaAdmin", "adm123"))) {
                 editor.putString("dap", mainBinding.dapField.getEditText().getText().toString()).apply();
                 editor.putString("tolerancia", mainBinding.toleranciaField.getEditText().getText().toString()).apply();
                 try {
