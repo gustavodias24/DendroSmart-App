@@ -1,12 +1,12 @@
 package benicio.soluces.dimensional.model;
 
 public class CredencialModel {
-    String chave, dataAtivacao, dispositivo;
+    String chave, data_ativacao, dispositivo;
     UsuarioModel usuario;
 
     public CredencialModel(String chave, String dataAtivacao, UsuarioModel usuario, String dispositivo) {
         this.chave = chave;
-        this.dataAtivacao = dataAtivacao;
+        this.data_ativacao = dataAtivacao;
         this.usuario = usuario;
         this.dispositivo = dispositivo;
     }
@@ -20,11 +20,11 @@ public class CredencialModel {
     }
 
     public String getDataAtivacao() {
-        return dataAtivacao;
+        return data_ativacao;
     }
 
     public void setDataAtivacao(String dataAtivacao) {
-        this.dataAtivacao = dataAtivacao;
+        this.data_ativacao = dataAtivacao;
     }
 
     public CredencialModel() {

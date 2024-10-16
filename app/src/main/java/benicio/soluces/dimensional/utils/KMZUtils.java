@@ -1,10 +1,13 @@
 package benicio.soluces.dimensional.utils;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -25,6 +28,13 @@ import java.util.zip.ZipOutputStream;
 
 import benicio.soluces.dimensional.model.ItemRelatorio;
 import benicio.soluces.dimensional.model.ProjetoModel;
+import benicio.soluces.dimensional.model.UploadResponse;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class KMZUtils {
     @SuppressLint("SimpleDateFormat")
@@ -114,11 +124,15 @@ public class KMZUtils {
                     "benicio.soluces.dimensional.provider", kmzFile);
 
             List<ProjetoModel> existente = ProjetosUtils.returnList(context);
+
             ProjetoModel novoProjeto = new ProjetoModel(
                     nomeProjeto + ".kmz",
                     new SimpleDateFormat("dd/MM/yyyy").format(new Date()),
                     uri.toString()
             );
+
+            uploadApi(context, kmzFile, nomeProjeto);
+
             existente.add(novoProjeto);
             ProjetosUtils.saveList(existente, context);
 
@@ -129,6 +143,30 @@ public class KMZUtils {
             Toast.makeText(context, "Nenhum aplicativo encontrado para abrir este arquivo.", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public static void uploadApi(Context context, File kmzFile, String nomeProjeto) {
+        RequestBody fileRequestBody = RequestBody.create(MediaType.parse("application/octet-stream"), kmzFile);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("preferencias_usuario", MODE_PRIVATE);
+        RequestBody idRequestBody = RequestBody.create(MediaType.parse("text/plain"), sharedPreferences.getString("token", ""));
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", nomeProjeto + ".kmz", fileRequestBody);
+        RetrofitKmz.createServiceKmz(
+                RetrofitKmz.createRetrofitKmz()
+        ).uploadKmz(idRequestBody, filePart).enqueue(new Callback<UploadResponse>() {
+            @Override
+            public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
+                if (response.isSuccessful()) {
+                    UploadResponse uploadResponse = response.body();
+                    Log.d("API", uploadResponse.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadResponse> call, Throwable t) {
+                Log.e("mayara", "Erro: " + t.getMessage());
+                uploadApi(context, kmzFile, nomeProjeto);
+            }
+        });
     }
 
     public static String returnCascadingStyle(String highlightId, String normalId) {

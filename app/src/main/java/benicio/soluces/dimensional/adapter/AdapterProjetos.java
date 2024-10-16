@@ -1,6 +1,7 @@
 package benicio.soluces.dimensional.adapter;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,9 +43,13 @@ public class AdapterProjetos extends RecyclerView.Adapter<AdapterProjetos.MyView
 
         holder.info.setText(Html.fromHtml(projetoModel.toString()));
         holder.abrirArquivo.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(projetoModel.getCaminhoProjeto()));
-            c.startActivity(intent);
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(projetoModel.getCaminhoProjeto()));
+                c.startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(c, "Nenhum aplicativo encontrado para abrir este arquivo.", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

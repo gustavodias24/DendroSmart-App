@@ -21,8 +21,10 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -118,6 +120,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     public void criarDialogDeCredenciamento(){
         AlertDialog.Builder b = new AlertDialog.Builder(AutenticacaoActivity.this);
         CredenciamentoLayoutBinding credenciamentovb = CredenciamentoLayoutBinding.inflate(getLayoutInflater());
@@ -161,6 +164,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
 
                                 CredencialModel credencial = new CredencialModel(chave, data , usuario, deviceId);
+                                credencial.setDipositivo(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 
                                 ativarChaveCredencial(credencial);
                                 dialogConfirmacao.dismiss();
@@ -260,7 +264,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
     public void configurarRetrofit(){
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://autencacao.vercel.app/")
+                .baseUrl("http://191.252.110.178:5001/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         service = retrofit.create(ServiceCredenciamento.class);
@@ -286,6 +290,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
                         mainBinding.loginField.getEditText().setText(credencialModel.getUsuario().getLogin());
                         mainBinding.senhaField.getEditText().setText(credencialModel.getUsuario().getSenha());
 
+                        editor.putString("token", credencialModel.getChave());
                         editor.putString("login", credencialModel.getUsuario().getLogin());
                         editor.putString("senha", credencialModel.getUsuario().getSenha());
                         editor.putBoolean("credenciado", true);
@@ -316,7 +321,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseModel> call, Throwable t) {
                 CuteToast.ct(getApplicationContext(),
-                        t.getMessage(),
+                        "tente novamente mais tarde",
                         CuteToast.LENGTH_SHORT,
                         CuteToast.ERROR,
                         true).show();

@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -78,6 +80,14 @@ public class RelatoriosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         configurarRecyclerView();
+        mainBinding.mytoken.setText(getSharedPreferences("preferencias_usuario", MODE_PRIVATE).getString("token", ""));
+        mainBinding.mytoken.setOnClickListener(v -> {
+            Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
+            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("token", mainBinding.mytoken.getText().toString());
+            clipboardManager.setPrimaryClip(clip);
+
+        });
 
         mainBinding.verLista.setOnClickListener(v -> startActivity(new Intent(this, ProjetosSalvosActivity.class)));
 
