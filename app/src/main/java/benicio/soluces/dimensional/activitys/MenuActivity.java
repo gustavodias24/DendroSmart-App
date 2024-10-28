@@ -1,9 +1,14 @@
 package benicio.soluces.dimensional.activitys;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -99,6 +104,26 @@ public class MenuActivity extends AppCompatActivity {
             public void onFailure(Call<List<PostagemModel>> call, Throwable t) {
 
             }
+        });
+
+
+        mainBinding.btnKey.setOnClickListener(v -> {
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle("Escolha uma Opção");
+            b.setMessage("Você pode copiar a Chave de acesso ou ir para o  Website Sinapses");
+            b.setPositiveButton("Copiar Chave", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Toast.makeText(MenuActivity.this, "Chave de Acesso Copiado", Toast.LENGTH_SHORT).show();
+                    ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("token", getSharedPreferences("preferencias_usuario", MODE_PRIVATE).getString("token", ""));
+                    clipboardManager.setPrimaryClip(clip);
+                }
+            });
+            b.setNegativeButton("Ir para o Site", (d, i) -> {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://191.252.110.178:5000/")));
+            });
+            b.create().show();
         });
     }
 
