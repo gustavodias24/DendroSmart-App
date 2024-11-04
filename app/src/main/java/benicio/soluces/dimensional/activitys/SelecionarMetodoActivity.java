@@ -18,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -43,6 +44,10 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = prefs.edit();
+
+        // Define que o teclado será sempre fixo e completo
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
 
 
         AlertDialog.Builder b = new AlertDialog.Builder(this);
@@ -94,6 +99,15 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
             editor.putString("metodo", metodo).apply();
             AlertDialog.Builder confimarNomeDialog = new AlertDialog.Builder(SelecionarMetodoActivity.this);
             NomeProjetoLayoutBinding projetoLayoutBinding = NomeProjetoLayoutBinding.inflate(getLayoutInflater());
+
+            projetoLayoutBinding.nomeProjeto.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    // Força a exibição do teclado completo ao focar no EditText
+                    projetoLayoutBinding.nomeProjeto.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
+                    projetoLayoutBinding.nomeProjeto.requestFocus();
+                }
+            });
+
             projetoLayoutBinding.nomeProjeto.setText(
                     prefs.getString("nomeProjeto", "")
             );

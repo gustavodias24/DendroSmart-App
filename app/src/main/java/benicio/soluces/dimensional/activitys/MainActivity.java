@@ -711,7 +711,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // mudança aqui
         alturaCalc = Float.valueOf(alturaCalc);
-        alturaReal.setText(String.format("Altura Total\n%.4f m", alturaCalc));
+        alturaReal.setText(String.format("Altura Total\n%.2f m", alturaCalc));
         alturaReal.setVisibility(View.VISIBLE);
     }
 
