@@ -70,6 +70,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/barrinha_vermelha_horizontal"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="8dp"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/setinha"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@raw/barrinhayellow" />
+
+    <ImageView
+        android:id="@+id/barrinha_amarela_horizontal"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/setinha"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@raw/barrinhared" />
+
     <TextView
         android:id="@+id/dadosGpsText"
         android:layout_width="wrap_content"
@@ -368,7 +394,7 @@
             android:layout_alignParentBottom="true"
             android:text="Aponte para a base da árvore, em seguida clique em medir."
             android:textColor="#FFE500"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
 

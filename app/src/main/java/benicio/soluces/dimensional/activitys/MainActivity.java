@@ -19,6 +19,7 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -105,6 +106,7 @@ import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
+    private MediaPlayer mediaPlayer;
     private ImageButton relatoriobtn;
     private ItemRelatorio itemRelatorio;
     TextView edt_dh;
@@ -225,6 +227,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        mediaPlayer = MediaPlayer.create(this, R.raw.bip);
+
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
@@ -337,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(this, BaterFotoArvoreActivity.class));
         });
         medirAngulo.setOnClickListener(view -> {
-
+            mediaPlayer.start();
 //            medirAngulo.setText("Medir ângulo T");
 
             if (etapa <= 2) {
@@ -366,7 +370,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        configurarDialogDH();
 //        configurarDialogDivisao();
 //        dialogInputDH.show();
-
 
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -661,6 +664,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         medidaRealText.setVisibility(View.VISIBLE);
         btnMenosYellow.setVisibility(View.VISIBLE);
         barrinhasLayout.setVisibility(View.VISIBLE);
+
+        findViewById(R.id.barrinha_vermelha_horizontal).setVisibility(View.VISIBLE);
+        findViewById(R.id.barrinha_amarela_horizontal).setVisibility(View.VISIBLE);
+
         imagemIlustrativaArvore.setVisibility(View.INVISIBLE);
 
 //        layoutIntroVolume.setVisibility(View.VISIBLE);
@@ -1103,11 +1110,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == findViewById(R.id.setar_dh).getId()) {
 //            dialogInputDH.show();
         } else if (id == medirDiametro.getId()) {
-            if (preferences.getString("metodo", "").equals("Newton")) {
-                configurarSwitchNewton();
-            } else if (preferences.getString("metodo", "").equals("Smalian")) {
-                configurarSwitchSmalian();
+            mediaPlayer.start();
+
+            float a1 = Float.parseFloat(alturaAtualToraString.replace(" ", "").replace("m", "").replace(",", "."));
+
+            if (a1 <= alturaCalc) {
+                if (preferences.getString("metodo", "").equals("Newton")) {
+                    configurarSwitchNewton();
+                } else if (preferences.getString("metodo", "").equals("Smalian")) {
+                    configurarSwitchSmalian();
+                }
             }
+
 
         } else if (
                 id == R.id.btn0 ||

@@ -135,14 +135,16 @@ public class BaterFotoArvoreActivity extends AppCompatActivity {
                             values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
                             values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
 
-                            ContentResolver resolver = getContentResolver();
-                            Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                            try{
+                                ContentResolver resolver = getContentResolver();
+                                Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-                            try (OutputStream out = resolver.openOutputStream(imageUri)) {
-                                Files.copy(photoFile.toPath(), out);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                                try (OutputStream out = resolver.openOutputStream(imageUri)) {
+                                    Files.copy(photoFile.toPath(), out);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }catch (Exception ignored){}
 
                             // Inicie outra atividade ou faça qualquer outra ação
                             Intent i = new Intent(BaterFotoArvoreActivity.this, SetarComprimentoToraActivity.class);
