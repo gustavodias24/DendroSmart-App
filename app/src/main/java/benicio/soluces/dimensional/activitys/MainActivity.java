@@ -106,7 +106,10 @@ import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
+
+    private float tolerancia = 0.0f;
     private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayerError;
     private ImageButton relatoriobtn;
     private ItemRelatorio itemRelatorio;
     TextView edt_dh;
@@ -228,8 +231,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.bip);
+        mediaPlayerError = MediaPlayer.create(this, R.raw.somerro);
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
+        tolerancia = Float.parseFloat(
+                preferences.getString("tolerancia", "0,02").replace(",", ".")
+        );
         editor = preferences.edit();
 
         CONST_CHAVE = CONST_CHAVE * preferences.getFloat("corretivo", 0.48484848f);
@@ -1110,18 +1117,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == findViewById(R.id.setar_dh).getId()) {
 //            dialogInputDH.show();
         } else if (id == medirDiametro.getId()) {
-            mediaPlayer.start();
 
-            float a1 = Float.parseFloat(alturaAtualToraString.replace(" ", "").replace("m", "").replace(",", "."));
+            float alturaInstataneaFormatada = Float.parseFloat(alturaAtualToraString.replace(" ", "").replace("m", "").replace(",", "."));
 
-            if (a1 <= alturaCalc) {
+            if ((alturaInstataneaFormatada - tolerancia) > alturaDesejada) {
+                mediaPlayerError.start();
+                Toast.makeText(this, "Altura menor que a tolerância", Toast.LENGTH_SHORT).show();
+            } else if ((alturaInstataneaFormatada + tolerancia) < alturaDesejada) {
+                mediaPlayerError.start();
+                Toast.makeText(this, "Altura ultrapassou a tolerância", Toast.LENGTH_SHORT).show();
+            } else {
+                mediaPlayer.start();
                 if (preferences.getString("metodo", "").equals("Newton")) {
                     configurarSwitchNewton();
                 } else if (preferences.getString("metodo", "").equals("Smalian")) {
                     configurarSwitchSmalian();
                 }
             }
-
 
         } else if (
                 id == R.id.btn0 ||

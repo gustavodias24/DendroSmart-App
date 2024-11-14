@@ -35,7 +35,6 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-
     private ActivityConfiguracoesBinding mainBinding;
     private TextView textIp;
 
@@ -127,7 +126,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         );
 
         mainBinding.toleranciaField.getEditText().setText(
-                preferences.getString("tolerancia", "")
+                preferences.getString("tolerancia", "0,02")
         );
 
 
