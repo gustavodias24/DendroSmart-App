@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivityConfiguracoesBinding;
@@ -38,6 +40,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     private ActivityConfiguracoesBinding mainBinding;
     private TextView textIp;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +132,16 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 preferences.getString("tolerancia", "0,02")
         );
 
+        Objects.requireNonNull(mainBinding.zoomMaxField.getEditText()).setText(
+                preferences.getInt("zoomMaximo", 4) + ""
+        );
+
+        Objects.requireNonNull(mainBinding.zoomInicialField.getEditText()).setText(
+                preferences.getInt("zoomInicial", 4) + ""
+        );
+
+
+
 
         mainBinding.exibirGps.setOnClickListener(view -> {
             if (mainBinding.exibirGps.isChecked()) {
@@ -145,9 +158,13 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
             String senhaDigitada = mainBinding.senhaField.getEditText().getText().toString();
 
-            if (senhaDigitada.equals(getSharedPreferences("preferencias_usuario", MODE_PRIVATE).getString("senhaAdmin", "123"))) {
+            if (senhaDigitada.equals(getSharedPreferences("preferencias_usuario", MODE_PRIVATE).getString("token", "123"))) {
+
+
                 editor.putString("dap", mainBinding.dapField.getEditText().getText().toString()).apply();
                 editor.putString("tolerancia", mainBinding.toleranciaField.getEditText().getText().toString()).apply();
+                editor.putInt("zoomMaximo", Integer.parseInt(mainBinding.zoomMaxField.getEditText().getText().toString())).apply();
+                editor.putInt("zoomInicial", Integer.parseInt(mainBinding.zoomInicialField.getEditText().getText().toString())).apply();
                 try {
                     String fatorString = mainBinding.fatorCorretivoField.getEditText().getText().toString().replace(",", ".").trim();
                     editor.putFloat("corretivo",
@@ -163,7 +180,14 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
 
         });
-
+    mainBinding.btnDefault.setOnClickListener(v -> {
+        editor.remove("dap").apply();
+        editor.putString("tolerancia", "0,02").apply();
+        editor.putInt("zoomMaximo", 4).apply();
+        finish();
+        startActivity(new Intent(this, ConfiguracoesActivity.class));
+        Toast.makeText(this, "Atualizado!", Toast.LENGTH_SHORT).show();
+    });
     }
 
     private void configurarDadosSalvos() {

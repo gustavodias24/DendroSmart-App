@@ -20,28 +20,31 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.WindowManager;
-import android.widget.Toast;
-
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.concurrent.ExecutionException;
 
-import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivityBaterFotoArvoreBinding;
-import benicio.soluces.dimensional.databinding.ActivityMenuBinding;
-import benicio.soluces.dimensional.model.ItemRelatorio;
+
 
 public class BaterFotoArvoreActivity extends AppCompatActivity {
 
@@ -49,6 +52,8 @@ public class BaterFotoArvoreActivity extends AppCompatActivity {
     int cameraFacing = CameraSelector.LENS_FACING_BACK;
 
     private PreviewView previewView;
+    private List<String> rearCameraIds;
+    private int currentRearCameraIndex = 0;
 
     private static final int PERMISSIONS_GERAL = 1;
 
@@ -56,7 +61,7 @@ public class BaterFotoArvoreActivity extends AppCompatActivity {
         @Override
         public void onActivityResult(Boolean result) {
             if ( result ){
-                startCamera(cameraFacing);
+                startCamera(cameraFacing,rearCameraIds.get(currentRearCameraIndex));
             }
         }
     });
@@ -75,6 +80,7 @@ public class BaterFotoArvoreActivity extends AppCompatActivity {
         mainBinding.backButton3.setOnClickListener(view -> finish());
 
         previewView = mainBinding.cameraPreview;
+        setupCameraToggle();
 
         mainBinding.flipcam.setOnClickListener( view -> {
             if ( cameraFacing == CameraSelector.LENS_FACING_BACK){
@@ -82,20 +88,63 @@ public class BaterFotoArvoreActivity extends AppCompatActivity {
             }else{
                 cameraFacing = CameraSelector.LENS_FACING_BACK;
             }
-            startCamera(cameraFacing);
+            startCamera(cameraFacing,rearCameraIds.get(currentRearCameraIndex));
         });
 
 
         if (
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
         ) {
-            startCamera(cameraFacing);
+            startCamera(cameraFacing,rearCameraIds.get(currentRearCameraIndex));
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA}, PERMISSIONS_GERAL);
         }
+
     }
 
-    public void startCamera(int cameraFacing) {
+    private List<String> getRearCameraIds() {
+        List<String> rearCameraIds = new ArrayList<>();
+        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
+        try {
+            // Percorre todas as câmeras disponíveis no dispositivo
+            for (String cameraId : cameraManager.getCameraIdList()) {
+                // Obtém as características de cada câmera
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+
+                // Verifica se a câmera é traseira
+                Integer lensFacing = characteristics.get(CameraCharacteristics.LENS_FACING);
+                if (lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
+                    Log.d("mayara", "getRearCameraIds: " + cameraId);
+                    rearCameraIds.add(cameraId);
+                }
+            }
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+
+        return rearCameraIds;
+    }
+
+
+    private void setupCameraToggle() {
+        rearCameraIds = getRearCameraIds();
+
+        if (rearCameraIds.size() > 1) {
+            mainBinding.switchcam.setOnClickListener(v -> {
+                // Alternar para a próxima câmera traseira
+                currentRearCameraIndex = (currentRearCameraIndex + 1) % rearCameraIds.size();
+                startCamera(cameraFacing,rearCameraIds.get(currentRearCameraIndex));
+            });
+        }
+
+        // Inicia com a primeira câmera traseira
+        if (!rearCameraIds.isEmpty()) {
+            startCamera(cameraFacing,rearCameraIds.get(currentRearCameraIndex));
+        }
+    }
+
+    public void startCamera(int cameraFacing, String cameraId) {
         int aspectRatio = aspectRatio(previewView.getWidth(), previewView.getHeight());
         ListenableFuture<ProcessCameraProvider> listenableFuture = ProcessCameraProvider.getInstance(this);
 
@@ -109,7 +158,8 @@ public class BaterFotoArvoreActivity extends AppCompatActivity {
                         .setTargetRotation(getWindowManager().getDefaultDisplay().getRotation()).build();
 
                 CameraSelector cameraSelector = new CameraSelector.Builder()
-                        .requireLensFacing(cameraFacing).build();
+                        .requireLensFacing(cameraFacing)
+                        .build();
 
                 cameraProvider.unbindAll();
 

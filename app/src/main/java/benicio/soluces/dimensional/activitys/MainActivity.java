@@ -234,6 +234,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mediaPlayerError = MediaPlayer.create(this, R.raw.somerro);
 
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
+
+        currentZoomLevel = Float.parseFloat(String.valueOf(preferences.getInt("zoomInicial", 4)));
+
         tolerancia = Float.parseFloat(
                 preferences.getString("tolerancia", "0,02").replace(",", ".")
         );
@@ -1098,6 +1101,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     public void onClick(View view) {
@@ -1165,11 +1170,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void configurarSwitchSmalian() {
         switch (parteDaToraPos) {
             case 1:
-
                 diametroBaseTora = diametroMarcado;
                 parteDaToraPos++;
                 parteDaTora = "o topo";
-                alturaDesejada += (alturaCalc / 4);
+//                alturaDesejada += (alturaCalc / 4);
+                alturaDesejada += (float) calcularIncremento((alturaCalc-toraDaponta), tamCadaParte);
 
                 break;
             case 2:
@@ -1183,7 +1188,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 diametroTopoTora = diametroMarcado;
 
 
-                alturaDesejada += (alturaCalc / 4);
+//                alturaDesejada += (alturaCalc / 4);
+                alturaDesejada += (float) calcularIncremento((alturaCalc-toraDaponta), tamCadaParte);
 
                 if (toraAtual < qtdDivisao) {
                     fazerCaluloVolume();
@@ -1198,6 +1204,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public static double calcularIncremento(double alturaArvore, double comprimentoTora) {
+        int numeroDeToras = (int) Math.ceil(alturaArvore / comprimentoTora);
+        return 1.0 / numeroDeToras;
+    }
+
     private void configurarSwitchNewton() {
         switch (parteDaToraPos) {
             case 1:
@@ -1205,12 +1216,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 diametroBaseTora = diametroMarcado;
                 parteDaToraPos++;
                 parteDaTora = "o centro";
-                alturaDesejada += (alturaCalc / 4);
+                alturaDesejada += (float) calcularIncremento((alturaCalc-toraDaponta), tamCadaParte);
 
                 break;
             case 2:
 
-                alturaDesejada += (alturaCalc / 4);
+                alturaDesejada += (float) calcularIncremento((alturaCalc-toraDaponta), tamCadaParte);
                 diametroMedioTora = diametroMarcado;
                 parteDaToraPos++;
                 parteDaTora = "o topo";
@@ -1229,7 +1240,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     fazerCalculoFinalVolume();
                     salvarArvoreRelatorio();
                 }
-
                 toraAtual += 1;
                 break;
         }
@@ -1576,38 +1586,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void pegarZoomMaximo() {
-        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
-
-        cameraProviderFuture.addListener(() -> {
-            try {
-                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-
-                // Selecionar a câmera traseira como padrão
-                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
-
-                // Configurar o Preview da câmera
-                Preview preview = new Preview.Builder().build();
-
-                // Configurar o ImageCapture da câmera
-                ImageCapture imageCapture = new ImageCapture.Builder().build();
-
-                // Vincular a câmera ao ciclo de vida
-                cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, imageCapture);
-
-                // Obter o zoom máximo da câmera usando Camera2 API
-                CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
-                String cameraId = cameraManager.getCameraIdList()[0];
-                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
-                float maxZoom = characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM);
-
-                if (maxZoom > 1) {
-                    maxZoomLevel = maxZoom;
-                }
-
-            } catch (Exception e) {
-                // Lidar com exceções relacionadas à câmera
-            }
-        }, ContextCompat.getMainExecutor(this));
+        maxZoomLevel = preferences.getInt("zoomMaximo", 4);
+//        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+//
+//        cameraProviderFuture.addListener(() -> {
+//            try {
+//                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+//
+//                // Selecionar a câmera traseira como padrão
+//                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
+//
+//                // Configurar o Preview da câmera
+//                Preview preview = new Preview.Builder().build();
+//
+//                // Configurar o ImageCapture da câmera
+//                ImageCapture imageCapture = new ImageCapture.Builder().build();
+//
+//                // Vincular a câmera ao ciclo de vida
+//                cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, imageCapture);
+//
+//                // Obter o zoom máximo da câmera usando Camera2 API
+//                CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
+//                String cameraId = cameraManager.getCameraIdList()[0];
+//                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+//                float maxZoom = characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM);
+//
+//                if (maxZoom > 1) {
+//                    maxZoomLevel = maxZoom;
+//                }
+//
+//            } catch (Exception e) {
+//                // Lidar com exceções relacionadas à câmera
+//            }
+//        }, ContextCompat.getMainExecutor(this));
     }
 
     private void pegarConfiguracoesAtuais() {
@@ -1657,7 +1668,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String operador;
 
-        String nomeOperador = getSharedPreferences("configPreferences", MODE_PRIVATE).getString("operador", "");
+        String nomeOperador = preferences.getString("operador", "");
         operador = Objects.requireNonNull(nomeOperador.isEmpty() ? "Nome não informado." : nomeOperador);
 
 

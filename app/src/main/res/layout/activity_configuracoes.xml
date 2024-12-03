@@ -160,6 +160,40 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/zoom_inicial_field"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Zoom Inicial"
+        android:padding="8dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:inputType="number|numberDecimal|numberSigned" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/zoom_max_field"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Zoom Máximo"
+        android:padding="8dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:inputType="number|numberDecimal|numberSigned" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
 
     <View
@@ -181,7 +215,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:inputType="number|numberDecimal|numberSigned" />
+             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -190,6 +224,13 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:background="?android:attr/listDivider" />
+
+
+    <Button
+        android:id="@+id/btn_default"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Padrão de Fábrica" />
 
     <Button
         android:id="@+id/btn_salvar"
