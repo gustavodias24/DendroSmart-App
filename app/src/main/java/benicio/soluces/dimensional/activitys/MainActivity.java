@@ -51,8 +51,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.camera.camera2.interop.Camera2CameraInfo;
 import androidx.camera.core.AspectRatio;
 import androidx.camera.core.Camera;
+import androidx.camera.core.CameraFilter;
+import androidx.camera.core.CameraInfo;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
@@ -106,6 +109,8 @@ import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
+
+    private String cameraPowerId = "";
 
     private float tolerancia = 0.0f;
     private MediaPlayer mediaPlayer;
@@ -204,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int qtdBarrinhas = 8;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private float maxZoomLevel = 1f; // Variável para armazenar o zoom máximo
+    private float maxZoomLevelReal = 1f; // Variável para armazenar o zoom máximo
 
     private float currentZoomLevel = 4.0f;
     private Camera mCamera;
@@ -223,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private float lastAccelZ;
 
 
-    @SuppressLint({"ResourceType", "MissingInflatedId", "DefaultLocale", "NewApi"})
+    @SuppressLint({"ResourceType", "MissingInflatedId", "DefaultLocale", "NewApi", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -337,6 +343,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alturaReal = findViewById(R.id.altura_real_text);
 
         textZoom = findViewById(R.id.textViewZoom);
+        textZoom.setText(preferences.getInt("zoomInicial", 4) + " X");
+
         animacaoBotaoZoom();
         qtdBarrinhasText = findViewById(R.id.qtd_barrinha);
         dadosGps = findViewById(R.id.dadosGpsText);
@@ -881,7 +889,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 ImageCapture imageCapture = new ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY).setTargetRotation(getWindowManager().getDefaultDisplay().getRotation()).build();
 
-                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(cameraFacing).build();
+                CameraSelector cameraSelector = new CameraSelector
+                        .Builder()
+                        .requireLensFacing(cameraFacing)
+                        .build();
 
                 cameraProvider.unbindAll();
 
@@ -1102,7 +1113,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     public void onClick(View view) {
@@ -1174,7 +1184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 parteDaToraPos++;
                 parteDaTora = "o topo";
 //                alturaDesejada += (alturaCalc / 4);
-                alturaDesejada += (float) calcularIncremento((alturaCalc-toraDaponta), tamCadaParte);
+                alturaDesejada += (float) calcularIncremento((alturaCalc - toraDaponta), tamCadaParte);
 
                 break;
             case 2:
@@ -1189,7 +1199,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 //                alturaDesejada += (alturaCalc / 4);
-                alturaDesejada += (float) calcularIncremento((alturaCalc-toraDaponta), tamCadaParte);
+                alturaDesejada += (float) calcularIncremento((alturaCalc - toraDaponta), tamCadaParte);
 
                 if (toraAtual < qtdDivisao) {
                     fazerCaluloVolume();
@@ -1216,12 +1226,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 diametroBaseTora = diametroMarcado;
                 parteDaToraPos++;
                 parteDaTora = "o centro";
-                alturaDesejada += (float) calcularIncremento((alturaCalc-toraDaponta), tamCadaParte);
+                alturaDesejada += (float) calcularIncremento((alturaCalc - toraDaponta), tamCadaParte);
 
                 break;
             case 2:
 
-                alturaDesejada += (float) calcularIncremento((alturaCalc-toraDaponta), tamCadaParte);
+                alturaDesejada += (float) calcularIncremento((alturaCalc - toraDaponta), tamCadaParte);
                 diametroMedioTora = diametroMarcado;
                 parteDaToraPos++;
                 parteDaTora = "o topo";
@@ -1405,7 +1415,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.menos_zoom).setOnTouchListener((view, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 // Quando o botão é pressionado
-                menosZoomFuncao();
+                try {
+                    menosZoomFuncao();
+                } catch (Exception ignored) {
+                }
             }
             return true;
         });
@@ -1413,7 +1426,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void menosZoomFuncao() {
         if (currentZoomLevel > 2) {
-
             divisorPorZoom /= 2;
 
             int quantidadeParaAjustar = ((indexr + 1) + (indexy + 1)) / 2;
@@ -1426,10 +1438,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
 
-            currentZoomLevel = currentZoomLevel / 2;
+            currentZoomLevel = (int) currentZoomLevel / 2;
             mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
 
-            String zoomString = currentZoomLevel + "x";
+            String zoomString = currentZoomLevel + " X";
             textZoom.setText(zoomString);
             animacaoBotaoZoom();
         } else {
@@ -1451,9 +1463,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
             currentZoomLevel = currentZoomLevel * 2;
+
+            if (currentZoomLevel >= maxZoomLevel) {
+                currentZoomLevel = maxZoomLevel;
+            }
+
+            if (currentZoomLevel > maxZoomLevelReal) {
+                Toast.makeText(this, "Zoom máximo da câmera: " + maxZoomLevelReal, Toast.LENGTH_SHORT).show();
+            }
+
             mCamera.getCameraControl().setZoomRatio(currentZoomLevel);
 
-            String zoomString = currentZoomLevel + "x";
+            String zoomString = currentZoomLevel + " X";
             textZoom.setText(zoomString);
             animacaoBotaoZoom();
 
@@ -1587,38 +1608,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void pegarZoomMaximo() {
         maxZoomLevel = preferences.getInt("zoomMaximo", 4);
-//        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
-//
-//        cameraProviderFuture.addListener(() -> {
-//            try {
-//                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-//
-//                // Selecionar a câmera traseira como padrão
-//                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
-//
-//                // Configurar o Preview da câmera
-//                Preview preview = new Preview.Builder().build();
-//
-//                // Configurar o ImageCapture da câmera
-//                ImageCapture imageCapture = new ImageCapture.Builder().build();
-//
-//                // Vincular a câmera ao ciclo de vida
-//                cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, imageCapture);
-//
-//                // Obter o zoom máximo da câmera usando Camera2 API
-//                CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
-//                String cameraId = cameraManager.getCameraIdList()[0];
-//                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
-//                float maxZoom = characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM);
-//
-//                if (maxZoom > 1) {
-//                    maxZoomLevel = maxZoom;
-//                }
-//
-//            } catch (Exception e) {
-//                // Lidar com exceções relacionadas à câmera
-//            }
-//        }, ContextCompat.getMainExecutor(this));
+        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+
+                // Selecionar a câmera traseira como padrão
+                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
+
+                // Configurar o Preview da câmera
+                Preview preview = new Preview.Builder().build();
+
+                // Configurar o ImageCapture da câmera
+                ImageCapture imageCapture = new ImageCapture.Builder().build();
+
+                // Vincular a câmera ao ciclo de vida
+                cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, imageCapture);
+
+                // Obter o zoom máximo da câmera usando Camera2 API
+                CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
+                //String cameraId = cameraManager.getCameraIdList()[0];
+                String cameraId = cameraManager.getCameraIdList()[(cameraManager.getCameraIdList().length - 1)];
+                cameraPowerId = cameraId;
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+                float maxZoom = characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM);
+
+
+                if (maxZoom > 1) {
+                    maxZoomLevelReal = maxZoom;
+                    if (currentZoomLevel > maxZoomLevelReal) {
+                        Toast.makeText(this, "Zoom máximo da câmera: " + maxZoomLevelReal, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            } catch (Exception e) {
+                // Lidar com exceções relacionadas à câmera
+            }
+        }, ContextCompat.getMainExecutor(this));
     }
 
     private void pegarConfiguracoesAtuais() {
