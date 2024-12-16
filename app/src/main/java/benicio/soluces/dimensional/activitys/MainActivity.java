@@ -190,7 +190,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     String qualPressionado = "";
     Runnable longPressRunnable;
+
     private Float dh;
+    private Float dd;
+
     private Bundle bundle;
     private static final int ALTURA_BARRINHA_NORMAL = 30;
     private static final int ALTURA_BARRINHA_AUMENTADA = 70;
@@ -801,7 +804,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "calcularQuantidadeTora: " + alturaCalc % tamCadaParte);
 
         toraDaponta = alturaCalc % tamCadaParte;
-        infosGenericas.setText(String.format("%d tora(s) de %.2f metro(s)\ntora da ponta: %.2f metro(s)", qtdDivisao, tamCadaParte, toraDaponta));
+        infosGenericas.setText(String.format("%d tora(s) de %.2f m\ntora da ponta: %.2f m", qtdDivisao, tamCadaParte, toraDaponta));
 //        dialogDivisao.dismiss();
 //        layoutIntroVolume.setVisibility(View.VISIBLE);
 
@@ -1804,6 +1807,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             alturaAtual.setText(String.format("Altura Istantânea: %s ", alturaAtualToraString.replace("-", "")));
 
+            configurarDD(
+                    Float.parseFloat(
+                            alturaAtualToraString
+                                    .replace("-", "")
+                                    .replace(" ", "")
+                                    .replace(",", ".")
+                                    .replace("m", "")
+                    )
+            );
+
             infoMedirTora.setText(String.format("\nAltura atual: %s " + "\nÂngulo atual: %.2f" + "\nDiametro da base: %.2f m" + "\nDiametro do centro: %.2f m" + "\nDiametro do topo: %.2f m", alturaAtualToraString.replace("-", ""), anguloAtualTora, diametroBaseTora, diametroMedioTora, diametroTopoTora));
         }
         this.lastAccelX = f2;
@@ -1834,5 +1847,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void configurarDD(float alturaInstataneaFormatada) {
+        dd = (float) Math.sqrt(Math.pow(alturaInstataneaFormatada, 2) + Math.pow(dh, 2));
+        if (alturaDesejada > 0) {
+            dh = dd;
+        }
+
+//        Log.d(TAG,
+//                "dd: " + dd + '\n' +
+//                        "dh: " + dh + '\n' +
+//                        "alturaDesejada: " + alturaDesejada + "\n\n"
+//        );
     }
 }
