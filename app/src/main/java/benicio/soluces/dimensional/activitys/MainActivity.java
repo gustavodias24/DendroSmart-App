@@ -278,8 +278,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             runOnUiThread(() -> {
                                 String[] command = info.split(" ");
 
-                                Log.d("mayara", info);
-
                                 if (command[0].equals("+") && command[1].equals("red")) {
                                     aumentarVermelho();
                                 } else if (command[0].equals("-") && command[1].equals("red")) {
@@ -318,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         medidaRealText = findViewById(R.id.medida_real_text);
         if (divisorPorZoom == 0) divisorPorZoom = 1;
+
         medidaRealText.setText(String.format("Diâmetro %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
 
         findViewById(R.id.backButton).setOnClickListener(view -> {
@@ -1805,7 +1804,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
 
-            alturaAtual.setText(String.format("Altura Istantânea: %s ", alturaAtualToraString.replace("-", "")));
+            alturaAtual.setText(String.format("Altura Istantânea: %s", alturaAtualToraString.replace("-", "")));
 
             configurarDD(
                     Float.parseFloat(
@@ -1817,7 +1816,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     )
             );
 
+
+            double anguloRadianos = Math.toRadians(degrees);
+            // Calcular o cosseno
+            double coseno = Math.cos(anguloRadianos);
+            Log.d(TAG, "angulo: " + degrees + " Coseno: " + coseno);
+
             infoMedirTora.setText(String.format("\nAltura atual: %s " + "\nÂngulo atual: %.2f" + "\nDiametro da base: %.2f m" + "\nDiametro do centro: %.2f m" + "\nDiametro do topo: %.2f m", alturaAtualToraString.replace("-", ""), anguloAtualTora, diametroBaseTora, diametroMedioTora, diametroTopoTora));
+
+            medidaRealText.setText(String.format("Diâmetro %.4f m", (( (dd/coseno) * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
+
+
+
+
         }
         this.lastAccelX = f2;
         this.lastAccelY = f;
@@ -1850,10 +1861,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void configurarDD(float alturaInstataneaFormatada) {
+
         dd = (float) Math.sqrt(Math.pow(alturaInstataneaFormatada, 2) + Math.pow(dh, 2));
-        if (alturaDesejada > 0) {
-            dh = dd;
-        }
 
 //        Log.d(TAG,
 //                "dd: " + dd + '\n' +
