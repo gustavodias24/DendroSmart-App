@@ -129,11 +129,11 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         );
 
         mainBinding.toleranciaField.getEditText().setText(
-                preferences.getString("tolerancia", "0,02")
+                preferences.getString("tolerancia", "0,10")
         );
 
         Objects.requireNonNull(mainBinding.zoomMaxField.getEditText()).setText(
-                preferences.getInt("zoomMaximo", 4) + ""
+                preferences.getInt("zoomMaximo", 8) + ""
         );
 
         Objects.requireNonNull(mainBinding.zoomInicialField.getEditText()).setText(
@@ -182,8 +182,8 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         });
     mainBinding.btnDefault.setOnClickListener(v -> {
         editor.remove("dap").apply();
-        editor.putString("tolerancia", "0,02").apply();
-        editor.putInt("zoomMaximo", 4).apply();
+        editor.putString("tolerancia", "0,10").apply();
+        editor.putInt("zoomMaximo", 8).apply();
         finish();
         startActivity(new Intent(this, ConfiguracoesActivity.class));
         Toast.makeText(this, "Atualizado!", Toast.LENGTH_SHORT).show();

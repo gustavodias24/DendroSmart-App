@@ -40,6 +40,8 @@ android {
 
 dependencies {
 
+    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.23")
+
     implementation("androidx.camera:camera-core:1.4.0")
     implementation("androidx.camera:camera-lifecycle:1.4.0")
     implementation("androidx.camera:camera-view:1.4.0")

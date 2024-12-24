@@ -74,6 +74,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -107,9 +110,11 @@ import benicio.soluces.dimensional.utils.GenericUtils;
 import benicio.soluces.dimensional.utils.ItemRelatorioUtil;
 import benicio.soluces.dimensional.utils.ListaBarrinhasUtils;
 import benicio.soluces.dimensional.utils.MetodosUtils;
+import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
+    private static final Logger log = LoggerFactory.getLogger(MainActivity.class);
     private String cameraPowerId = "";
 
     private float tolerancia = 0.0f;
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Boolean isPrimeiraVez = true;
     boolean smalianFirstCalc = true;
     float disDireta = 0.0f;
-    ImageView imagemIlustrativaArvore;
+    GifImageView imagemIlustrativaArvore;
     float toraDaponta = 0.0f;
     TextView alturaAtual;
     ServerSocket serverSocket = null;
@@ -192,7 +197,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Runnable longPressRunnable;
 
     private Float dh;
-    private Float dd;
+    private Float dddi;
+//    private Float dd;
 
     private Bundle bundle;
     private static final int ALTURA_BARRINHA_NORMAL = 30;
@@ -239,6 +245,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         mediaPlayer = MediaPlayer.create(this, R.raw.bip);
         mediaPlayerError = MediaPlayer.create(this, R.raw.somerro);
 
@@ -247,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         currentZoomLevel = Float.parseFloat(String.valueOf(preferences.getInt("zoomInicial", 4)));
 
         tolerancia = Float.parseFloat(
-                preferences.getString("tolerancia", "0,02").replace(",", ".")
+                preferences.getString("tolerancia", "0,10").replace(",", ".")
         );
         editor = preferences.edit();
 
@@ -366,7 +374,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (etapa <= 2) {
                 etapa++;
-                Picasso.get().load(R.drawable.angulo_topo_arvore).into(imagemIlustrativaArvore);
+                imagemIlustrativaArvore.setImageResource(R.drawable.angulo_topo_arvore);
+                //Picasso.get().load(R.drawable.angulo_topo_arvore).into(imagemIlustrativaArvore);
                 instrucaoTela.setText(MSG2);
 
             }
@@ -621,7 +630,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             // Torna o textView invisível após a animação
             textZoom.setVisibility(View.INVISIBLE);
-        }, 3000);
+        }, 7000);
     }
 
 
@@ -731,6 +740,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             alturaCalc = dh * (ValueTA + ValueTB);
 
+
             if (alturaCalc < 0.0f) {
                 alturaCalc = alturaCalc * (-1.0f);
             }
@@ -738,7 +748,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // mudança aqui
         alturaCalc = Float.valueOf(alturaCalc);
-        alturaReal.setText(String.format("Altura Total\n%.2f m", alturaCalc));
+
+        if (anguloBaseTora > anguloAtualTora) {
+            alturaReal.setText("Aponte Mais Acima");
+        } else {
+            alturaReal.setText(String.format("Altura Total\n%.2f m", alturaCalc));
+        }
+
         alturaReal.setVisibility(View.VISIBLE);
     }
 
@@ -776,8 +792,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //        alturaAtualTora = Float.valueOf(alturaAtualTora) * 100;
         alturaAtualTora = Float.valueOf(alturaAtualTora);
-
         alturaAtualToraString = String.format(" %.2f m", alturaAtualTora);
+
     }
 
 
@@ -1609,7 +1625,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void pegarZoomMaximo() {
-        maxZoomLevel = preferences.getInt("zoomMaximo", 4);
+        maxZoomLevel = preferences.getInt("zoomMaximo", 8);
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
         cameraProviderFuture.addListener(() -> {
@@ -1806,15 +1822,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             alturaAtual.setText(String.format("Altura Istantânea: %s", alturaAtualToraString.replace("-", "")));
 
-            configurarDD(
-                    Float.parseFloat(
-                            alturaAtualToraString
-                                    .replace("-", "")
-                                    .replace(" ", "")
-                                    .replace(",", ".")
-                                    .replace("m", "")
-                    )
-            );
+//            configurarDD(
+//                    Float.parseFloat(
+//                            alturaAtualToraString
+//                                    .replace("-", "")
+//                                    .replace(" ", "")
+//                                    .replace(",", ".")
+//                                    .replace("m", "")
+//                    )
+//            );
 
 
             double anguloRadianos = Math.toRadians(degrees);
@@ -1824,9 +1840,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             infoMedirTora.setText(String.format("\nAltura atual: %s " + "\nÂngulo atual: %.2f" + "\nDiametro da base: %.2f m" + "\nDiametro do centro: %.2f m" + "\nDiametro do topo: %.2f m", alturaAtualToraString.replace("-", ""), anguloAtualTora, diametroBaseTora, diametroMedioTora, diametroTopoTora));
 
-            medidaRealText.setText(String.format("Diâmetro %.4f m", (( (dd/coseno) * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
-
-
+//            medidaRealText.setText(String.format("Diâmetro %.4f m", (( (dd/coseno) * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
+            dddi = (float) (dh / coseno);
+            medidaRealText.setText(String.format("Diâmetro %.4f m", ((dddi * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
 
 
         }
@@ -1860,14 +1876,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return null;
     }
 
-    private void configurarDD(float alturaInstataneaFormatada) {
-
-        dd = (float) Math.sqrt(Math.pow(alturaInstataneaFormatada, 2) + Math.pow(dh, 2));
-
-//        Log.d(TAG,
-//                "dd: " + dd + '\n' +
-//                        "dh: " + dh + '\n' +
-//                        "alturaDesejada: " + alturaDesejada + "\n\n"
-//        );
-    }
+//    private void configurarDD(float alturaInstataneaFormatada) {
+//
+//        dd = (float) Math.sqrt(Math.pow(alturaInstataneaFormatada, 2) + Math.pow(dh, 2));
+//
+////        Log.d(TAG,
+////                "dd: " + dd + '\n' +
+////                        "dh: " + dh + '\n' +
+////                        "alturaDesejada: " + alturaDesejada + "\n\n"
+////        );
+//    }
 }
