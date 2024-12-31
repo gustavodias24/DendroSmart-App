@@ -114,8 +114,7 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
 
-    private static final Logger log = LoggerFactory.getLogger(MainActivity.class);
-    private String cameraPowerId = "";
+    private TextView text_tora_apontamento_counter;
 
     private float tolerancia = 0.0f;
     private MediaPlayer mediaPlayer;
@@ -330,6 +329,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.backButton).setOnClickListener(view -> {
             finish();
         });
+
+        text_tora_apontamento_counter = findViewById(R.id.text_tora_apontamento_counter);
+
 
         infosGenericas = findViewById(R.id.infos_dev_text);
         layoutIntroVolume = findViewById(R.id.layout_mediar_volume);
@@ -697,7 +699,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.barrinha_vermelha_horizontal).setVisibility(View.VISIBLE);
         findViewById(R.id.barrinha_amarela_horizontal).setVisibility(View.VISIBLE);
 
-        imagemIlustrativaArvore.setVisibility(View.INVISIBLE);
+//        imagemIlustrativaArvore.setVisibility(View.INVISIBLE);
+        imagemIlustrativaArvore.setImageResource(R.drawable.aponta_p_base);
+        text_tora_apontamento_counter.setVisibility(View.VISIBLE);
 
 //        layoutIntroVolume.setVisibility(View.VISIBLE);
         medirDiametro.setVisibility(View.VISIBLE);
@@ -1341,6 +1345,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ItemRelatorioUtil.saveList(listaParaAtualiziar, this);
         animarBotao(restartButton);
         relatoriobtn.setVisibility(View.VISIBLE);
+        imagemIlustrativaArvore.setVisibility(View.INVISIBLE);
+        text_tora_apontamento_counter.setVisibility(View.INVISIBLE);
         Toast.makeText(this, "Árvore salva no relatório.", Toast.LENGTH_SHORT).show();
     }
 
@@ -1443,7 +1449,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void menosZoomFuncao() {
-        if (currentZoomLevel > 2) {
+
+        int zoomMinimo = preferences.getInt("zoomInicial", 4);
+
+        if (currentZoomLevel > zoomMinimo) {
             divisorPorZoom /= 2;
 
             int quantidadeParaAjustar = ((indexr + 1) + (indexy + 1)) / 2;
@@ -1648,7 +1657,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
                 //String cameraId = cameraManager.getCameraIdList()[0];
                 String cameraId = cameraManager.getCameraIdList()[(cameraManager.getCameraIdList().length - 1)];
-                cameraPowerId = cameraId;
                 CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
                 float maxZoom = characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM);
 
@@ -1814,9 +1822,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             if (qtdDivisao != 0) {
+
+                text_tora_apontamento_counter.setText("T" + toraAtual);
+
+                if (parteDaTora.equals("a base")) {
+                    imagemIlustrativaArvore.setImageResource(R.drawable.aponta_p_base);
+                }
+                if (parteDaTora.equals("o centro")) {
+                    imagemIlustrativaArvore.setImageResource(R.drawable.aponta_p_meio);
+                }
+                if (parteDaTora.equals("o topo")) {
+                    imagemIlustrativaArvore.setImageResource(R.drawable.aponta_p_topo);
+                }
+
                 instrucaoTela.setText(
                         String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada));
-//                            String.format("Aponte para %s da %d° tora", parteDaTora, toraAtual));
             }
 
 

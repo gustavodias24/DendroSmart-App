@@ -30,6 +30,13 @@
     </androidx.camera.view.PreviewView>
 
 
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="#FFFFFF" />
+
     <ImageView
         android:id="@+id/imagePreview"
         android:layout_width="match_parent"
@@ -60,6 +67,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="32dp"
         android:alpha="0.3"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:scaleType="fitCenter"
@@ -357,12 +365,26 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/imagemIlustrativaArvore"
-        android:layout_width="80dp"
-        android:layout_height="120dp"
+        android:layout_width="140dp"
+        android:layout_height="200dp"
         android:src="@drawable/angulo_base_arvore"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/linearLayout7"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_tora_apontamento_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="13dp"
+        android:text="T1"
+        android:visibility="invisible"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imagemIlustrativaArvore"
+        app:layout_constraintStart_toStartOf="@+id/raio_image"
+        app:layout_constraintTop_toTopOf="@+id/imagemIlustrativaArvore" />
 
     <LinearLayout
         android:id="@+id/linearLayout6"
