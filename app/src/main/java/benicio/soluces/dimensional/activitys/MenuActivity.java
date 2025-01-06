@@ -54,7 +54,7 @@ public class MenuActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
 
         mainBinding.face.setOnClickListener(v -> {
-            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/profile.php?id=61559403886899&mibextid=LQQJ4d&rdid=mHTgiHw38cfK62A7&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2FZUfre1CMmYJsHrWH%2F%3Fmibextid%3DLQQJ4d"));
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/people/Sinapses/61559403886899/"));
             startActivity(i);
         });
         mainBinding.insta.setOnClickListener(v -> {

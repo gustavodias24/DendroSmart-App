@@ -170,6 +170,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                     editor.putFloat("corretivo",
                             Float.parseFloat(fatorString)).apply();
                     Toast.makeText(this, "Configurações salvas!", Toast.LENGTH_SHORT).show();
+                    finish();
                 } catch (Exception e) {
                     Toast.makeText(this, "Valor de fator inválido", Toast.LENGTH_SHORT).show();
                 }

@@ -789,9 +789,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             alturaAtualTora = dh * (ValueTA + ValueTB);
 
-            if (alturaAtualTora < 0.0f) {
-                alturaAtualTora = alturaAtualTora * (-1.0f);
-            }
+//            if (alturaAtualTora < 0.0f) {
+//                alturaAtualTora = alturaAtualTora * (-1.0f);
+//            }
         }
 
 //        alturaAtualTora = Float.valueOf(alturaAtualTora) * 100;
@@ -1236,9 +1236,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public static double calcularIncremento(double alturaArvore, double comprimentoTora) {
-        int numeroDeToras = (int) Math.ceil(alturaArvore / comprimentoTora);
-        return 1.0 / numeroDeToras;
+    public  double calcularIncremento(double alturaArvore, double comprimentoTora) {
+//        int numeroDeToras = (int) Math.ceil(alturaArvore / comprimentoTora);
+//        return 1.0 / numeroDeToras;
+
+        return comprimentoTora / 2;
     }
 
     private void configurarSwitchNewton() {
@@ -1261,6 +1263,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 3:
                 diametroTopoTora = diametroMarcado;
+                alturaDesejada += (float) calcularIncremento((alturaCalc - toraDaponta), tamCadaParte);
                 parteDaTora = "o centro";
                 parteDaToraPos = 2;
 
@@ -1834,6 +1837,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (parteDaTora.equals("o topo")) {
                     imagemIlustrativaArvore.setImageResource(R.drawable.aponta_p_topo);
                 }
+
 
                 instrucaoTela.setText(
                         String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada));

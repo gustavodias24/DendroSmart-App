@@ -10,11 +10,6 @@
     tools:context=".activitys.MainActivity"
     tools:viewBindingIgnore="true">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
 
     <androidx.camera.view.PreviewView
         android:id="@+id/camera_preview"
@@ -30,12 +25,6 @@
     </androidx.camera.view.PreviewView>
 
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textColor="#FFFFFF" />
 
     <ImageView
         android:id="@+id/imagePreview"
@@ -224,7 +213,7 @@
         android:layout_alignParentBottom="true"
         android:padding="4dp"
         android:text="Diâmetro 0 m"
-        android:textColor="#FFFFFF"
+        android:textColor="#FFE500"
         android:textSize="12sp"
         android:textStyle="bold"
         android:visibility="invisible"
@@ -263,7 +252,7 @@
         android:gravity="center"
         android:text="Altura Atual:"
         android:textAlignment="center"
-        android:textColor="#FFFFFF"
+        android:textColor="#FFE500"
         android:textSize="10sp"
         android:textStyle="bold"
         android:visibility="invisible"
@@ -376,15 +365,17 @@
         android:id="@+id/text_tora_apontamento_counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="13dp"
         android:text="T1"
-        android:visibility="invisible"
         android:textColor="#FFFFFF"
+        android:textSize="24sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/imagemIlustrativaArvore"
-        app:layout_constraintStart_toStartOf="@+id/raio_image"
-        app:layout_constraintTop_toTopOf="@+id/imagemIlustrativaArvore" />
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout8"
+        app:layout_constraintHorizontal_bias="0.27"
+        app:layout_constraintStart_toStartOf="@+id/imagemIlustrativaArvore"
+        app:layout_constraintTop_toTopOf="@+id/imagemIlustrativaArvore"
+        app:layout_constraintVertical_bias="0.55" />
 
     <LinearLayout
         android:id="@+id/linearLayout6"
@@ -708,6 +699,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
