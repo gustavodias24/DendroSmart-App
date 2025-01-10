@@ -22,7 +22,9 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,16 +52,42 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Configurações");
 
 
-        mainBinding.trocarSenhaAdm.setOnClickListener( v -> {
+        mainBinding.dapField.setOnFocusChangeListener((v, focus) -> {
+            if (focus)
+                mainBinding.dapField.setText("");
+        });
+        mainBinding.toleranciaField.setOnFocusChangeListener((v, focus) -> {
+            if (focus)
+                mainBinding.toleranciaField.setText("");
+        });
+        mainBinding.fatorCorretivoField.setOnFocusChangeListener((v, focus) -> {
+            if (focus) {
+                mainBinding.fatorCorretivoField.setText("");
+            }
+        });
+
+        mainBinding.zoomInicialField.setOnFocusChangeListener((v, focus) -> {
+            if (focus) {
+                mainBinding.zoomInicialField.setText("");
+            }
+        });
+
+        mainBinding.zoomMaxField.setOnFocusChangeListener((v, focus) -> {
+            if (focus) {
+                mainBinding.zoomMaxField.setText("");
+            }
+        });
+
+        mainBinding.trocarSenhaAdm.setOnClickListener(v -> {
             String old_pass = mainBinding.velhaSenhaAdm.getText().toString();
             String new_pass = mainBinding.novaSenhaAdm.getText().toString();
 
             String atual_pass = getSharedPreferences("preferencias_usuario", MODE_PRIVATE).getString("senhaAdmin", "123");
 
-            if ( old_pass.equals(atual_pass)){
+            if (old_pass.equals(atual_pass)) {
                 getSharedPreferences("preferencias_usuario", MODE_PRIVATE).edit().putString("senhaAdmin", new_pass).apply();
                 Toast.makeText(this, "Senha trocada!", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(this, "Senha do adm antiga errada", Toast.LENGTH_SHORT).show();
             }
 
@@ -111,7 +139,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         preferences = getSharedPreferences("configPreferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
-        mainBinding.fatorCorretivoField.getEditText().setText(
+        mainBinding.fatorCorretivoField.setText(
                 String.valueOf(
                         preferences.getFloat("corretivo", 0.48484848f)
                 ).replace(".", ",")
@@ -124,23 +152,21 @@ public class ConfiguracoesActivity extends AppCompatActivity {
             startActivityForResult(intent, 1);
         });
 
-        mainBinding.dapField.getEditText().setText(
+        mainBinding.dapField.setText(
                 preferences.getString("dap", "")
         );
 
-        mainBinding.toleranciaField.getEditText().setText(
-                preferences.getString("tolerancia", "0,10")
+        mainBinding.toleranciaField.setText(
+                preferences.getString("tolerancia", "0,10").replace(".", ",")
         );
 
-        Objects.requireNonNull(mainBinding.zoomMaxField.getEditText()).setText(
+        Objects.requireNonNull(mainBinding.zoomMaxField).setText(
                 preferences.getInt("zoomMaximo", 8) + ""
         );
 
-        Objects.requireNonNull(mainBinding.zoomInicialField.getEditText()).setText(
+        Objects.requireNonNull(mainBinding.zoomInicialField).setText(
                 preferences.getInt("zoomInicial", 4) + ""
         );
-
-
 
 
         mainBinding.exibirGps.setOnClickListener(view -> {
@@ -161,12 +187,12 @@ public class ConfiguracoesActivity extends AppCompatActivity {
             if (senhaDigitada.equals(getSharedPreferences("preferencias_usuario", MODE_PRIVATE).getString("token", "123"))) {
 
 
-                editor.putString("dap", mainBinding.dapField.getEditText().getText().toString()).apply();
-                editor.putString("tolerancia", mainBinding.toleranciaField.getEditText().getText().toString()).apply();
-                editor.putInt("zoomMaximo", Integer.parseInt(mainBinding.zoomMaxField.getEditText().getText().toString())).apply();
-                editor.putInt("zoomInicial", Integer.parseInt(mainBinding.zoomInicialField.getEditText().getText().toString())).apply();
+                editor.putString("dap", mainBinding.dapField.getText().toString()).apply();
+                editor.putString("tolerancia", mainBinding.toleranciaField.getText().toString().replace(",", ".")).apply();
+                editor.putInt("zoomMaximo", Integer.parseInt(mainBinding.zoomMaxField.getText().toString())).apply();
+                editor.putInt("zoomInicial", Integer.parseInt(mainBinding.zoomInicialField.getText().toString())).apply();
                 try {
-                    String fatorString = mainBinding.fatorCorretivoField.getEditText().getText().toString().replace(",", ".").trim();
+                    String fatorString = mainBinding.fatorCorretivoField.getText().toString().replace(",", ".").trim();
                     editor.putFloat("corretivo",
                             Float.parseFloat(fatorString)).apply();
                     Toast.makeText(this, "Configurações salvas!", Toast.LENGTH_SHORT).show();
@@ -174,21 +200,20 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Toast.makeText(this, "Valor de fator inválido", Toast.LENGTH_SHORT).show();
                 }
-            }else{
+            } else {
                 Toast.makeText(this, "Senha Incorreta", Toast.LENGTH_SHORT).show();
             }
 
 
-
         });
-    mainBinding.btnDefault.setOnClickListener(v -> {
-        editor.remove("dap").apply();
-        editor.putString("tolerancia", "0,10").apply();
-        editor.putInt("zoomMaximo", 8).apply();
-        finish();
-        startActivity(new Intent(this, ConfiguracoesActivity.class));
-        Toast.makeText(this, "Atualizado!", Toast.LENGTH_SHORT).show();
-    });
+        mainBinding.btnDefault.setOnClickListener(v -> {
+            editor.remove("dap").apply();
+            editor.putString("tolerancia", "0,10").apply();
+            editor.putInt("zoomMaximo", 8).apply();
+            finish();
+            startActivity(new Intent(this, ConfiguracoesActivity.class));
+            Toast.makeText(this, "Atualizado!", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void configurarDadosSalvos() {

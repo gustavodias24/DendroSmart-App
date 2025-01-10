@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         medidaRealText = findViewById(R.id.medida_real_text);
         if (divisorPorZoom == 0) divisorPorZoom = 1;
 
-        medidaRealText.setText(String.format("Diâmetro %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
+        medidaRealText.setText(String.format("DIÂMETRO %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
 
         findViewById(R.id.backButton).setOnClickListener(view -> {
             finish();
@@ -552,7 +552,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         edt_dh.getText().toString().replace(",", ".")
                 );
 
-                medidaRealText.setText(String.format("Diâmetro %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
+                medidaRealText.setText(String.format("DIÂMETRO %.4f m", ((dh * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
             } catch (Exception ignored) {
                 Toast.makeText(this, "Digite um número válido!", Toast.LENGTH_SHORT).show();
             }
@@ -1761,7 +1761,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             divisorPorZoom = 1;
         }
         diametroMarcado = ((dh * (qtdPos / divisorPorZoom) * CONST_CHAVE) / 100);
-        medidaRealText.setText(String.format("Diâmetro %.4f m", diametroMarcado));
+        medidaRealText.setText(String.format("DIÂMETRO %.4f m", diametroMarcado));
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale", "ResourceType"})
@@ -1821,7 +1821,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             diametroMarcado = ((disDireta * (qtdPos / divisorPorZoom) * CONST_CHAVE) / 100);
             if (bundle == null && !bundle.getBoolean("diametro", false)) {
-                medidaRealText.setText(String.format("Diâmetro %.4f m", diametroMarcado));
+                medidaRealText.setText(String.format("DIÂMETRO %.4f m", diametroMarcado));
             }
 
             if (qtdDivisao != 0) {
@@ -1843,8 +1843,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         String.format("Aponte para %s da %d° tora na altura %.2f m", parteDaTora, toraAtual, alturaDesejada));
             }
 
+            if ( anguloAtualTora < anguloBaseTora ){
+                if ((-1*alturaAtualTora) < tolerancia){
+                    alturaAtual.setText(String.format("ALTURA INST: -%s", alturaAtualToraString.replace("-", "")));
+                }else{
+                    alturaAtual.setText("LEVANTE MAIS O SMARTPHONE ");
+                }
+            }else{
+                alturaAtual.setText(String.format("ALTURA INST: %s", alturaAtualToraString.replace("-", "")));
+            }
 
-            alturaAtual.setText(String.format("Altura Istantânea: %s", alturaAtualToraString.replace("-", "")));
+
 
 //            configurarDD(
 //                    Float.parseFloat(
@@ -1866,7 +1875,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //            medidaRealText.setText(String.format("Diâmetro %.4f m", (( (dd/coseno) * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
             dddi = (float) (dh / coseno);
-            medidaRealText.setText(String.format("Diâmetro %.4f m", ((dddi * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
+            medidaRealText.setText(String.format("DIÂMETRO %.4f m", ((dddi * ((qtdBarrinhas + (qtdBarrinhas - 1)) / divisorPorZoom) * CONST_CHAVE) / 100)));
 
 
         }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EFF1EE"
+    android:background="#FFFFFF"
     tools:context=".activitys.SelecionarMetodoActivity">
 
     <ImageView

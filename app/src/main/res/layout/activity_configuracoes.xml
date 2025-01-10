@@ -1,250 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:fillViewport="true"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    >
-<LinearLayout
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    android:orientation="vertical"
-    android:padding="8dp"
-    tools:context=".activitys.ConfiguracoesActivity">
+    android:fillViewport="true">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:background="@drawable/background_blue"
-        android:src="@raw/emptylogo" />
+    <LinearLayout
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:hint="Incremento do Zoom" />
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="?android:attr/listDivider" />
-
-    <TextView
-        android:id="@+id/textIpConfig"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:orientation="vertical"
         android:padding="8dp"
-        android:text="Ip do Controle: SEM INFORMAÇÃO" />
+        tools:context=".activitys.ConfiguracoesActivity">
 
-    <TextView
-        android:id="@+id/informacaoDoAparelho"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="18dp"
-        android:text="..."
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <CheckBox
-        android:id="@+id/exibirGps"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Exibir dados do GPS na tela." />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="?android:attr/listDivider" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/velha_senha_adm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Senha adm antiga" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nova_senha_adm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Senha adm nova" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/trocar_senha_adm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Trocar" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="?android:attr/listDivider" />
-
-
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Digite um valor próximo de 0,48484848" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/fator_corretivo_field"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Fator">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
-            android:gravity="center"
+            android:background="@drawable/background_blue"
+            android:src="@raw/emptylogo" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:hint="Incremento do Zoom" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textIpConfig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Ip do Controle: SEM INFORMAÇÃO" />
+
+        <TextView
+            android:id="@+id/informacaoDoAparelho"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="18dp"
+            android:text="..."
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <CheckBox
+            android:id="@+id/exibirGps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Exibir dados do GPS na tela." />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="?android:attr/listDivider" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/velha_senha_adm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Senha adm antiga" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nova_senha_adm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Senha adm nova" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/trocar_senha_adm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trocar" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Zoom Máximo" />
+
+        <EditText
+            android:id="@+id/zoom_max_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Zoom Máximo"
             android:inputType="text" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dap_field"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="DAP"
-        android:padding="8dp">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:inputType="number|numberDecimal|numberSigned" />
+            android:text="Zoom Inicial" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tolerancia_field"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Tolerância"
-        android:padding="8dp">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
+            android:id="@+id/zoom_inicial_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:inputType="number|numberDecimal|numberSigned" />
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Zoom Inicial"
+            android:inputType="text" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <TextView
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/zoom_inicial_field"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Zoom Inicial"
-        android:padding="8dp">
-
-        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:inputType="number|numberDecimal|numberSigned" />
+            android:text="Tolerância" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/zoom_max_field"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Zoom Máximo"
-        android:padding="8dp">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
+            android:id="@+id/tolerancia_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:inputType="number|numberDecimal|numberSigned" />
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Tolerância"
+            android:inputType="text" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <TextView
 
-
-
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="?android:attr/listDivider" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/senha_field"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Senha"
-        android:padding="8dp">
-
-        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-             />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="?android:attr/listDivider" />
+            android:text="dap" />
 
 
-    <Button
-        android:id="@+id/btn_default"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Padrão de Fábrica" />
+        <EditText
+            android:id="@+id/dap_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="DAP"
+            android:inputType="text" />
 
-    <Button
-        android:id="@+id/btn_salvar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Salvar" />
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Digite um valor próximo de 0,48484848" />
 
-    <Button
-        android:id="@+id/sair"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#F44336"
-        android:text="Deslogar"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        <TextView
 
-</LinearLayout></ScrollView>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Fator"
+            android:inputType="text" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="?android:attr/listDivider" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/senha_field"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Senha"
+            android:padding="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="?android:attr/listDivider" />
+
+
+        <Button
+            android:id="@+id/btn_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Padrão de Fábrica" />
+
+        <Button
+            android:id="@+id/btn_salvar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Salvar" />
+
+        <Button
+            android:id="@+id/sair"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#F44336"
+            android:text="Deslogar"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</ScrollView>
