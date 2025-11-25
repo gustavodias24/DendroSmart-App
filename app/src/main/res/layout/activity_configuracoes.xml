@@ -64,22 +64,26 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="?android:attr/listDivider" />
+            android:background="?android:attr/listDivider"
+            android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/velha_senha_adm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Senha adm antiga" />
+                android:hint="Senha adm antiga"
+                android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nova_senha_adm"
@@ -93,7 +97,8 @@
             android:id="@+id/trocar_senha_adm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trocar" />
+            android:text="Trocar"
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
@@ -159,26 +164,377 @@
             android:hint="DAP"
             android:inputType="text" />
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Digite um valor próximo de 0,48484848" />
+
 
         <TextView
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fator" />
+            android:text="Fator 3m" />
 
         <EditText
-            android:id="@+id/fator_corretivo_field"
+            android:id="@+id/fator_corretivo_field_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Fator"
             android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 4m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 5m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 6m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 7m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 8m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 9m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 10m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 11m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 12m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 13m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 14m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 15m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 16m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 17m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 18m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 19m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 20m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 21m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_19"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 22m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 23m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 24m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_22"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 25m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_23"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 26m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 27m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_25"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 28m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_26"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 29m" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_27"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            
+            android:inputType="text" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fator 30" />
+
+        <EditText
+            android:id="@+id/fator_corretivo_field_28"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+
+            android:inputType="text" />
+
 
         <View
             android:id="@+id/divider2"
@@ -192,7 +548,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Senha"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package benicio.soluces.dimensional.activitys;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -64,13 +65,26 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
         });
 
         mainBinding.btnProsseguir.setOnClickListener(view -> {
-            try {
-                Float dhFloat = Float.parseFloat(
-                        mainBinding.edtDh.getText().toString().replace(",", ".")
-                );
+            String input = mainBinding.edtDh.getText().toString().trim();
 
+            try {
+                // TENTA LER COMO INTEIRO
+                int dhInt = Integer.parseInt(input);  // se tiver vírgula/ponto/decimal, vai dar erro aqui
+
+                // Validação do intervalo 3 a 30
+                if (dhInt < 3 || dhInt > 30) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Atenção")
+                            .setMessage("A distância deve ser um número inteiro entre 3 e 30 metros.")
+                            .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                            .show();
+                    return; // impede de continuar para a próxima tela
+                }
+
+                // Se chegou aqui, está tudo ok: inteiro e dentro do intervalo
                 Intent i = new Intent(this, MainActivity.class);
-                i.putExtra("dh", dhFloat);
+                // se você ainda precisa mandar como float:
+                i.putExtra("dh", (float) dhInt);
                 i.putExtra("tamCadaParte", getIntent().getExtras().getFloat("tamCadaParte", 0.0f));
                 i.putExtra("link", getIntent().getExtras().getString("link", ""));
 
@@ -80,11 +94,18 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
                 }
 
                 startActivity(i);
-            } catch (Exception e) {
-                Toast.makeText(this, "Digite um número válido!", Toast.LENGTH_SHORT).show();
-            }
 
+            } catch (NumberFormatException e) {
+                // aqui cai se o campo estiver vazio, com letras, vírgula, ponto, decimal etc.
+                new AlertDialog.Builder(this)
+                        .setTitle("Atenção")
+                        .setMessage("A distância deve ser um número inteiro entre 3 e 50 metros.")
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .show();
+            }
         });
+
+
 
         mainBinding.backButton5.setOnClickListener(view -> finish());
 

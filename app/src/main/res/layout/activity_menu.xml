@@ -155,20 +155,43 @@
 
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btn_key"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            android:backgroundTint="#2196F3"
-            android:scaleType="fitCenter"
-            android:src="@drawable/key"
-            android:text="sobre"
-            android:textAllCaps="true"
-            android:tint="#FFFFFF"
-            app:iconGravity="textStart"
-            app:iconSize="30dp"
-            tools:ignore="MissingConstraints" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <ImageButton
+                android:id="@+id/btn_key"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:backgroundTint="#2196F3"
+                android:scaleType="fitCenter"
+                android:src="@drawable/key"
+                android:text="sobre"
+                android:textAllCaps="true"
+                android:tint="#FFFFFF"
+                app:iconGravity="textStart"
+                app:iconSize="30dp"
+                tools:ignore="MissingConstraints" />
+
+            <ImageButton
+                android:id="@+id/btn_contato"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:backgroundTint="#2196F3"
+                android:scaleType="fitCenter"
+                android:src="@drawable/infos"
+                android:text="sobre"
+                android:textAllCaps="true"
+                app:iconGravity="textStart"
+                app:iconSize="30dp"
+                tools:ignore="MissingConstraints" />
+
+
+        </LinearLayout>
 
 
     </LinearLayout>

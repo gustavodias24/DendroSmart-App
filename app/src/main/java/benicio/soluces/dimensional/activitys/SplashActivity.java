@@ -37,13 +37,13 @@ public class SplashActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("preferencias_usuario", MODE_PRIVATE);
 
         new Handler().postDelayed(() -> {
-            Intent intent;
-            if ( sharedPreferences.getBoolean("islogado", false) ){
-                Toast.makeText(this, "Bem-vindo de volta.", Toast.LENGTH_SHORT).show();
-                intent = new Intent(getApplicationContext(), MenuActivity.class);
-            }else{
-                intent = new Intent(getApplicationContext(), AutenticacaoActivity.class);
-            }
+            Intent  intent = new Intent(getApplicationContext(), MenuActivity.class); ;
+//            if ( sharedPreferences.getBoolean("islogado", false) ){
+//                Toast.makeText(this, "Bem-vindo de volta.", Toast.LENGTH_SHORT).show();
+//                intent = new Intent(getApplicationContext(), MenuActivity.class);
+//            }else{
+//                intent = new Intent(getApplicationContext(), AutenticacaoActivity.class);
+//            }
             startActivity(intent);
             finish();
         }, SPLASH_DURATION);

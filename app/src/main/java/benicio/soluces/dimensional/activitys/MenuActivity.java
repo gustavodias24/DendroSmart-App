@@ -13,7 +13,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -57,6 +59,12 @@ public class MenuActivity extends AppCompatActivity {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/people/Sinapses/61559403886899/"));
             startActivity(i);
         });
+
+        mainBinding.btnContato.setOnClickListener(v -> {
+            Intent i = new Intent(this, InfosContatoActivity.class);
+            startActivity(i);
+        });
+
         mainBinding.insta.setOnClickListener(v -> {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/sinapses.solutionss/"));
             startActivity(i);
@@ -148,7 +156,31 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void irConfiguracoes(View view) {
-        startActivity(new Intent(this, ConfiguracoesActivity.class));
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Área restrita");
+
+        final EditText input = new EditText(this);
+        input.setHint("Digite a senha");
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        builder.setView(input);
+
+        builder.setPositiveButton("Entrar", (dialog, which) -> {
+            String senha = input.getText().toString().trim();
+
+            if ("D3ndr02026".equals(senha)) {
+                // senha correta -> abre configurações
+                Intent i = new Intent(this, ConfiguracoesActivity.class);
+                startActivity(i);
+            } else {
+                // senha errada
+                Toast.makeText(this, "Senha incorreta", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+
+        builder.show();
     }
 
 }

@@ -1,95 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:background="@color/azulbb"
-    android:orientation="vertical"
-    android:padding="8dp">
-
-    <ImageButton
-        android:id="@+id/btn_excluir"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:backgroundTint="#00090808"
-        android:padding="8dp"
-        tools:src="@raw/lixo" />
+    app:cardCornerRadius="16dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="50"
-        android:orientation="horizontal"
-        android:padding="4dp">
+        android:orientation="vertical">
 
+        <!-- Barra superior com checkbox + texto e botão excluir -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="4dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="50"
-                android:gravity="center"
-                android:text="Informações da(s) Tora(s):" />
-
-            <TextView
-                android:id="@+id/text_info_generic1"
+            <CheckBox
+                android:id="@+id/check_selecionado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="50"
-                android:text="TextView"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="10sp"
-                android:textStyle="bold|italic" />
+                android:layout_marginStart="4dp"
+                android:text=""
+                android:buttonTint="@android:color/black" />
 
             <TextView
-                android:id="@+id/text_info_generic2"
+                android:id="@+id/text_marcar_para_pdf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="50"
-                android:text="TextView"
-                android:textAlignment="viewStart"
-                android:textColor="#000000"
-                android:textSize="10sp"
-                android:textStyle="bold|italic" />
+                android:layout_marginStart="4dp"
+                android:text="Marca para relatório"
+                android:textSize="13sp"
+                android:textColor="@android:color/black" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_weight="50"
-                android:gravity="center"
-                android:text="Endereço:" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/text_info_generic3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="50"
-                android:text="TextView"
-                android:textAlignment="viewStart"
-                android:textColor="#000000"
-                android:textSize="10sp"
-                android:textStyle="bold|italic" />
+            <ImageButton
+                android:id="@+id/btn_excluir"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@android:color/transparent"
+                android:padding="4dp"
+                app:tint="@android:color/holo_red_dark"
+                app:srcCompat="@raw/lixo"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
+
+        <!-- Conteúdo principal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Informações da(s) tora(s)"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/text_info_generic1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="23 tora(s) de 1,00 m..."
+                    android:textAlignment="viewStart"
+                    android:textColor="@android:color/black"
+                    android:textSize="11sp"
+                    android:textStyle="italic"
+                    tools:ignore="HardcodedText" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/azulbb" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Endereço"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/text_info_generic3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Rua X, Bairro Y, Cidade Z"
+                    android:textAlignment="viewStart"
+                    android:textColor="@android:color/black"
+                    android:textSize="11sp"
+                    android:textStyle="italic"
+                    tools:ignore="HardcodedText" />
+
+                <!-- Botão Volumes (preto) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_volumes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Volumes"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    app:cornerRadius="24dp"
+                    app:iconPadding="8dp"
+                    app:iconGravity="textStart"
+                    app:backgroundTint="@android:color/black"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Imagem da árvore -->
+        <ImageView
+            android:id="@+id/imagem_da_arvore"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/angulo_base_arvore" />
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imagem_da_arvore"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_weight="1"
-        app:srcCompat="@drawable/angulo_base_arvore" />
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

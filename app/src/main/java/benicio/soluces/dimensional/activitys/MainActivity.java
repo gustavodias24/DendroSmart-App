@@ -253,12 +253,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         currentZoomLevel = Float.parseFloat(String.valueOf(preferences.getInt("zoomInicial", 4)));
 
-        tolerancia = Float.parseFloat(
-                preferences.getString("tolerancia", "0,10").replace(",", ".")
-        );
         editor = preferences.edit();
-
-        CONST_CHAVE = CONST_CHAVE * preferences.getFloat("corretivo", 0.48484848f);
 
         relatoriobtn = findViewById(R.id.relatoriobtn);
         relatoriobtn.setOnClickListener(view -> startActivity(new Intent(this, RelatoriosActivity.class)));
@@ -487,6 +482,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         itemRelatorio.setImagemArvore(getIntent().getExtras().getString("link", ""));
     }
 
+
+
     @SuppressLint("DefaultLocale")
     private void configurarTeclado() {
         Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bVirgula;
@@ -557,6 +554,76 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "Digite um número válido!", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        tolerancia = Float.parseFloat(
+                preferences.getString("tolerancia", "0,10").replace(",", ".")
+        );
+
+        if (dh == 3.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField1", 0.48484848f);
+        } else if (dh == 4.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField2", 0.48484848f);
+        } else if (dh == 5.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField3", 0.48484848f);
+        } else if (dh == 6.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField4", 0.48484848f);
+        } else if (dh == 7.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField5", 0.48484848f);
+        } else if (dh == 8.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField6", 0.48484848f);
+        } else if (dh == 9.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField7", 0.48484848f);
+        } else if (dh == 10.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField8", 0.48484848f);
+        } else if (dh == 11.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField9", 0.48484848f);
+        } else if (dh == 12.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField10", 0.48484848f);
+        } else if (dh == 13.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField11", 0.48484848f);
+        } else if (dh == 14.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField12", 0.48484848f);
+        } else if (dh == 15.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField13", 0.48484848f);
+        } else if (dh == 16.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField14", 0.48484848f);
+        } else if (dh == 17.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField15", 0.48484848f);
+        } else if (dh == 18.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField16", 0.48484848f);
+        } else if (dh == 19.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField17", 0.48484848f);
+        } else if (dh == 20.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField18", 0.48484848f);
+        } else if (dh == 21.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField19", 0.48484848f);
+        } else if (dh == 22.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField20", 0.48484848f);
+        } else if (dh == 23.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField21", 0.48484848f);
+        } else if (dh == 24.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField22", 0.48484848f);
+        } else if (dh == 25.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField23", 0.48484848f);
+        } else if (dh == 26.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField24", 0.48484848f);
+        } else if (dh == 27.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField25", 0.48484848f);
+        } else if (dh == 28.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField26", 0.48484848f);
+        } else if (dh == 29.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField27", 0.48484848f);
+        } else if (dh == 30.0f) {
+            CONST_CHAVE = CONST_CHAVE * preferences.getFloat("fatorCorretivoField28", 0.48484848f);
+        }
+
+        Log.d(TAG, "CONST_CHAVE: " + CONST_CHAVE);
 
 
     }
