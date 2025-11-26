@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivitySetarComprimentoToraBinding;
+import benicio.soluces.dimensional.utils.AudioIA;
 
 public class SetarComprimentoToraActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,6 +30,9 @@ public class SetarComprimentoToraActivity extends AppCompatActivity implements V
         mainBinding = ActivitySetarComprimentoToraBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        AudioIA.pararAudio();
+        AudioIA.tocarAudio(this, R.raw.comprimentotoras);
 
         mainBinding.backButton4.setOnClickListener(view -> finish());
         Picasso.get().load(R.raw.pinheirocortado).into(mainBinding.imageView4);

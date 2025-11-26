@@ -232,13 +232,12 @@ public class RelatoriosActivity extends AppCompatActivity {
         linePaint.setStrokeWidth(2f);
         linePaint.setColor(android.graphics.Color.parseColor("#E5E7EB"));
 
-
         // Pega apenas os itens selecionados no adapter
         List<ItemRelatorio> fonte;
         if (adapterItens != null) {
             fonte = adapterItens.getSelectedItems();
         } else {
-            fonte = new ArrayList<>(lista); // fallback (caso algo dê errado)
+            fonte = new ArrayList<>(lista); // fallback
         }
 
         if (fonte.isEmpty()) {
@@ -293,13 +292,43 @@ public class RelatoriosActivity extends AppCompatActivity {
                 alturaTotal = ultimaLinha.replace("Altura total: ", "");
             }
 
-            String volumeTotal = "";
+            // --------- NOVA LÓGICA DE VOLUMES ---------
+            String volumeComercial = "";
+            String volumePonta = "";
+
             for (String linha : volumeLines) {
-                if (linha.contains("Volume total: ")) {
-                    volumeTotal = linha.replace("Volume total: ", "");
-                    break;
+                if (linha.contains("Volume total:")) {
+                    // Volume total comercial (antigo "Volume total")
+                    volumeComercial = linha.replace("Volume total:", "").trim();
+                }
+                // tenta achar uma linha de ponta
+                if (linha.toLowerCase().contains("volume ponta")
+                        || linha.toLowerCase().contains("volume da ponta")) {
+                    volumePonta = linha
+                            .replace("Volume ponta:", "")
+                            .replace("Volume da ponta:", "")
+                            .trim();
                 }
             }
+
+            // converte para float (p/ somar comercial + ponta)
+            float volCom = 0f;
+            float volPontaF = 0f;
+
+            try {
+                volCom = Float.parseFloat(volumeComercial.replace(",", ".").replace("m³", ""));
+            } catch (Exception ignored) {
+            }
+            try {
+                volPontaF = Float.parseFloat(volumePonta.replace(",", ".").replace("m³", ""));
+            } catch (Exception ignored) {
+            }
+
+            float volumeArvoreTotal = volCom + volPontaF;
+
+            // string formatada com 3 casas decimais e vírgula
+            String volumeArvoreTotalStr = String.format(java.util.Locale.US, "%.3f", volumeArvoreTotal)
+                    .replace(".", ",");
 
             String data = "";
             if (toraLines.length > 0) {
@@ -362,7 +391,15 @@ public class RelatoriosActivity extends AppCompatActivity {
             currentY += 32;
             canvas.drawText("Altura total: " + alturaTotal, margin, currentY, content);
             currentY += 32;
-            canvas.drawText("Volume total: " + volumeTotal, margin, currentY, content);
+
+            // 👉 Aqui entram os novos textos:
+            canvas.drawText("Volume total comercial: " + volumeComercial, margin, currentY, content);
+            currentY += 32;
+
+            canvas.drawText("Volume da ponta: " + volumePonta, margin, currentY, content);
+            currentY += 32;
+
+            canvas.drawText("Volume total da árvore: " + volumeArvoreTotalStr + " m³", margin, currentY, content);
             currentY += 40;
 
             canvas.drawLine(margin, currentY, pagewidth - margin, currentY, linePaint);
@@ -371,13 +408,11 @@ public class RelatoriosActivity extends AppCompatActivity {
             // --------- OBSERVAÇÕES ----------
             int estimatedObsHeight = 40 + 3 * (int) content.getTextSize();
             if (currentY + estimatedObsHeight > pageHeight - bottomMargin) {
-                // fechar página atual
                 String pageNumberText = "Página " + currentPageNum;
                 float textWidth = content.measureText(pageNumberText);
                 canvas.drawText(pageNumberText, pagewidth - margin - textWidth, pageHeight - 40, content);
                 pdfDocument.finishPage(page);
 
-                // nova página
                 currentPageNum = globalPageNum++;
                 page = startNewPage(pdfDocument, pagewidth, pageHeight, currentPageNum,
                         bgPaint, headerBarPaint, title, subTitle,
@@ -400,13 +435,11 @@ public class RelatoriosActivity extends AppCompatActivity {
             int blocoAltura = 420;
 
             if (currentY + 40 + 10 + blocoAltura > pageHeight - bottomMargin) {
-                // fecha página
                 String pageNumberText = "Página " + currentPageNum;
                 float textWidth = content.measureText(pageNumberText);
                 canvas.drawText(pageNumberText, pagewidth - margin - textWidth, pageHeight - 40, content);
                 pdfDocument.finishPage(page);
 
-                // nova página
                 currentPageNum = globalPageNum++;
                 page = startNewPage(pdfDocument, pagewidth, pageHeight, currentPageNum,
                         bgPaint, headerBarPaint, title, subTitle,
@@ -424,12 +457,14 @@ public class RelatoriosActivity extends AppCompatActivity {
             for (int idx = 0; idx < volumeLines.length; idx++) {
                 String linha = volumeLines[idx];
                 if (linha.trim().isEmpty()) continue;
-
-                if (idx < 2) {
-                    headerVolumeLines.add(linha);
-                } else {
-                    dataVolumeLines.add(linha);
+                if (!linha.contains("total")) {
+                    if (idx < 2) {
+                        headerVolumeLines.add(linha);
+                    } else {
+                        dataVolumeLines.add(linha);
+                    }
                 }
+
             }
 
             int dataIndex = 0;
@@ -437,7 +472,6 @@ public class RelatoriosActivity extends AppCompatActivity {
 
             while (dataIndex < dataVolumeLines.size() || (firstBlock && !headerVolumeLines.isEmpty())) {
 
-                // se não cabe mais um bloco nesta página, cria nova página
                 if (currentY + 10 + blocoAltura > pageHeight - bottomMargin) {
                     String pageNumberText = "Página " + currentPageNum;
                     float textWidth = content.measureText(pageNumberText);
@@ -472,7 +506,6 @@ public class RelatoriosActivity extends AppCompatActivity {
 
                 int linhaY = tableTop + 40;
 
-                // cabeçalho só no primeiro bloco
                 if (firstBlock && !headerVolumeLines.isEmpty()) {
                     for (String h : headerVolumeLines) {
                         canvas.drawText(h, tableLeft + 20, linhaY, content);
@@ -496,7 +529,7 @@ public class RelatoriosActivity extends AppCompatActivity {
                             x = col2X;
                             linhaY = colStartY;
                         } else {
-                            break; // bloco cheio
+                            break;
                         }
                     }
 
@@ -541,7 +574,6 @@ public class RelatoriosActivity extends AppCompatActivity {
                 }
             }
 
-            // fecha última página deste item
             String pageNumberText = "Página " + currentPageNum;
             float textWidth = content.measureText(pageNumberText);
             canvas.drawText(pageNumberText, pagewidth - margin - textWidth, pageHeight - 40, content);
@@ -583,6 +615,7 @@ public class RelatoriosActivity extends AppCompatActivity {
             pdfDocument.close();
         }
     }
+
 
     /**
      * Desenha texto com quebra de linha simples baseado na largura máxima.
@@ -668,7 +701,9 @@ public class RelatoriosActivity extends AppCompatActivity {
         }
     }
 
-    /** Inicia uma nova página com cabeçalho padrão e retorna o Page. */
+    /**
+     * Inicia uma nova página com cabeçalho padrão e retorna o Page.
+     */
     private PdfDocument.Page startNewPage(PdfDocument pdfDocument,
                                           int pagewidth,
                                           int pageHeight,
@@ -710,7 +745,6 @@ public class RelatoriosActivity extends AppCompatActivity {
 
         return page;
     }
-
 
 
 }

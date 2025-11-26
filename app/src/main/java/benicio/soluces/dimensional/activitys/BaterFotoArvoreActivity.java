@@ -44,7 +44,9 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.concurrent.ExecutionException;
 
+import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivityBaterFotoArvoreBinding;
+import benicio.soluces.dimensional.utils.AudioIA;
 
 
 public class BaterFotoArvoreActivity extends AppCompatActivity {
@@ -70,6 +72,9 @@ public class BaterFotoArvoreActivity extends AppCompatActivity {
         mainBinding = ActivityBaterFotoArvoreBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        AudioIA.pararAudio();
+        AudioIA.tocarAudio(this, R.raw.fotoarvore);
 
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,

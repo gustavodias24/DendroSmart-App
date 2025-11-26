@@ -28,6 +28,7 @@ import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivityMenuBinding;
 import benicio.soluces.dimensional.databinding.ActivitySelecionarMetodoBinding;
 import benicio.soluces.dimensional.model.PostagemModel;
+import benicio.soluces.dimensional.utils.AudioIA;
 import benicio.soluces.dimensional.utils.RetrofitUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +43,7 @@ public class MenuActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
 
 
+
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class MenuActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         Picasso.get().load(R.raw.pinheiro).into(mainBinding.imageView);
+
+        AudioIA.tocarAudio(this, R.raw.bemvindo);
 
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         editor = sharedPreferences.edit();

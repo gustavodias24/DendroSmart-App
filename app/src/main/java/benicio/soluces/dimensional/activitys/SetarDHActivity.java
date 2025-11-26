@@ -20,6 +20,7 @@ import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivitySelecionarMetodoBinding;
 import benicio.soluces.dimensional.databinding.ActivitySetarDhactivityBinding;
 import benicio.soluces.dimensional.model.ItemRelatorio;
+import benicio.soluces.dimensional.utils.AudioIA;
 
 public class SetarDHActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -33,6 +34,9 @@ public class SetarDHActivity extends AppCompatActivity implements View.OnClickLi
         mainBinding = ActivitySetarDhactivityBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        AudioIA.pararAudio();
+        AudioIA.tocarAudio(this, R.raw.informedh);
 
         b = getIntent().getExtras();
 

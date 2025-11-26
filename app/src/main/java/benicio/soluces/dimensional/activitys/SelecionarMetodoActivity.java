@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.databinding.ActivitySelecionarMetodoBinding;
 import benicio.soluces.dimensional.databinding.NomeProjetoLayoutBinding;
+import benicio.soluces.dimensional.utils.AudioIA;
 
 public class SelecionarMetodoActivity extends AppCompatActivity {
 
@@ -48,7 +49,8 @@ public class SelecionarMetodoActivity extends AppCompatActivity {
         // Define que o teclado será sempre fixo e completo
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-
+        AudioIA.pararAudio();
+        AudioIA.tocarAudio(this, R.raw.informetodo);
 
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setTitle("Atenção!");

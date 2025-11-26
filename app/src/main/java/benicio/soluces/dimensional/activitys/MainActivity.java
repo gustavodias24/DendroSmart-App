@@ -105,6 +105,7 @@ import java.util.concurrent.Executors;
 
 import benicio.soluces.dimensional.R;
 import benicio.soluces.dimensional.model.ItemRelatorio;
+import benicio.soluces.dimensional.utils.AudioIA;
 import benicio.soluces.dimensional.utils.Converter;
 import benicio.soluces.dimensional.utils.GenericUtils;
 import benicio.soluces.dimensional.utils.ItemRelatorioUtil;
@@ -146,6 +147,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Float diametroBaseTora = 0.0f;
     Float diametroMedioTora = 0.0f;
     Float diametroTopoTora = 0.0f;
+
+    int audioAtual = 0;
+
+    boolean jaClicou = false;
 
     Float ultimoDiametroBase = 0.0f;
 
@@ -245,6 +250,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        AudioIA.pararAudio();
+        AudioIA.tocarAudio(this, R.raw.basedaarvore);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.bip);
         mediaPlayerError = MediaPlayer.create(this, R.raw.somerro);
@@ -373,7 +381,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 etapa++;
                 imagemIlustrativaArvore.setImageResource(R.drawable.angulo_topo_arvore);
                 //Picasso.get().load(R.drawable.angulo_topo_arvore).into(imagemIlustrativaArvore);
-                instrucaoTela.setText(MSG2);
+                if (!jaClicou){
+                    instrucaoTela.setText(MSG2);
+                    jaClicou = true;
+                    AudioIA.pararAudio();
+                    AudioIA.tocarAudio(this, R.raw.topoarvore);
+                }else{
+                    AudioIA.pararAudio();
+                    AudioIA.tocarAudio(this, R.raw.basetora);
+                    audioAtual = 0;
+                }
+
 
             }
 
@@ -1224,6 +1242,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             float alturaInstataneaFormatada = Float.parseFloat(alturaAtualToraString.replace(" ", "").replace("m", "").replace(",", "."));
 
+
+            Log.d(TAG, "audioAtual: " + audioAtual);
+            if (audioAtual == 0 || audioAtual == 2) {
+                AudioIA.pararAudio();
+                AudioIA.tocarAudio(this, R.raw.centrotora);
+                audioAtual = 1 ;
+            }else if (audioAtual == 1)
+            {
+                AudioIA.pararAudio();
+                AudioIA.tocarAudio(this, R.raw.tiopotora);
+                audioAtual = 2;
+            }
+
+
+
+
             if ((alturaInstataneaFormatada - tolerancia) > alturaDesejada) {
                 mediaPlayerError.start();
                 Toast.makeText(this, "Altura menor que a tolerância", Toast.LENGTH_SHORT).show();
@@ -1418,6 +1452,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imagemIlustrativaArvore.setVisibility(View.INVISIBLE);
         text_tora_apontamento_counter.setVisibility(View.INVISIBLE);
         Toast.makeText(this, "Árvore salva no relatório.", Toast.LENGTH_SHORT).show();
+        AudioIA.pararAudio();
+        AudioIA.tocarAudio(this, R.raw.infossalvas);
     }
 
     private void aumentarAmerelo() {
@@ -1897,12 +1933,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (parteDaTora.equals("a base")) {
                     imagemIlustrativaArvore.setImageResource(R.drawable.aponta_p_base);
+
                 }
                 if (parteDaTora.equals("o centro")) {
                     imagemIlustrativaArvore.setImageResource(R.drawable.aponta_p_meio);
+
                 }
                 if (parteDaTora.equals("o topo")) {
                     imagemIlustrativaArvore.setImageResource(R.drawable.aponta_p_topo);
+
                 }
 
 
