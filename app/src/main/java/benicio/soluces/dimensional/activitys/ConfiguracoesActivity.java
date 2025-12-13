@@ -1,7 +1,5 @@
 package benicio.soluces.dimensional.activitys;
 
-import static benicio.soluces.dimensional.activitys.MainActivity.getIPAddress;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -288,16 +286,16 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
         textIp = findViewById(R.id.textIpConfig);
 
-        new Thread(() -> {
-            while (true) {
-                runOnUiThread(() -> textIp.setText("IP do controle: " + getIPAddress()));
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
+//        new Thread(() -> {
+//            while (true) {
+//                runOnUiThread(() -> textIp.setText("IP do controle: " + getIPAddress()));
+//                try {
+//                    Thread.sleep(2000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }).start();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
